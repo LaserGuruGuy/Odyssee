@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Odyssee"
         mc:Ignorable="d"
-        Title="Odyssee" Height="600" Width="800" Background="White"  WindowStyle="None" AllowsTransparency="True" AllowDrop="True" StateChanged="Window_StateChanged">
+        Title="Odyssee" Height="600" Width="800" Background="White" WindowStyle="None" AllowsTransparency="True" AllowDrop="True" StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="32"
@@ -27,8 +27,7 @@
         <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"/>
         <CommandBinding Command="Close" Executed="CloseCommandBinding_Executed"/>
     </Window.CommandBindings>
-
-    <Border Style="{StaticResource WindowMainPanelStyle}">
+    <Border>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -45,30 +44,6 @@
                     </MenuItem>
                 </Menu>
                 <Border HorizontalAlignment="Right" DockPanel.Dock="Right" >
-                    <!--
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" WindowChrome.IsHitTestVisibleInChrome="True">
-                        <Button Name="Button_Minimize" Click="OnButtonClick_Minimize" Content="&#xE949;" FontFamily="Segoe MDL2 Assets" FontSize="10" Padding="15,15,15,5" Background="Transparent" BorderBrush="Transparent" />
-                        <Button Name="Button_MaximizeRestore"  Click="OnButtonClick_MaximizeRestore" FontFamily="Segoe MDL2 Assets" FontSize="10" Padding="15,10" Background="Transparent" BorderBrush="Transparent">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Button.Content" Value="&#xE739;" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
-                                            <Setter Property="Button.Content" Value="&#xE923;" />
-                                        </DataTrigger>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Button.Background" Value="Gray" />
-                                        </Trigger>
-                                        <Trigger Property="IsPressed" Value="true">
-                                            <Setter Property="Button.Background" Value="Gray" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                        <Button Name="Button_Close" Click="OnButtonClick_Close" Content="&#xE106;" FontFamily="Segoe MDL2 Assets" FontSize="10" Padding="15,10"  Background="Transparent" BorderBrush="Transparent" />
-                    </StackPanel>
-                    -->
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -90,7 +65,7 @@
                     </Grid>
                 </Border>
             </DockPanel>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_SizeChanged">
+            <ScrollViewer Grid.Row="1" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_SizeChanged">
                 <StackPanel>
                     <TextBlock Text="{Binding Serialized}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent"/>
                 </StackPanel>
