@@ -19,12 +19,12 @@ namespace Odyssee
 {
 	public class Test
     {
-		public string Serialized { get; set; } = "DataContext bound debug window";
+		public string Serialized { get; } = "DataContext bound debug window\r\nMultiple line autoscroll";
 	}
 
 	public partial class MainWindow : Window
     {
-		Test test;
+        readonly Test test;
 
         public MainWindow()
         {
@@ -62,7 +62,7 @@ namespace Odyssee
             this.Close();
         }
 
-        private void ScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void ScrollViewer_Serialized_SizeChanged(object sender, SizeChangedEventArgs e)
         {
 			var scrollViewer = sender as ScrollViewer;
 
@@ -72,7 +72,7 @@ namespace Odyssee
 			}
 		}
 
-        private void cmbInterfaceHost_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_InterfaceHost_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 			ComboBox comboBox = sender as ComboBox;
 
