@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Odyssee"
         mc:Ignorable="d"
-        Title="Odyssee" Width="1024" Height="768" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" AllowDrop="True" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged">
+        Title="Odyssee" Width="1024" Height="768" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="30"

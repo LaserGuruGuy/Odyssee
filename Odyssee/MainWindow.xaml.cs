@@ -37,6 +37,19 @@ namespace Odyssee
 			this.DataContext = test;
 		}
 
+		private void HandleDroppedFile(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
+				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+				foreach (var file in files)
+				{
+					// TODO: Implementation of Open
+				}
+			}
+		}
+
 		private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
 			//TODO: Implementation of Open
