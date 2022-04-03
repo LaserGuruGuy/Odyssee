@@ -5,7 +5,10 @@ using System.Windows.Interop;
 
 namespace Odyssee
 {
-    public partial class MainWindow : Window
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
+	public partial class MainWindow : Window
     {
 		private void OnButtonClick_Minimize(object sender, RoutedEventArgs e)
 		{
@@ -62,7 +65,7 @@ namespace Odyssee
 
 				if (monitor != IntPtr.Zero)
 				{
-					MONITORINFO monitorInfo = new MONITORINFO();
+					MONITORINFO monitorInfo = new();
 					monitorInfo.cbSize = Marshal.SizeOf(typeof(MONITORINFO));
 					GetMonitorInfo(monitor, ref monitorInfo);
 					RECT rcWorkArea = monitorInfo.rcWork;

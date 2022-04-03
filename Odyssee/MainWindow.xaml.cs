@@ -22,6 +22,9 @@ namespace Odyssee
 		public string Serialized { get; } = "DataContext bound debug window\r\nMultiple line autoscroll";
 	}
 
+	/// <summary>
+	/// Interaction logic for MainWindow.xaml
+	/// </summary>
 	public partial class MainWindow : Window
     {
         readonly Test test;

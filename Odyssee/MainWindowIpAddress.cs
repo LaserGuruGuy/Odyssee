@@ -57,30 +57,28 @@ namespace Odyssee
             cmbInterfaceClient.Items.Clear();
             cmbInterfaceClient.Items.Add("Searching...");
             cmbInterfaceClient.SelectedIndex = cmbInterfaceClient.Items.Count - 1;
-            using (var deviceLocator = new SsdpDeviceLocator(new Rssdp.Infrastructure.SsdpCommunicationsServer(new SocketFactory(ComputerIpAddress))))
+            using var deviceLocator = new SsdpDeviceLocator(new Rssdp.Infrastructure.SsdpCommunicationsServer(new SocketFactory(ComputerIpAddress)));
+            // Can pass search arguments here (device type, uuid). No arguments means all devices.
+            var foundDevices = await deviceLocator.SearchAsync("upnp:rootdevice");
+            cmbInterfaceClient.Items.Clear();
+            foreach (var foundDevice in foundDevices)
             {
-                // Can pass search arguments here (device type, uuid). No arguments means all devices.
-                var foundDevices = await deviceLocator.SearchAsync("upnp:rootdevice");
-                cmbInterfaceClient.Items.Clear();
-                foreach (var foundDevice in foundDevices)
+                try
                 {
-                    try
-                    {
-                        //Can retrieve the full device description easily though.
-                        var fullDevice = await foundDevice.GetDeviceInfo();
+                    //Can retrieve the full device description easily though.
+                    var fullDevice = await foundDevice.GetDeviceInfo();
 
-                        //Device data returned only contains basic device details and location of full device description.
-                        Console.WriteLine("Found " + fullDevice.FriendlyName + " with " + foundDevice.Usn + " at " + foundDevice.DescriptionLocation.ToString());
+                    //Device data returned only contains basic device details and location of full device description.
+                    Console.WriteLine("Found " + fullDevice.FriendlyName + " with " + foundDevice.Usn + " at " + foundDevice.DescriptionLocation.ToString());
 
-                        if (fullDevice.FriendlyName.Contains("Denon AVR"))
-                        {
-                            cmbInterfaceClient.Items.Add(foundDevice.DescriptionLocation.Host + " | " + fullDevice.FriendlyName);
-                            cmbInterfaceClient.SelectedIndex = cmbInterfaceClient.Items.Count - 1;
-                        }
-                    }
-                    catch
+                    if (fullDevice.FriendlyName.Contains("Denon AVR"))
                     {
+                        cmbInterfaceClient.Items.Add(foundDevice.DescriptionLocation.Host + " | " + fullDevice.FriendlyName);
+                        cmbInterfaceClient.SelectedIndex = cmbInterfaceClient.Items.Count - 1;
                     }
+                }
+                catch
+                {
                 }
             }
         }
