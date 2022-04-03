@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Odyssee"
         mc:Ignorable="d"
-        Title="Odyssee" Height="600" Width="800" Background="White" WindowStyle="None" AllowsTransparency="True" AllowDrop="True" StateChanged="Window_StateChanged">
+        Title="Odyssee" Height="600" MinHeight="32" Width="800" Background="White" WindowStyle="None" AllowsTransparency="True" AllowDrop="True" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>
         <WindowChrome
-            CaptionHeight="32"
+            CaptionHeight="30"
             ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}"
-            GlassFrameThickness="0">
+            GlassFrameThickness="{x:Static SystemParameters.WindowNonClientFrameThickness}">
         </WindowChrome>
     </WindowChrome.WindowChrome>
     <Window.Resources>
@@ -33,9 +33,9 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0" Background="#FF2D2D30">
-                <Menu FontSize="13" WindowChrome.IsHitTestVisibleInChrome="True" Width="Auto" Name="Menu" VerticalAlignment="Top" DockPanel.Dock="Left" Foreground="White" Background="Transparent" Padding="5 5 5 5">
-                    <MenuItem Header="_File">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+                <Menu Name="Menu" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Left" VerticalAlignment="Stretch" Background="Transparent" FontSize="13">
+                    <MenuItem Header="_File" Height="30" BorderThickness="0">
                         <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
                         <MenuItem Name="menuSave" Header="_Save..." Command="SaveAs" InputGestureText="Ctrl+S"/>
                         <MenuItem Name="menuSaveAs" Header="Save _as..." Command="SaveAs" InputGestureText="Ctrl+A"/>
@@ -43,28 +43,25 @@
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close"  InputGestureText="Alt+F4"/>
                     </MenuItem>
                 </Menu>
-                <Border HorizontalAlignment="Right" DockPanel.Dock="Right" >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Click="OnButtonClick_Minimize" Style="{StaticResource TitleBarButtonStyle}">
-                            <Path Width="46" Height="32" Data="M 18,15 H 28" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1" />
-                        </Button>
-                        <Button Grid.Column="1" Name="maximizeButton" Click="OnButtonClick_MaximizeRestore" RenderOptions.EdgeMode="Aliased" Style="{StaticResource TitleBarButtonStyle}">
-                            <Path Width="46" Height="32" Data="M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1" />
-                        </Button>
-                        <Button Grid.Column="1" Name="restoreButton" Click="OnButtonClick_MaximizeRestore" Visibility="Collapsed" Style="{StaticResource TitleBarButtonStyle}">
-                            <Path Width="46" Height="32" Data="M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1" />
-                        </Button>
-                        <Button	Grid.Column="3" Click="OnButtonClick_Close" Style="{StaticResource TitleBarButtonStyle}">
-                            <Path Width="46" Height="32" Data="M 18,11 27,20 M 18,20 27,11" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1" />
-                        </Button>
-                    </Grid>
-                </Border>
-            </DockPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+                <Label Content="Receiver" VerticalAlignment="Center" ></Label>
+                <ComboBox x:Name="cmbInterfaceClient"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Stretch" Width="220"/>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                <Button Click="OnButtonClick_Minimize" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+                    <Path Width="46" Height="30" Data="M 18,15 H 28" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
+                </Button>
+                <Button Name="maximizeButton" Click="OnButtonClick_MaximizeRestore" RenderOptions.EdgeMode="Aliased" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0"  IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+                    <Path Width="46" Height="30" Data="M 18.5,10.5 H 27.5 V 19.5 H 18.5 Z" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1" />
+                </Button>
+                <Button Name="restoreButton" Click="OnButtonClick_MaximizeRestore" Visibility="Collapsed" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+                    <Path Width="46" Height="30" Data="M 18.5,12.5 H 25.5 V 19.5 H 18.5 Z M 20.5,12.5 V 10.5 H 27.5 V 17.5 H 25.5" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
+                </Button>
+                <Button	Click="OnButtonClick_Close" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
+                    <Path Width="46" Height="30" Data="M 18,11 27,20 M 18,20 27,11" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
+                </Button>
+            </StackPanel>
             <ScrollViewer Grid.Row="1" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_SizeChanged">
                 <StackPanel>
                     <TextBlock Text="{Binding Serialized}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent"/>

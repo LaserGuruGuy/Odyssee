@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Fill Brushes -->
+
+    <!--
 
     <LinearGradientBrush x:Key="HorizontalNormalBrush" StartPoint="0,0" EndPoint="1,0">
         <GradientBrush.GradientStops>
@@ -59,8 +60,6 @@
 
     <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#DDD" />
 
-    <!-- Border Brushes -->
-
     <LinearGradientBrush x:Key="NormalBorderBrush" StartPoint="0,0" EndPoint="0,1">
         <GradientBrush.GradientStops>
             <GradientStopCollection>
@@ -103,12 +102,10 @@
 
     <SolidColorBrush x:Key="LightBorderBrush" Color="#AAA" />
 
-    <!-- Miscellaneous Brushes -->
     <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
 
     <SolidColorBrush x:Key="LightColorBrush" Color="#DDD" />
 
-    <!-- Menu Seperator -->
     <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}"
        TargetType="Separator">
         <Setter Property="Height" Value="1"/>
@@ -122,9 +119,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <!-- TopLevelHeader -->
-    
+   
     <ControlTemplate x:Key="{x:Static MenuItem.TopLevelHeaderTemplateKey}"
                  TargetType="MenuItem">
         <Border Name="Border" >
@@ -173,8 +168,6 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     
-    <!-- TopLevelItem -->
-
     <ControlTemplate 
   x:Key="{x:Static MenuItem.TopLevelItemTemplateKey}" 
   TargetType="MenuItem">
@@ -198,8 +191,6 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
-    <!-- SubmenuItem -->
 
     <ControlTemplate 
   x:Key="{x:Static MenuItem.SubmenuItemTemplateKey}" 
@@ -266,8 +257,6 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
-    <!-- SubmenuHeader -->
 
     <ControlTemplate 
   x:Key="{x:Static MenuItem.SubmenuHeaderTemplateKey}" 
@@ -340,8 +329,6 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!-- MenuItem Style -->
-
     <Style x:Key="{x:Type MenuItem}" TargetType="MenuItem">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Style.Triggers>
@@ -364,8 +351,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
-    <!-- main window panel border -->
     
     <Style x:Key="{x:Type Border}" TargetType="Border">
         <Setter Property="BorderBrush" Value="{DynamicResource WindowBorderBrush}" />
@@ -377,8 +362,6 @@
         </Style.Triggers>
     </Style>
     
-    <!-- title bar buttons minimize/maximize/restore/close -->
-
     <Style x:Key="TitleBarButtonStyle" TargetType="Button">
         <Setter Property="Foreground" Value="Gray" />
         <Setter Property="Padding" Value="0" />
@@ -402,5 +385,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    -->
 
 </ResourceDictionary>
