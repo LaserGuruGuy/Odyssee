@@ -17,13 +17,24 @@ using System.Windows.Shapes;
 
 namespace Odyssee
 {
-    public partial class MainWindow : Window
+	public class Test
     {
+		public string Serialized { get; set; } = "DataContext bound debug window";
+	}
+
+	public partial class MainWindow : Window
+    {
+		Test test;
+
         public MainWindow()
         {
             InitializeComponent();
 
 			SearchForComputerIpAddress();
+
+			test = new();
+
+			this.DataContext = test;
 		}
 
 		private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -63,10 +74,15 @@ namespace Odyssee
 
         private void cmbInterfaceHost_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-			ComboBox comboBox = (ComboBox)sender;
-			string selectedHost = (string)comboBox.SelectedItem;
-			selectedHost = selectedHost.Substring(0, selectedHost.IndexOf('|')).TrimEnd(' ');
-			SearchForReceiverIpAddress(selectedHost);
+			ComboBox comboBox = sender as ComboBox;
+
+			if (comboBox.Items.Count > 0)
+            {
+				string selectedHost = (string)comboBox.SelectedItem;
+				selectedHost = selectedHost.Substring(0, selectedHost.IndexOf('|')).TrimEnd(' ');
+
+				SearchForReceiverIpAddress(selectedHost);
+			}
 		}
 	}
 }
