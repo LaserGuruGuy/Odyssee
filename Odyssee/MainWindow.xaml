@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Odyssee"
         mc:Ignorable="d"
-        Title="Odyssee" Height="600" MinHeight="32" Width="800" Background="White" WindowStyle="None" AllowsTransparency="True" AllowDrop="True" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged">
+        Title="Odyssee" Width="1024" Height="768" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" AllowDrop="True" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged">
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="30"
@@ -32,6 +32,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
                 <Menu Name="Menu" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Left" VerticalAlignment="Stretch" Background="Transparent" FontSize="13">
@@ -46,7 +48,9 @@
             </StackPanel>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                 <Label Content="Receiver" VerticalAlignment="Center" ></Label>
-                <ComboBox x:Name="cmbInterfaceClient"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Stretch" Width="220"/>
+                <ComboBox x:Name="cmbInterfaceClient"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto"/>
+                <Label Content="Computer" VerticalAlignment="Center" ></Label>
+                <ComboBox x:Name="cmbInterfaceHost" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto" SelectionChanged="cmbInterfaceHost_SelectionChanged"/>
             </StackPanel>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
                 <Button Click="OnButtonClick_Minimize" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
@@ -62,7 +66,11 @@
                     <Path Width="46" Height="30" Data="M 18,11 27,20 M 18,20 27,11" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
                 </Button>
             </StackPanel>
-            <ScrollViewer Grid.Row="1" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_SizeChanged">
+            <DockPanel Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
+                <!-- TODO -->
+            </DockPanel>
+            <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
+            <ScrollViewer Grid.Row="3" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_SizeChanged">
                 <StackPanel>
                     <TextBlock Text="{Binding Serialized}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent"/>
                 </StackPanel>

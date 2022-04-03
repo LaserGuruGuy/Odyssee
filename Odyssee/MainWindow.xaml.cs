@@ -25,7 +25,9 @@ namespace Odyssee
         public MainWindow()
         {
             InitializeComponent();
-        }
+
+			SearchForComputerIpAddress();
+		}
 
 		private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
@@ -194,5 +196,13 @@ namespace Odyssee
 				scrollViewer.ScrollToEnd();
 			}
 		}
-    }
+
+        private void cmbInterfaceHost_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+			ComboBox comboBox = (ComboBox)sender;
+			string selectedHost = (string)comboBox.SelectedItem;
+			selectedHost = selectedHost.Substring(0, selectedHost.IndexOf('|')).TrimEnd(' ');
+			SearchForReceiverIpAddress(selectedHost);
+		}
+	}
 }
