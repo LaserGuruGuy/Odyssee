@@ -10,12 +10,17 @@ namespace Odyssee
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Get this computer's IP address(es) and add to listbox, select last one by default
+        /// </summary>
         private async void SearchForComputerIpAddress()
         {
             cmbInterfaceHost.Items.Clear();
-            // get this computer's IP address(es) and add to listbox, select last one by default
+            cmbInterfaceHost.Items.Add("Searching...");
+            cmbInterfaceHost.SelectedIndex = cmbInterfaceClient.Items.Count - 1;
             var HostName = System.Net.Dns.GetHostName();
             var HostEntry = await System.Net.Dns.GetHostEntryAsync(HostName);
+            cmbInterfaceHost.Items.Clear();
             if (HostEntry.AddressList.Length > 0)
             {
                 foreach (System.Net.IPAddress IP in HostEntry.AddressList)
@@ -44,6 +49,9 @@ namespace Odyssee
             }
         }
 
+        /// <summary>
+        /// Get receiver's IP address(es) and add to listbox, select last one by default
+        /// </summary>
         private async void SearchForReceiverIpAddress(string ComputerIpAddress)
         {
             cmbInterfaceClient.Items.Clear();
