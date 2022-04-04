@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -29,7 +30,7 @@ namespace Odyssee
     {
         readonly Test test;
 
-        public MainWindow()
+		public MainWindow()
         {
             InitializeComponent();
 
@@ -88,7 +89,7 @@ namespace Odyssee
 			}
 		}
 
-        private void ComboBox_InterfaceHost_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBox_InterfaceComputer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 			ComboBox comboBox = sender as ComboBox;
 
@@ -99,6 +100,21 @@ namespace Odyssee
 
 				SearchForReceiverIpAddress(selectedHost);
 			}
+		}
+
+        private void OnButtonClick_Connect(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+		private void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
+		{
+
 		}
 	}
 }

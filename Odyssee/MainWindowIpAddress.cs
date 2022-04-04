@@ -15,12 +15,12 @@ namespace Odyssee
         /// </summary>
         private async void SearchForComputerIpAddress()
         {
-            cmbInterfaceHost.Items.Clear();
-            cmbInterfaceHost.Items.Add("Searching...");
-            cmbInterfaceHost.SelectedIndex = cmbInterfaceClient.Items.Count - 1;
+            cmbInterfaceComputer.Items.Clear();
+            cmbInterfaceComputer.Items.Add("Searching...");
+            cmbInterfaceComputer.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
             var HostName = System.Net.Dns.GetHostName();
             var HostEntry = await System.Net.Dns.GetHostEntryAsync(HostName);
-            cmbInterfaceHost.Items.Clear();
+            cmbInterfaceComputer.Items.Clear();
             if (HostEntry.AddressList.Length > 0)
             {
                 foreach (System.Net.IPAddress IP in HostEntry.AddressList)
@@ -35,7 +35,7 @@ namespace Odyssee
                                 {
                                     if (UnicastAddress.Address.Equals(IP))
                                     {
-                                        cmbInterfaceHost.Items.Add(IP.ToString() + " | " + nic.Description);
+                                        cmbInterfaceComputer.Items.Add(IP.ToString() + " | " + nic.Description);
                                     }
                                 }
                             }
@@ -45,7 +45,7 @@ namespace Odyssee
                     {
                     }
                 }
-                cmbInterfaceHost.SelectedIndex = cmbInterfaceHost.Items.Count - 1;
+                cmbInterfaceComputer.SelectedIndex = cmbInterfaceComputer.Items.Count - 1;
             }
         }
 
@@ -54,13 +54,13 @@ namespace Odyssee
         /// </summary>
         private async void SearchForReceiverIpAddress(string ComputerIpAddress)
         {
-            cmbInterfaceClient.Items.Clear();
-            cmbInterfaceClient.Items.Add("Searching...");
-            cmbInterfaceClient.SelectedIndex = cmbInterfaceClient.Items.Count - 1;
+            cmbInterfaceReceiver.Items.Clear();
+            cmbInterfaceReceiver.Items.Add("Searching...");
+            cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
             using var deviceLocator = new SsdpDeviceLocator(new Rssdp.Infrastructure.SsdpCommunicationsServer(new SocketFactory(ComputerIpAddress)));
             // Can pass search arguments here (device type, uuid). No arguments means all devices.
             var foundDevices = await deviceLocator.SearchAsync("upnp:rootdevice");
-            cmbInterfaceClient.Items.Clear();
+            cmbInterfaceReceiver.Items.Clear();
             foreach (var foundDevice in foundDevices)
             {
                 try
@@ -73,8 +73,8 @@ namespace Odyssee
 
                     if (fullDevice.FriendlyName.Contains("Denon AVR"))
                     {
-                        cmbInterfaceClient.Items.Add(foundDevice.DescriptionLocation.Host + " | " + fullDevice.FriendlyName);
-                        cmbInterfaceClient.SelectedIndex = cmbInterfaceClient.Items.Count - 1;
+                        cmbInterfaceReceiver.Items.Add(foundDevice.DescriptionLocation.Host + " | " + fullDevice.FriendlyName);
+                        cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
                     }
                 }
                 catch

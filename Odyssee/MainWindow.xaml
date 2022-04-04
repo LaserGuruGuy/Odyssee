@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Odyssee"
         mc:Ignorable="d"
-        Title="Odyssee" Width="1024" Height="768" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged">
+        Title="Odyssee" Width="1024" Height="768" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
+        Icon=".\Odyssee.ico">
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="30"
@@ -37,7 +38,7 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
                 <Menu Name="Menu" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Left" VerticalAlignment="Stretch" Background="Transparent" FontSize="13">
-                    <MenuItem Header="_File" Height="30" BorderThickness="0">
+                    <MenuItem Header="_File" Height="30" Width="50" BorderThickness="0">
                         <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
                         <MenuItem Name="menuSave" Header="_Save..." Command="SaveAs" InputGestureText="Ctrl+S"/>
                         <MenuItem Name="menuSaveAs" Header="Save _as..." Command="SaveAs" InputGestureText="Ctrl+A"/>
@@ -45,12 +46,21 @@
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close"  InputGestureText="Alt+F4"/>
                     </MenuItem>
                 </Menu>
+                <Button Click="OnButtonClick_Connect" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to Receiver">
+                    <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Ethernet.png"/>
+                </Button>
+                <Button Click="OnButtonClick_Microphone" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Measure Chirp Response with Receiver Microphone">
+                    <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Microphone.png"/>
+                </Button>
+                <Button Click="OnButtonClick_Speaker" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Send Coefficients to Receiver Speakers">
+                    <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Speaker.png"/>
+                </Button>
             </StackPanel>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                 <Label Content="Receiver" VerticalAlignment="Center" ></Label>
-                <ComboBox x:Name="cmbInterfaceClient"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto"/>
+                <ComboBox x:Name="cmbInterfaceReceiver"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto"/>
                 <Label Content="Computer" VerticalAlignment="Center" ></Label>
-                <ComboBox x:Name="cmbInterfaceHost" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto" SelectionChanged="ComboBox_InterfaceHost_SelectionChanged"/>
+                <ComboBox x:Name="cmbInterfaceComputer" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto" SelectionChanged="ComboBox_InterfaceComputer_SelectionChanged"/>
             </StackPanel>
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
                 <Button Click="OnButtonClick_Minimize" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">

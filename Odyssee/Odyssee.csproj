@@ -143,5 +143,17 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Odyssee.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Microphone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Speaker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Ethernet.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
