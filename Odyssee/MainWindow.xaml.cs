@@ -285,12 +285,12 @@ namespace Odyssee
 
         private void getReceiverInfo_OnClick(object sender, RoutedEventArgs e)
         {
-
+            audysseyMultEQAvrTcp.GetAvrInfo();
         }
 
         private void getReceiverStatus_OnClick(object sender, RoutedEventArgs e)
         {
-
+            audysseyMultEQAvrTcp.GetAvrStatus();
         }
 
         private void ConnectAudyssey_OnClick(object sender, RoutedEventArgs e)
