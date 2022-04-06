@@ -5,6 +5,10 @@ VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odyssee", "Odyssee\Odyssee.csproj", "{15DFA390-A71A-4659-9395-D7E7AFDAEF02}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultEqTcp", "MultEqTcp\MultEqTcp.csproj", "{BE2A9CEF-E7A1-4E91-A370-3D7D452ECBD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultEqAvr", "MultEqAvr\MultEqAvr.csproj", "{31E9EEB9-7D72-4DB5-B484-FD2867C15D5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{15DFA390-A71A-4659-9395-D7E7AFDAEF02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15DFA390-A71A-4659-9395-D7E7AFDAEF02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15DFA390-A71A-4659-9395-D7E7AFDAEF02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2A9CEF-E7A1-4E91-A370-3D7D452ECBD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2A9CEF-E7A1-4E91-A370-3D7D452ECBD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2A9CEF-E7A1-4E91-A370-3D7D452ECBD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2A9CEF-E7A1-4E91-A370-3D7D452ECBD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31E9EEB9-7D72-4DB5-B484-FD2867C15D5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E9EEB9-7D72-4DB5-B484-FD2867C15D5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E9EEB9-7D72-4DB5-B484-FD2867C15D5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E9EEB9-7D72-4DB5-B484-FD2867C15D5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

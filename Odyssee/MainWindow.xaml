@@ -36,7 +36,7 @@
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
                 <Menu Name="Menu" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Left" VerticalAlignment="Stretch" Background="Transparent" FontSize="13">
                     <MenuItem Header="_File" Height="30" Width="50" BorderThickness="0">
                         <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
@@ -45,9 +45,35 @@
                         <Separator/>
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close"  InputGestureText="Alt+F4"/>
                     </MenuItem>
+                    <MenuItem Header="_Receiver"  Height="30" Width="70">
+                        <MenuItem Header="_Detect Receiver" Name="detectReceiver" Click="DetectReceiver_OnClick"/>
+                        <MenuItem Header="Connect _Receiver" Name="connectReceiver" Click="ConnectReceiver_OnClick" IsCheckable="True"/>
+                        <MenuItem Header="Connect S_niffer" Name="connectSniffer" Click="ConnectSniffer_OnClick" IsCheckable="True"/>
+                        <Separator/>
+                        <MenuItem Header="Get Receiver _Info" Name="getReceiverInfo" Click="getReceiverInfo_OnClick" />
+                        <MenuItem Header="Get Receiver _Status" Name="getReceiverStatus" Click="getReceiverStatus_OnClick" />
+                        <Separator/>
+                        <MenuItem Header="Enter _Audyssey" Name="connectAudyssey" Click="ConnectAudyssey_OnClick" IsCheckable="True"/>
+                        <Separator/>
+                        <MenuItem Header="Set LvLm" Name="setAvrLvLm" Click="setAvrLvLm_OnClick" />
+                        <MenuItem Header="Abort Oprt" Name="setAvrAbortOprt" Click="setAvrAbortOprt_OnClick" />
+                        <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="setAvrSetPosNum_OnClick" />
+                        <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="setAvrStartChnl_OnClick" />
+                        <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="setAvrGetRespon_OnClick" />
+                        <Separator/>
+                        <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="setAvrSetAmp_OnClick" />
+                        <MenuItem Header="Set Audy" Name="setAvrSetAudy" Click="setAvrSetAudy_OnClick" />
+                        <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="setAvrSetDisFil_OnClick" />
+                        <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="setAvrInitCoefs_OnClick" />
+                        <MenuItem Header="Set CoefDt" Name="setAvrSetCoefDt" Click="setAvrSetCoefDt_OnClick" />
+                        <MenuItem Header="Set AudyFinFlg" Name="setAudysseyFinishedFlag" Click="setAudysseyFinishedFlag_OnClick" />
+                    </MenuItem>
                 </Menu>
                 <Button Click="OnButtonClick_Connect" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to Receiver">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Ethernet.png"/>
+                </Button>
+                <Button Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to Sniffer">
+                    <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Inspector.png"/>
                 </Button>
                 <Button Click="OnButtonClick_Microphone" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Measure Chirp Response with Receiver Microphone">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Microphone.png"/>
@@ -56,13 +82,13 @@
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Speaker.png"/>
                 </Button>
             </StackPanel>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                 <Label Content="Receiver" VerticalAlignment="Center" ></Label>
                 <ComboBox x:Name="cmbInterfaceReceiver"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto"/>
                 <Label Content="Computer" VerticalAlignment="Center" ></Label>
                 <ComboBox x:Name="cmbInterfaceComputer" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto" SelectionChanged="ComboBox_InterfaceComputer_SelectionChanged"/>
             </StackPanel>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
                 <Button Click="OnButtonClick_Minimize" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
                     <Path Width="46" Height="30" Data="M 18,15 H 28" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
                 </Button>
@@ -76,7 +102,11 @@
                     <Path Width="46" Height="30" Data="M 18,11 27,20 M 18,20 27,11" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
                 </Button>
             </StackPanel>
-            <DockPanel Grid.Row="1" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
+            <DockPanel Grid.Row="1" LastChildFill="True" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
+                <!-- TODO -->
+                <Button Content="L" DockPanel.Dock="Left"></Button>
+                <Button Content="R" DockPanel.Dock="Right" HorizontalAlignment="Right"></Button>
+                <Button Content="C"></Button>
                 <!-- TODO -->
             </DockPanel>
             <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />

@@ -84,6 +84,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AudysseyMultEQAvrTcpParser.cs" />
     <Compile Include="MainWindowIpAddress.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -154,6 +155,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Ethernet.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MultEqAvr\MultEqAvr.csproj">
+      <Project>{31e9eeb9-7d72-4db5-b484-fd2867c15d5c}</Project>
+      <Name>MultEqAvr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MultEqTcp\MultEqTcp.csproj">
+      <Project>{be2a9cef-e7a1-4e91-a370-3d7d452ecbd4}</Project>
+      <Name>MultEqTcp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Inspector.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
