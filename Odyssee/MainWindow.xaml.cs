@@ -19,9 +19,6 @@ using System.Windows.Shapes;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcp;
 using Audyssey.MultEQTcpSniffer;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
 
 namespace Odyssee
 {
@@ -33,8 +30,6 @@ namespace Odyssee
         private AudysseyMultEQAvr audysseyMultEQAvr = null;
         private AudysseyMultEQAvrTcp audysseyMultEQAvrTcp = null;
         private AudysseyMultEQTcpSniffer audysseyMultEQTcpSniffer = null;
-
-        public PlotModel PlotModel { get; private set; } = new();
 
         public MainWindow()
         {
@@ -121,7 +116,7 @@ namespace Odyssee
         {
             if (e.PropertyName.Equals("SPLValue"))
             {
-                //AddOxyPlotLvlm();
+                AddOxyPlotLvlm();
             }
         }
     }

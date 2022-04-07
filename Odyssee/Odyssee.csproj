@@ -118,6 +118,7 @@
   <ItemGroup>
     <Compile Include="MainWindowMenu.cs" />
     <Compile Include="MainWindowMinimizeResizeClose.cs" />
+    <Compile Include="MainWindowOxyPlot.cs" />
     <Compile Include="MainWindowToolbar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
