@@ -51,13 +51,13 @@
                         <MenuItem Header="Connect _Receiver" Name="connectReceiver" Click="MenuItem_ConnectReceiver_OnClick" IsCheckable="True"/>
                         <MenuItem Header="Connect S_niffer" Name="connectSniffer" Click="MenuItem_ConnectSniffer_OnClick" IsCheckable="True"/>
                         <Separator/>
-                        <MenuItem Header="Get Receiver _Info" Name="getReceiverInfo" Click="MenuItem_GetReceiverInfo_OnClick" />
-                        <MenuItem Header="Get Receiver _Status" Name="getReceiverStatus" Click="MenuItem_GetReceiverStatus_OnClick" />
+                        <MenuItem Header="Get Receiver _Info" Name="ReceiverInfo" Click="MenuItem_AvrInfo_OnClick" IsCheckable="True" IsChecked="{Binding AvrInfo_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Get Receiver _Status" Name="ReceiverStatus" Click="MenuItem_AvrStatus_OnClick" IsCheckable="True" IsChecked="{Binding AvrStatus_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Enter _Audyssey" Name="connectAudyssey" Click="MenuItem_ConnectAudyssey_OnClick" IsCheckable="True"/>
+                        <MenuItem Header="Enter _Audyssey" Name="AudysseyMode" Click="MenuItem_AudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Set LvLm" Name="setAvrLvLm" Click="MenuItem_SetAvrLvLm_OnClick" IsCheckable="True"/>
-                        <MenuItem Header="Abort Oprt" Name="setAvrAbortOprt" Click="MenuItem_SetAvrAbortOprt_OnClick" />
+                        <MenuItem Header="Set LvLm" Name="AvrLvLm" Click="MenuItem_AvrLvLm_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Abort Oprt" Name="AvrAbortOprt" Click="MenuItem_AvrAbortOprt_OnClick"/>
                         <Separator/>
                         <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" />
                         <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" />
@@ -68,10 +68,10 @@
                         <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="MenuItem_SetAvrSetDisFil_OnClick" />
                         <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" />
                         <MenuItem Header="Set CoefDt" Name="setAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" />
-                        <MenuItem Header="Set AudyFinFlg" Name="setAudysseyFinishedFlag" Click="MenuItem_SetAudysseyFinishedFlag_OnClick" />
+                        <MenuItem Header="Set AudyFinFlg" Name="AudyFinFlag" Click="MenuItem_AudyFinFlag_OnClick"  IsChecked="{Binding AudyFinFlag_IsChecked, Mode=TwoWay}"/>
                     </MenuItem>
                 </Menu>
-                <Button Click="OnButtonClick_Connect" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to Receiver">
+                <Button Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to the Receiver">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Ethernet.png"/>
                 </Button>
                 <Button Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Get receiver Info and Status">

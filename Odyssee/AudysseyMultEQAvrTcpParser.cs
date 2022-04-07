@@ -1,20 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.Text;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.ComponentModel;
-using System.Text;
-using System.Runtime.InteropServices;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcpClient;
-using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using System.Windows;
 
 namespace Audyssey
 {
     namespace MultEQTcp
     {
+        public delegate void CmdAckCallBack(bool IsAck);
+
         public class AudysseyMultEQAvrTcp : INotifyPropertyChanged
         {
             private AudysseyMultEQAvr AudysseyMultEQAvr = null;
@@ -29,8 +28,6 @@ namespace Audyssey
             private const byte ESC = 0x1B;
 
             CmdAck cmdAck = new();
-
-            private bool CmdSuccess = false;
 
             public AudysseyMultEQAvrTcp(ref AudysseyMultEQAvr audysseyMultEQAvr, string ClientAddress = "127.0.0.1", int ClientPort = 1256, int ClientTimeout = 5000)
             {
@@ -52,7 +49,7 @@ namespace Audyssey
                 AudysseyMultEQAvrTcpClient.Close();
             }
 
-            public bool GetAvrInfo(int TimeoutMs = 1000)
+            public bool GetAvrInfo(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -66,7 +63,7 @@ namespace Audyssey
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(TimeoutMs);
+                    cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;
                 }
@@ -77,7 +74,7 @@ namespace Audyssey
                 }
             }
             
-            public bool GetAvrStatus(int TimeoutMs = 1000)
+            public bool GetAvrStatus(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -91,7 +88,7 @@ namespace Audyssey
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(TimeoutMs);
+                    cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;
                 }
@@ -102,7 +99,7 @@ namespace Audyssey
                 }
             }
 
-            public bool EnterAudysseyMode(int TimeoutMs = 1000)
+            public bool EnterAudysseyMode(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -113,7 +110,7 @@ namespace Audyssey
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(TimeoutMs);
+                    cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;
                 }
@@ -124,7 +121,7 @@ namespace Audyssey
                 }
             }
 
-            public bool ExitAudysseyMode(int TimeoutMs = 1000)
+            public bool ExitAudysseyMode(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -135,7 +132,7 @@ namespace Audyssey
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(TimeoutMs);
+                    cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;
                 }
@@ -146,7 +143,7 @@ namespace Audyssey
                 }
             }
 
-            public bool StartLvLm(int TimeoutMs = 1000)
+            public bool StartLvLm(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -159,7 +156,7 @@ namespace Audyssey
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(TimeoutMs);
+                    cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;
                 }
@@ -170,7 +167,7 @@ namespace Audyssey
                 }
             }
 
-            public bool AbortOprt(int TimeoutMs = 1000)
+            public bool AbortOprt(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -183,7 +180,7 @@ namespace Audyssey
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(TimeoutMs);
+                    cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;
                 }
@@ -194,7 +191,7 @@ namespace Audyssey
                 }
             }
 
-            public bool SetAudysseyFinishedFlag(int TimeoutMs = 1000)
+            public bool AudyFinFlag(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -205,7 +202,7 @@ namespace Audyssey
                     // transmit request
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(TimeoutMs);
+                    cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;
                 }
@@ -250,7 +247,11 @@ namespace Audyssey
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
-                                                cmdAck.Rqst(1000);
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -263,6 +264,14 @@ namespace Audyssey
                                             if (Response.Comm.Equals(ACK))
                                             {
                                                 cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -281,6 +290,14 @@ namespace Audyssey
                                                     ContractResolver = new InterfaceContractResolver(typeof(ISPLValue)),
                                                 });
                                                 cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -327,9 +344,17 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
-                                            if (Response.Comm.Equals(ACK) && !Response.Comm.Equals(INPROGRESS))
+                                            if (Response.Comm.Equals(ACK))
                                             {
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -339,9 +364,17 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
-                                            if (Response.Comm.Equals(ACK) && !Response.Comm.Equals(INPROGRESS))
+                                            if (Response.Comm.Equals(ACK))
                                             {
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -351,9 +384,17 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
-                                            if (Response.Comm.Equals(ACK) && !Response.Comm.Equals(INPROGRESS))
+                                            if (Response.Comm.Equals(ACK))
                                             {
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -363,9 +404,17 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
-                                            if (Response.Comm.Equals(ACK) && !Response.Comm.Equals(INPROGRESS))
+                                            if (Response.Comm.Equals(ACK))
                                             {
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -377,15 +426,15 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
-                                                CmdSuccess = false;
                                                 byte[] Data = new byte[] { ESC };
                                                 AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(Data, null, null);
+                                                cmdAck.Progress();
                                             }
-                                            else if (Response.Comm.Equals(NACK) && !CmdSuccess)
+                                            if (Response.Comm.Equals(NACK) && cmdAck.Pending)
                                             {
                                                 byte[] Data = new byte[] { EOT };
                                                 AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(Data, null, null);
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
                                             }
                                         }
                                         break;
@@ -397,7 +446,15 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -407,18 +464,17 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
+                                            if (Response.Comm.Equals(ACK))
+                                            {
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
                                             if (Response.Comm.Equals(NACK))
                                             {
-                                            }
-                                            else if (Response.Comm.Equals(INPROGRESS))
-                                            {
-                                            }
-                                            else if (Response.Comm.Equals(ACK))
-                                            {
-                                                if (Response.Comm.Equals(ACK))
-                                                {
-                                                    CmdSuccess = true;
-                                                }
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -430,7 +486,15 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -448,11 +512,12 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
-                                        CmdSuccess = true;
+                                        cmdAck.Ack();
                                     }
                                     else
                                     {
                                         AudysseyMultEQAvr.Serialized += CmdString + " segment " + CurrentPacket.ToString() + " of " + TotalPackets.ToString() + " with " + Encoding.ASCII.GetString(DataByte) + " bytes" + "\n";
+                                        cmdAck.Progress();
                                     }
                                 }
                                 if (TransmitReceiveChar == 'R')
@@ -460,11 +525,12 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
-                                        CmdSuccess = true;
+                                        cmdAck.Ack();
                                     }
                                     else
                                     {
                                         AudysseyMultEQAvr.Serialized += CmdString + " segment " + CurrentPacket.ToString() + " of " + TotalPackets.ToString() + " with " + Encoding.ASCII.GetString(DataByte) + " bytes" + "\n";
+                                        cmdAck.Progress();
                                     }
                                 }
                                 break;
@@ -474,11 +540,12 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
-                                        CmdSuccess = true;
+                                        cmdAck.Ack();
                                     }
                                     else
                                     {
                                         AudysseyMultEQAvr.Serialized += CmdString + " segment " + CurrentPacket.ToString() + " of " + TotalPackets.ToString() + " with " + Encoding.ASCII.GetString(DataByte) + " bytes" + "\n";
+                                        cmdAck.Progress();
                                     }
                                 }
                                 if (TransmitReceiveChar == 'R')
@@ -486,11 +553,12 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
-                                        CmdSuccess = true;
+                                        cmdAck.Ack();
                                     }
                                     else
                                     {
                                         AudysseyMultEQAvr.Serialized += CmdString + " segment " + CurrentPacket.ToString() + " of " + TotalPackets.ToString() + " with " + Encoding.ASCII.GetString(DataByte) + " bytes" + "\n";
+                                        cmdAck.Progress();
                                     }
                                 }
                                 break;
@@ -498,11 +566,12 @@ namespace Audyssey
                                 if (TransferComplete)
                                 {
                                     AudysseyMultEQAvr.Serialized += "TODO\n";
-                                    CmdSuccess = true;
+                                    cmdAck.Ack();
                                 }
                                 else
                                 {
                                     AudysseyMultEQAvr.Serialized += CmdString + " segment " + CurrentPacket.ToString() + " of " + TotalPackets.ToString() + " with " + Encoding.ASCII.GetString(DataByte) + " bytes" + "\n";
+                                    cmdAck.Progress();
                                 }
                                 break;
                         }
@@ -569,38 +638,76 @@ namespace Audyssey
             public string Comm { get; set; } = string.Empty;
         }
 
+        /// <summary>
+        /// Provide a wait-for-ack-with-timeout and callback-on-success-or-fail mechanism
+        /// </summary>
         class CmdAck
         {
             private System.Timers.Timer Timer;
+            private CmdAckCallBack Callback;
 
-            public bool Pending { get; internal set; } = false;
+            public bool Pending { get; internal set; }
 
             public CmdAck()
             {
                 Timer = new System.Timers.Timer();
                 Timer.Elapsed += TimerElapsed;
                 Pending = false;
+                Callback = null;
             }
 
-            public void Rqst(int TimeoutMs = 1000)
+            /// <summary>
+            /// Start the timer, set the command pending flag and load the callback function.
+            /// </summary>
+            /// <param name="CallBack">The timeout or acknowledge funtion (default null)</param>
+            /// <param name="TimerInterval">The timeout period in ms (default 2000)</param>
+            public void Rqst(CmdAckCallBack CallBack = null, int TimerInterval = 2000)
             {
                 Timer.Stop();
                 Pending = true;
-                Timer.Interval = TimeoutMs;
+                Callback = CallBack;
+                Timer.Interval = TimerInterval;
                 Timer.Start();
             }
 
+            /// <summary>
+            /// Stop the timer, clear the command pending flag and invoke the callback funtion(success).
+            /// </summary>
             public void Ack()
             {
                 Timer.Stop();
                 Pending = false;
+                Callback?.Invoke(true);
             }
 
+            /// <summary>
+            /// Restart the timer.
+            /// </summary>
+            /// <param name="TimerInterval">The timeout period in ms</param>
+            public void Progress()
+            {
+                Timer.Stop();
+                Timer.Start();
+            }
+
+            /// <summary>
+            /// Stop the timer, clear the command pending flag and invoke the callback funtion(fail).
+            /// </summary>
+            public void Nack()
+            {
+                Timer.Stop();
+                Pending = false;
+                Callback?.Invoke(false);
+            }
+
+            /// <summary>
+            /// Stop the timer, clear the command pending flag and invoke the callback funtion(fail).
+            /// </summary>
             private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
             {
                 Timer.Stop();
-                MessageBox.Show("Communication timeout.", "Timeout expired before ACK received.", MessageBoxButton.OK, MessageBoxImage.Error);
                 Pending = false;
+                Callback?.Invoke(false);
             }
         }
     }

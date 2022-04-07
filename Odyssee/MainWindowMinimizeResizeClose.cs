@@ -41,6 +41,11 @@ namespace Odyssee
 			}
 		}
 
+		private void OnButtonClick_Close(object sender, RoutedEventArgs e)
+		{
+			this.Close();
+		}
+
 		private void Window_StateChanged(object sender, EventArgs e)
 		{
 			this.RefreshMaximizeRestoreButton();
