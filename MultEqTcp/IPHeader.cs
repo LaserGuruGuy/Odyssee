@@ -103,8 +103,7 @@ namespace Audyssey
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "IPHeader Received: " + nReceived + " TotalLength: " + usTotalLength + " HeaderLength: " + byHeaderLength, MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "IPHeader Received: " + nReceived + " TotalLength: " + usTotalLength + " HeaderLength: " + byHeaderLength, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

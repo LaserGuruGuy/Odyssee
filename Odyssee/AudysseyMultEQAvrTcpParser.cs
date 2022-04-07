@@ -7,35 +7,14 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcpClient;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Windows;
 
 namespace Audyssey
 {
     namespace MultEQTcp
     {
-        [StructLayout(LayoutKind.Explicit, Size = 4)]
-        struct FloatInt32
-        {
-            [FieldOffset(0)] private float Float;
-            [FieldOffset(0)] private int Int32;
-
-            private static FloatInt32 inst = new();
-            public static int FloatToInt32(float value)
-            {
-                inst.Float = value;
-                return inst.Int32;
-            }
-            public static float Int32ToFloat(int value)
-            {
-                inst.Int32 = value;
-                return inst.Float;
-            }
-        }
-
-        public class AudysseyMultEQAvrComm
-        {
-            public string Comm { get; set; } = string.Empty;
-        }
-
         public class AudysseyMultEQAvrTcp : INotifyPropertyChanged
         {
             private AudysseyMultEQAvr AudysseyMultEQAvr = null;
@@ -43,13 +22,15 @@ namespace Audyssey
 
             private const string AUDYFINFLG = "{\"AudyFinFlg\":\"Fin\"}";
 
-            private bool CmdSuccess = false;
-
             private const string INPROGRESS = "INPROGRESS";
             private const string NACK = "NACK";
             private const string ACK = "ACK";
             private const byte EOT = 0x04;
             private const byte ESC = 0x1B;
+
+            CmdAck cmdAck = new();
+
+            private bool CmdSuccess = false;
 
             public AudysseyMultEQAvrTcp(ref AudysseyMultEQAvr audysseyMultEQAvr, string ClientAddress = "127.0.0.1", int ClientPort = 1256, int ClientTimeout = 5000)
             {
@@ -71,21 +52,9 @@ namespace Audyssey
                 AudysseyMultEQAvrTcpClient.Close();
             }
 
-            public void Log(string Result)
+            public bool GetAvrInfo(int TimeoutMs = 1000)
             {
-                AudysseyMultEQAvr.Serialized += Result;
-            }
-
-            private string MakeQuery(string Serialized)
-            {
-                var SerializedJObject = JObject.Parse(Serialized);
-                foreach (var prop in SerializedJObject.Properties()) { prop.Value = "?"; }
-                return SerializedJObject.ToString(Formatting.None);
-            }
-            
-            public void GetAvrInfo()
-            {
-                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null))
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     string CmdString = "GET_AVRINF";
                     // build JSON and replace values with "?"
@@ -96,12 +65,21 @@ namespace Audyssey
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(TimeoutMs);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
                 }
             }
             
-            public void GetAvrStatus()
+            public bool GetAvrStatus(int TimeoutMs = 1000)
             {
-                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null))
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     string CmdString = "GET_AVRSTS";
                     // build JSON and replace values with "?"
@@ -112,12 +90,21 @@ namespace Audyssey
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(TimeoutMs);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
                 }
             }
-            
-            public void EnterAudysseyMode()
+
+            public bool EnterAudysseyMode(int TimeoutMs = 1000)
             {
-                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null))
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     string CmdString = "ENTER_AUDY";
                     string AvrString = "";
@@ -125,12 +112,21 @@ namespace Audyssey
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(TimeoutMs);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
                 }
             }
-            
-            public void ExitAudysseyMode()
+
+            public bool ExitAudysseyMode(int TimeoutMs = 1000)
             {
-                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null))
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     string CmdString = "EXIT_AUDMD";
                     string AvrString = "";
@@ -138,12 +134,21 @@ namespace Audyssey
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(TimeoutMs);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
                 }
             }
 
-            public void StartLvLm()
+            public bool StartLvLm(int TimeoutMs = 1000)
             {
-                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null))
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     // abort operation
                     string CmdString = "START_LVLM";
@@ -153,12 +158,21 @@ namespace Audyssey
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(TimeoutMs);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
                 }
             }
 
-            public void AbortOprt()
+            public bool AbortOprt(int TimeoutMs = 1000)
             {
-                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null))
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     // abort operation
                     string CmdString = "ABORT_OPRT";
@@ -168,13 +182,21 @@ namespace Audyssey
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(TimeoutMs);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
                 }
             }
 
-
-            public void SetAudysseyFinishedFlag()
+            public bool SetAudysseyFinishedFlag(int TimeoutMs = 1000)
             {
-                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null))
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     string CmdString = "SET_SETDAT";
                     string AvrString = AUDYFINFLG;
@@ -182,8 +204,17 @@ namespace Audyssey
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit request
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(TimeoutMs);
+                    // return command was issued
+                    return true;
                 }
-            }            
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
 
             public void Populate(char TransmitReceiveChar, string CmdString, byte[] DataByte, byte CurrentPacket, byte TotalPackets, bool TransferComplete)
             {
@@ -213,6 +244,14 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
+                                            if (Response.Comm.Equals(ACK))
+                                            {
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Rqst(1000);
+                                            }
                                         }
                                         break;
                                     case "ABORT_OPRT":
@@ -221,6 +260,10 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
+                                            if (Response.Comm.Equals(ACK))
+                                            {
+                                                cmdAck.Ack();
+                                            }
                                         }
                                         break;
                                     case "START_LVLM":
@@ -237,6 +280,7 @@ namespace Audyssey
                                                     NullValueHandling = NullValueHandling.Ignore,
                                                     ContractResolver = new InterfaceContractResolver(typeof(ISPLValue)),
                                                 });
+                                                cmdAck.Ack();
                                             }
                                         }
                                         break;
@@ -254,7 +298,7 @@ namespace Audyssey
                                                     ContractResolver = new InterfaceContractResolver(typeof(IInfo)),
                                                     FloatParseHandling = FloatParseHandling.Decimal
                                                 });
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
                                             }
                                         }
                                         break;
@@ -273,7 +317,7 @@ namespace Audyssey
                                                     ContractResolver = new InterfaceContractResolver(typeof(IStatus)),
                                                     FloatParseHandling = FloatParseHandling.Decimal,
                                                 });
-                                                CmdSuccess = true;
+                                                cmdAck.Ack();
                                             }
                                         }
                                         break;
@@ -351,6 +395,10 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
+                                            if (Response.Comm.Equals(ACK))
+                                            {
+                                                CmdSuccess = true;
+                                            }
                                         }
                                         break;
                                     case "START_CHNL":
@@ -367,6 +415,10 @@ namespace Audyssey
                                             }
                                             else if (Response.Comm.Equals(ACK))
                                             {
+                                                if (Response.Comm.Equals(ACK))
+                                                {
+                                                    CmdSuccess = true;
+                                                }
                                             }
                                         }
                                         break;
@@ -376,6 +428,10 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
+                                            if (Response.Comm.Equals(ACK))
+                                            {
+                                                CmdSuccess = true;
+                                            }
                                         }
                                         break;
                                 }
@@ -392,6 +448,7 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
+                                        CmdSuccess = true;
                                     }
                                     else
                                     {
@@ -403,6 +460,7 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
+                                        CmdSuccess = true;
                                     }
                                     else
                                     {
@@ -416,6 +474,7 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
+                                        CmdSuccess = true;
                                     }
                                     else
                                     {
@@ -427,6 +486,7 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.Serialized += "TODO\n";
+                                        CmdSuccess = true;
                                     }
                                     else
                                     {
@@ -438,6 +498,7 @@ namespace Audyssey
                                 if (TransferComplete)
                                 {
                                     AudysseyMultEQAvr.Serialized += "TODO\n";
+                                    CmdSuccess = true;
                                 }
                                 else
                                 {
@@ -446,6 +507,47 @@ namespace Audyssey
                                 break;
                         }
                     }
+                }
+            }
+
+
+            public void Log(string Result)
+            {
+                AudysseyMultEQAvr.Serialized += Result;
+            }
+
+            private string MakeQuery(string Serialized)
+            {
+                var SerializedJObject = JObject.Parse(Serialized);
+                foreach (var prop in SerializedJObject.Properties()) { prop.Value = "?"; }
+                return SerializedJObject.ToString(Formatting.None);
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged = delegate { };
+            private void RaisePropertyChanged(string propertyName)
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+
+            [StructLayout(LayoutKind.Explicit, Size = 4)]
+            struct FloatInt32
+            {
+                [FieldOffset(0)] private float Float;
+                [FieldOffset(0)] private int Int32;
+
+                private static FloatInt32 inst = new();
+                public static int FloatToInt32(float value)
+                {
+                    inst.Float = value;
+                    return inst.Int32;
+                }
+                public static float Int32ToFloat(int value)
+                {
+                    inst.Int32 = value;
+                    return inst.Float;
                 }
             }
 
@@ -460,14 +562,45 @@ namespace Audyssey
                 }
                 return Int32s;
             }
+        }
 
-            public event PropertyChangedEventHandler PropertyChanged = delegate { };
-            private void RaisePropertyChanged(string propertyName)
+        public class AudysseyMultEQAvrComm
+        {
+            public string Comm { get; set; } = string.Empty;
+        }
+
+        class CmdAck
+        {
+            private System.Timers.Timer Timer;
+
+            public bool Pending { get; internal set; } = false;
+
+            public CmdAck()
             {
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }
+                Timer = new System.Timers.Timer();
+                Timer.Elapsed += TimerElapsed;
+                Pending = false;
+            }
+
+            public void Rqst(int TimeoutMs = 1000)
+            {
+                Timer.Stop();
+                Pending = true;
+                Timer.Interval = TimeoutMs;
+                Timer.Start();
+            }
+
+            public void Ack()
+            {
+                Timer.Stop();
+                Pending = false;
+            }
+
+            private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
+            {
+                Timer.Stop();
+                MessageBox.Show("Communication timeout.", "Timeout expired before ACK received.", MessageBoxButton.OK, MessageBoxImage.Error);
+                Pending = false;
             }
         }
     }

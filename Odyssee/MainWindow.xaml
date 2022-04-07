@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Odyssee"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1280" Height="1024" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
         Icon=".\Odyssee.ico">
@@ -46,34 +47,38 @@
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close"  InputGestureText="Alt+F4"/>
                     </MenuItem>
                     <MenuItem Header="_Receiver"  Height="30" Width="70">
-                        <MenuItem Header="_Detect Receiver" Name="detectReceiver" Click="DetectReceiver_OnClick"/>
-                        <MenuItem Header="Connect _Receiver" Name="connectReceiver" Click="ConnectReceiver_OnClick" IsCheckable="True"/>
-                        <MenuItem Header="Connect S_niffer" Name="connectSniffer" Click="ConnectSniffer_OnClick" IsCheckable="True"/>
+                        <MenuItem Header="_Detect Receiver" Name="detectReceiver" Click="MenuItem_DetectReceiver_OnClick"/>
+                        <MenuItem Header="Connect _Receiver" Name="connectReceiver" Click="MenuItem_ConnectReceiver_OnClick" IsCheckable="True"/>
+                        <MenuItem Header="Connect S_niffer" Name="connectSniffer" Click="MenuItem_ConnectSniffer_OnClick" IsCheckable="True"/>
                         <Separator/>
-                        <MenuItem Header="Get Receiver _Info" Name="getReceiverInfo" Click="getReceiverInfo_OnClick" />
-                        <MenuItem Header="Get Receiver _Status" Name="getReceiverStatus" Click="getReceiverStatus_OnClick" />
+                        <MenuItem Header="Get Receiver _Info" Name="getReceiverInfo" Click="MenuItem_GetReceiverInfo_OnClick" />
+                        <MenuItem Header="Get Receiver _Status" Name="getReceiverStatus" Click="MenuItem_GetReceiverStatus_OnClick" />
                         <Separator/>
-                        <MenuItem Header="Enter _Audyssey" Name="connectAudyssey" Click="ConnectAudyssey_OnClick" IsCheckable="True"/>
+                        <MenuItem Header="Enter _Audyssey" Name="connectAudyssey" Click="MenuItem_ConnectAudyssey_OnClick" IsCheckable="True"/>
                         <Separator/>
-                        <MenuItem Header="Set LvLm" Name="setAvrLvLm" Click="setAvrLvLm_OnClick" />
-                        <MenuItem Header="Abort Oprt" Name="setAvrAbortOprt" Click="setAvrAbortOprt_OnClick" />
-                        <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="setAvrSetPosNum_OnClick" />
-                        <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="setAvrStartChnl_OnClick" />
-                        <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="setAvrGetRespon_OnClick" />
+                        <MenuItem Header="Set LvLm" Name="setAvrLvLm" Click="MenuItem_SetAvrLvLm_OnClick" IsCheckable="True"/>
+                        <MenuItem Header="Abort Oprt" Name="setAvrAbortOprt" Click="MenuItem_SetAvrAbortOprt_OnClick" />
                         <Separator/>
-                        <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="setAvrSetAmp_OnClick" />
-                        <MenuItem Header="Set Audy" Name="setAvrSetAudy" Click="setAvrSetAudy_OnClick" />
-                        <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="setAvrSetDisFil_OnClick" />
-                        <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="setAvrInitCoefs_OnClick" />
-                        <MenuItem Header="Set CoefDt" Name="setAvrSetCoefDt" Click="setAvrSetCoefDt_OnClick" />
-                        <MenuItem Header="Set AudyFinFlg" Name="setAudysseyFinishedFlag" Click="setAudysseyFinishedFlag_OnClick" />
+                        <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" />
+                        <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" />
+                        <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="MenuItem_SetAvrGetRespon_OnClick" />
+                        <Separator/>
+                        <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="MenuItem_SetAvrSetAmp_OnClick" />
+                        <MenuItem Header="Set Audy" Name="setAvrSetAudy" Click="MenuItem_SetAvrSetAudy_OnClick" />
+                        <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="MenuItem_SetAvrSetDisFil_OnClick" />
+                        <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" />
+                        <MenuItem Header="Set CoefDt" Name="setAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" />
+                        <MenuItem Header="Set AudyFinFlg" Name="setAudysseyFinishedFlag" Click="MenuItem_SetAudysseyFinishedFlag_OnClick" />
                     </MenuItem>
                 </Menu>
                 <Button Click="OnButtonClick_Connect" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to Receiver">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Ethernet.png"/>
                 </Button>
-                <Button Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to Sniffer">
+                <Button Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Get receiver Info and Status">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Inspector.png"/>
+                </Button>
+                <Button Click="OnButtonClick_SubwooferLevel" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Adjust Subwoofer Level">
+                    <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Subwoofer.png"/>
                 </Button>
                 <Button Click="OnButtonClick_Microphone" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Measure Chirp Response with Receiver Microphone">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Microphone.png"/>
@@ -106,7 +111,7 @@
                 <!-- TODO -->
                 <Button Content="L" DockPanel.Dock="Left"></Button>
                 <Button Content="R" DockPanel.Dock="Right" HorizontalAlignment="Right"></Button>
-                <Button Content="C"></Button>
+                <oxy:PlotView x:Name="plot"/>
                 <!-- TODO -->
             </DockPanel>
             <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />

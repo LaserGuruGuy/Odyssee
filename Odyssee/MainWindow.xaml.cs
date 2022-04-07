@@ -66,7 +66,7 @@ namespace Odyssee
             {
                 if (ex.NativeErrorCode == 1223)
                 {
-                    System.Windows.MessageBox.Show("Run the app elevated.", "Elevated rights required to capture packets from a raw socket.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Run the app elevated.", "Elevated rights required to capture packets from a raw socket.", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace Odyssee
                     // uncheck the menu item
                     connectReceiver.IsChecked = false;
                     // display message to report error to user
-                    MessageBox.Show("Please enter receiver IP address.");
+                    MessageBox.Show("Enter select a valid receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
@@ -240,7 +240,7 @@ namespace Odyssee
                     else
                     {
                         // or we cannot connect because the receiver was not connected to begin with
-                        System.Windows.MessageBox.Show("Connnect to receiver IP address.", "Could not attach sniffer to receiver.", MessageBoxButton.OK, MessageBoxImage.Error);
+                        MessageBox.Show("Connnect to receiver IP address prior to attaching sniffer.", "Could not attach sniffer to receiver.", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
@@ -254,101 +254,167 @@ namespace Odyssee
 
         private void OnButtonClick_Inspector(object sender, RoutedEventArgs e)
         {
-            connectSniffer.IsChecked = !connectSniffer.IsChecked;
-            ConnectReceiverSniffer();
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.GetAvrInfo();
+                // TODO loop & delay
+                audysseyMultEQAvrTcp.GetAvrStatus();
+            }
+        }
+
+        private void OnButtonClick_SubwooferLevel(object sender, RoutedEventArgs e)
+        {
+            if (setAvrLvLm.IsChecked)
+            {
+                if (audysseyMultEQAvrTcp != null)
+                {
+                    if (audysseyMultEQAvrTcp.AbortOprt())
+                    {
+                        setAvrLvLm.IsChecked = false;
+                    }
+                }
+            }
+            else
+            {
+                if (audysseyMultEQAvrTcp != null)
+                {
+                    if (audysseyMultEQAvrTcp.StartLvLm())
+                    {
+                        setAvrLvLm.IsChecked = true;
+                    }
+                }
+            }
         }
 
         private void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
 		{
-
+            // TODO
 		}
 
 		private void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
 		{
+            // TODO
+        }
 
-		}
-
-        private void DetectReceiver_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_DetectReceiver_OnClick(object sender, RoutedEventArgs e)
         {
             SearchForReceiverIpAddress(cmbInterfaceComputer.Text.IndexOf(' ') > -1 ? cmbInterfaceComputer.Text.Substring(0, cmbInterfaceComputer.Text.IndexOf(' ')) : cmbInterfaceComputer.Text);
         }
 
-        private void ConnectReceiver_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_ConnectReceiver_OnClick(object sender, RoutedEventArgs e)
         {
             ConnectReceiverSniffer();
         }
 
-        private void ConnectSniffer_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_ConnectSniffer_OnClick(object sender, RoutedEventArgs e)
         {
             ConnectReceiverSniffer();
         }
 
-        private void getReceiverInfo_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_GetReceiverInfo_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp.GetAvrInfo();
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.GetAvrInfo();
+            }
         }
 
-        private void getReceiverStatus_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_GetReceiverStatus_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp.GetAvrStatus();
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.GetAvrStatus();
+            }
         }
 
-        private void ConnectAudyssey_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_ConnectAudyssey_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (connectAudyssey.IsChecked)
+            {
+                if (audysseyMultEQAvrTcp != null)
+                {
+                    connectAudyssey.IsChecked = audysseyMultEQAvrTcp.EnterAudysseyMode();
+                }
+            }
+            else
+            {
+                if (audysseyMultEQAvrTcp != null)
+                {
+                    connectAudyssey.IsChecked = !audysseyMultEQAvrTcp.ExitAudysseyMode();
+                }
+            }
+        }
+
+        private void MenuItem_SetAvrLvLm_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (setAvrLvLm.IsChecked)
+            {
+                if (audysseyMultEQAvrTcp != null)
+                {
+                    setAvrLvLm.IsChecked = audysseyMultEQAvrTcp.StartLvLm();
+                }
+            }
+            else
+            {
+                if (audysseyMultEQAvrTcp != null)
+                {
+                    setAvrLvLm.IsChecked = !audysseyMultEQAvrTcp.AbortOprt();
+                }
+            }
+        }
+
+        private void MenuItem_SetAvrAbortOprt_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (audysseyMultEQAvrTcp != null)
+            {
+                if (audysseyMultEQAvrTcp.AbortOprt())
+                {
+                    setAvrLvLm.IsChecked = false;
+                }
+            }
+        }
+
+        private void MenuItem_SetAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrLvLm_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrStartChnl_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrAbortOprt_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrGetRespon_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrStartChnl_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrSetAudy_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrGetRespon_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrSetDisFil_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrInitCoefs_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrSetAudy_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrSetCoefDt_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void setAvrSetDisFil_OnClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void setAvrInitCoefs_OnClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void setAvrSetCoefDt_OnClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void setAudysseyFinishedFlag_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAudysseyFinishedFlag_OnClick(object sender, RoutedEventArgs e)
         {
 
         }
