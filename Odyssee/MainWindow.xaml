@@ -1,9 +1,9 @@
 ﻿<Window x:Class="Odyssee.MainWindow"
+        x:Name="_this"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Odyssee"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1280" Height="1024" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
@@ -111,7 +111,10 @@
                 <!-- TODO -->
                 <Button Content="L" DockPanel.Dock="Left"></Button>
                 <Button Content="R" DockPanel.Dock="Right" HorizontalAlignment="Right"></Button>
-                <oxy:PlotView x:Name="plot"/>
+                <oxy:PlotView x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}"/>
+                <!--
+                <oxy:PlotView x:Name="plot" DataContext="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" Model="{Binding PlotModel}"/>
+                -->
                 <!-- TODO -->
             </DockPanel>
             <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />

@@ -2,6 +2,9 @@
 using System.Windows;
 using Audyssey.MultEQTcp;
 using Audyssey.MultEQTcpSniffer;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace Odyssee
 {
@@ -210,10 +213,13 @@ namespace Odyssee
             if (IsAck)
             {
                 audysseyMultEQAvr.AudysseyMode_IsChecked = false;
+                audysseyMultEQAvr.AvrInfo_IsChecked = false;
+                audysseyMultEQAvr.AvrStatus_IsChecked = false;
+                audysseyMultEQAvr.AvrLvlm_IsChecked = false;
+                audysseyMultEQAvr.AudyFinFlag_IsChecked = false;
             }
             else
             {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = true;
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
         }
@@ -225,6 +231,7 @@ namespace Odyssee
                 if (audysseyMultEQAvrTcp != null)
                 {
                     audysseyMultEQAvrTcp.StartLvLm(OnCmdAckLvLm);
+                    InitOxyPlotLvlm();
                 }
                 else
                 {
@@ -246,15 +253,55 @@ namespace Odyssee
             }
         }
 
+        public void InitOxyPlotLvlm()
+        {
+            PlotModel.Axes.Clear();
+            PlotModel.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Left});
+
+            LineSeries Lineserie = new()
+            {
+                DataFieldX = "Time",
+                DataFieldY = "dB",
+                StrokeThickness = 2,
+                MarkerSize = 0,
+                LineStyle = LineStyle.Solid,
+                Color = OxyColor.FromRgb(0, 0, 0),
+                MarkerType = MarkerType.None,
+            };
+
+            PlotModel.Series.Clear();
+            PlotModel.Series.Add(Lineserie);
+
+            PlotModel.InvalidatePlot(true);
+        }
+
+        public void AddOxyPlotLvlm()
+        {
+            if (PlotModel != null)
+            {
+                if (PlotModel.Series != null)
+                {
+                    if (PlotModel.Series.Count > 0)
+                    {
+                        var s = (LineSeries)PlotModel.Series[0];
+                        var y = audysseyMultEQAvr.SPLValue > 0 ? Math.Log10((double)audysseyMultEQAvr.SPLValue) : -Math.Log10((double)(0-audysseyMultEQAvr.SPLValue));
+                        Console.WriteLine(y);
+                        s.Points.Add(new DataPoint(s.Points.Count, y));
+                        PlotModel.InvalidatePlot(true);
+                    }
+                }
+            }
+        }
+
         public void OnCmdAckLvLm(bool IsAck)
         {
             if (IsAck)
             {
                 audysseyMultEQAvr.AvrLvlm_IsChecked = true;
+                AddOxyPlotLvlm();
             }
             else
             {
-                audysseyMultEQAvr.AvrLvlm_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
         }
@@ -280,7 +327,6 @@ namespace Odyssee
             }
             else
             {
-                audysseyMultEQAvr.AvrLvlm_IsChecked = true;
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
         }

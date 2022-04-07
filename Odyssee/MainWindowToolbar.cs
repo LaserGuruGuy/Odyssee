@@ -60,6 +60,7 @@ namespace Odyssee
                 if (audysseyMultEQAvrTcp != null)
                 {
                     audysseyMultEQAvrTcp.StartLvLm(OnCmdAckLvLm);
+                    InitOxyPlotLvlm();
                 }
                 else
                 {

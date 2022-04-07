@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -18,7 +19,9 @@ using System.Windows.Shapes;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcp;
 using Audyssey.MultEQTcpSniffer;
-
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace Odyssee
 {
@@ -30,6 +33,8 @@ namespace Odyssee
         private AudysseyMultEQAvr audysseyMultEQAvr = null;
         private AudysseyMultEQAvrTcp audysseyMultEQAvrTcp = null;
         private AudysseyMultEQTcpSniffer audysseyMultEQTcpSniffer = null;
+
+        public PlotModel PlotModel { get; private set; } = new();
 
         public MainWindow()
         {
@@ -114,9 +119,9 @@ namespace Odyssee
 
         private void AudysseyMultEQAvr_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName.Equals("Serialized"))
+            if (e.PropertyName.Equals("SPLValue"))
             {
-                // TODO catch any property which should be handled here...
+                //AddOxyPlotLvlm();
             }
         }
     }

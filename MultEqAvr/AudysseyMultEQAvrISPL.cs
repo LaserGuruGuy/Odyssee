@@ -10,7 +10,7 @@ namespace Audyssey
         {
             public override bool CanConvert(Type objectType)
             {
-                return typeof(uint).Equals(objectType);
+                return typeof(UInt16).Equals(objectType);
             }
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -24,11 +24,15 @@ namespace Audyssey
                 {
                     string str = (string)reader.Value;
                     if (str == null)
+                    {
                         throw new JsonSerializationException();
-                    return Convert.ToUInt16(str, 16);
+                    }
+                    return Convert.ToInt16(str, 16);
                 }
                 else
+                {
                     throw new JsonSerializationException();
+                }
             }
         }
 
@@ -36,19 +40,19 @@ namespace Audyssey
         {
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public UInt16? SPLValue { get; set; }
+            public Int16? SPLValue { get; set; }
             #endregion
         }
 
         public partial class AudysseyMultEQAvr : ISPLValue, INotifyPropertyChanged
         {
             #region BackingField
-            public UInt16? _SPLValue = null;
+            public Int16? _SPLValue = null;
             #endregion
 
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public UInt16? SPLValue
+            public Int16? SPLValue
             {
                 get
                 {
@@ -70,6 +74,5 @@ namespace Audyssey
             }
             #endregion
         }
-
     }
 }
