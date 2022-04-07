@@ -579,7 +579,6 @@ namespace Audyssey
                 }
             }
 
-
             public void Log(string Result)
             {
                 AudysseyMultEQAvr.Serialized += Result;
@@ -651,6 +650,7 @@ namespace Audyssey
             public CmdAck()
             {
                 Timer = new System.Timers.Timer();
+                Timer.AutoReset = false;
                 Timer.Elapsed += TimerElapsed;
                 Pending = false;
                 Callback = null;
@@ -686,8 +686,11 @@ namespace Audyssey
             /// <param name="TimerInterval">The timeout period in ms</param>
             public void Progress()
             {
-                Timer.Stop();
-                Timer.Start();
+                if (Timer.Enabled)
+                {
+                    Timer.Stop();
+                    Timer.Start();
+                }
             }
 
             /// <summary>
@@ -705,7 +708,6 @@ namespace Audyssey
             /// </summary>
             private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
             {
-                Timer.Stop();
                 Pending = false;
                 Callback?.Invoke(false);
             }

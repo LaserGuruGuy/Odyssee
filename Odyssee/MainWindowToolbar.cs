@@ -21,6 +21,8 @@ namespace Odyssee
             }
             else
             {
+                ReceiverInfo.IsChecked = false;
+                ReceiverStatus.IsChecked = false;
                 audysseyMultEQAvr.Serialized += "No receiver connected\n";
             }
         }
