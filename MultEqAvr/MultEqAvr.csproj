@@ -61,9 +61,9 @@
   <ItemGroup>
     <Compile Include="AudysseyMultEQAvr.cs" />
     <Compile Include="AudysseyMultEQAvrCoefWaitTime.cs" />
-    <Compile Include="AudysseyMultEQAvrCollection.cs" />
+    <Compile Include="AudysseyMultEQAvrUniqueObservableCollection.cs" />
     <Compile Include="AudysseyMultEQAvrInfo.cs" />
-    <Compile Include="AudysseyMultEQAvrISPL.cs" />
+    <Compile Include="AudysseyMultEQAvrSPL.cs" />
     <Compile Include="AudysseyMultEQAvrStatus.cs" />
     <Compile Include="ClassInterfaceContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

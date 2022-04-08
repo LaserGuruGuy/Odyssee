@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace Audyssey
 {
@@ -68,6 +68,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public double SPLValuedB
             {
                 get
@@ -77,7 +78,7 @@ namespace Audyssey
             }
             #endregion
 
-            #region ResetMethods
+            #region Methods
             public void ResetSPLValue()
             {
                 _SPLValue = null;

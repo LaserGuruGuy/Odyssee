@@ -158,57 +158,17 @@ namespace Audyssey
             }
             #endregion
 
-            #region ResetMethods
-            public void ResetIfver()
-            {
-                _Ifver = null;
-                RaisePropertyChanged("Ifver");
-            }
-            public void ResetDType()
-            {
-                _DType = null;
-                RaisePropertyChanged("DType");
-            }
-            public void ResetCoefWaitTime()
-            {
-                _CoefWaitTime = null;
-                RaisePropertyChanged("CoefWaitTime");
-            }
-            public void ResetADC()
-            {
-                _ADC = null;
-                RaisePropertyChanged("ADC");
-            }
-            public void ResetSysDelay()
-            {
-                _SysDelay = null;
-                RaisePropertyChanged("SysDelay");
-            }
-            public void ResetEQType()
-            {
-                _EQType = null;
-                RaisePropertyChanged("EQType");
-            }
-            public void ResetSWLvlMatch()
-            {
-                _SWLvlMatch = null;
-                RaisePropertyChanged("SWLvlMatch");
-            }
-            public void ResetLFC()
-            {
-                _LFC = null;
-                RaisePropertyChanged("LFC");
-            }
-            public void ResetAuro()
-            {
-                _Auro = null;
-                RaisePropertyChanged("Auro");
-            }
-            public void ResetUpgrade()
-            {
-                _Upgrade = null;
-                RaisePropertyChanged("Upgrade");
-            }
+            #region Methods
+            public void ResetIfver() { _Ifver = null; }
+            public void ResetDType() { _DType = null; }
+            public void ResetCoefWaitTime() { _CoefWaitTime = null; }
+            public void ResetADC() { _ADC = null; }
+            public void ResetSysDelay() { _SysDelay = null; }
+            public void ResetEQType() { _EQType = null; }
+            public void ResetSWLvlMatch() { _SWLvlMatch = null; }
+            public void ResetLFC() { _LFC = null; }
+            public void ResetAuro() { _Auro = null; }
+            public void ResetUpgrade() {_Upgrade = null; }
             #endregion
         }
     }

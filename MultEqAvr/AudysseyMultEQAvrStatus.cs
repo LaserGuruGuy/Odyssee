@@ -117,43 +117,14 @@ namespace Audyssey
             }
             #endregion
 
-            #region ResetMethods
-            public void ResetHPPlug()
-            {
-                _HPPlug = null;
-                RaisePropertyChanged("HPPlug");
-            }
-            public void ResetMic()
-            {
-                _Mic = null;
-                RaisePropertyChanged("Mic");
-            }
-            public void ResetAmpAssign()
-            {
-                _AmpAssign = null;
-                RaisePropertyChanged("AmpAssign");
-            }
-            public void ResetAssignBin()
-            {
-                _AssignBin = null;
-                RaisePropertyChanged("AssignBin");
-             }
-            public void ResetChSetup()
-            {
-                _ChSetup = null;
-                RaisePropertyChanged("ChSetup");
-                RaisePropertyChanged("SelectedChSetup");
-            }
-            public void ResetBTTXStatus()
-            {
-                _BTTXStatus = null;
-                RaisePropertyChanged("BTTXStatus");
-            }
-            public void ResetSpPreset()
-            {
-                _SpPreset = null;
-                RaisePropertyChanged("SpPreset");
-            }
+            #region Methods
+            public void ResetHPPlug() { _HPPlug = null; }
+            public void ResetMic() { _Mic = null; }
+            public void ResetAmpAssign() { _AmpAssign = null; }
+            public void ResetAssignBin() { _AssignBin = null; }
+            public void ResetChSetup() { _ChSetup = null; }
+            public void ResetBTTXStatus() { _BTTXStatus = null; }
+            public void ResetSpPreset() { _SpPreset = null; }
             #endregion
         }
     }

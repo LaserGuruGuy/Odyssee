@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace Audyssey
 {
@@ -75,7 +73,7 @@ namespace Audyssey
                 }
                 RaisePropertyChanged("");
             }
-            private void RaisePropertyChanged(string propertyName = "")
+            private void RaisePropertyChanged(string propertyName)
             {
                 if (PropertyChanged != null)
                 {

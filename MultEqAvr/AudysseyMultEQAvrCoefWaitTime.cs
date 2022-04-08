@@ -44,24 +44,20 @@ namespace Audyssey
             }
             #endregion
 
-            #region ResetMethods
-            public void ResetInit()
+            #region Methods
+            public void ResetInit() { _Init = null; }
+            public void ResetFinal() { _Final = null; }
+            public void Reset()
             {
-                _Init = null;
-                RaisePropertyChanged("Init");
+                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
+                {
+                    if (prop.CanResetValue(this))
+                    {
+                        prop.ResetValue(this);
+                    }
+                }
+                RaisePropertyChanged("");
             }
-            public void ResetFinal()
-            {
-                _Final = null;
-                RaisePropertyChanged("Final");
-            }
-            #endregion
-
-            #region INotifyPropertyChanged implementation
-            public event PropertyChangedEventHandler PropertyChanged = delegate { };
-            #endregion
-
-            #region methods
             private void RaisePropertyChanged(string propertyName)
             {
                 if (PropertyChanged != null)
@@ -69,6 +65,10 @@ namespace Audyssey
                     PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                 }
             }
+            #endregion
+
+            #region Events
+            public event PropertyChangedEventHandler PropertyChanged = delegate { };
             #endregion
         }
     }
