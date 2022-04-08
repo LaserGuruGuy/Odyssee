@@ -160,16 +160,16 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Odyssee.ico" />
+    <Resource Include="Icons\Odyssee.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Microphone.png" />
+    <Resource Include="Icons\Microphone.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Speaker.png" />
+    <Resource Include="Icons\Speaker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Ethernet.png" />
+    <Resource Include="Icons\Ethernet.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MultEqAvr\MultEqAvr.csproj">
@@ -182,13 +182,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Inspector.png" />
+    <Resource Include="Icons\Inspector.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Subwoofer.png" />
+    <Resource Include="Icons\Subwoofer.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Audyssey.png" />
+    <Resource Include="Icons\Audyssey.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
