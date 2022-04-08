@@ -243,14 +243,17 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.AudysseyMode_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
+                                                AudysseyMultEQAvr.AudysseyMode_IsChecked = false;
                                                 cmdAck.Progress();
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
+                                                AudysseyMultEQAvr.AudysseyMode_IsChecked = false;
                                                 cmdAck.Nack();
                                             }
                                         }
@@ -263,6 +266,7 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = false;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
@@ -283,6 +287,7 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = true;
                                                 JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
                                                 {
                                                     ObjectCreationHandling = ObjectCreationHandling.Replace,
@@ -293,10 +298,12 @@ namespace Audyssey
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
+                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = false;
                                                 cmdAck.Progress();
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
+                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = false;
                                                 cmdAck.Nack();
                                             }
                                         }
@@ -307,7 +314,7 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
-                                            if (!Response.Comm.Equals(NACK))
+                                            if (Response.Comm.Equals(string.Empty))
                                             {
                                                 JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
                                                 {
@@ -315,7 +322,12 @@ namespace Audyssey
                                                     ContractResolver = new InterfaceContractResolver(typeof(IInfo)),
                                                     FloatParseHandling = FloatParseHandling.Decimal
                                                 });
+                                                AudysseyMultEQAvr.AvrInfo_IsChecked = true;
                                                 cmdAck.Ack();
+                                            }
+                                            else
+                                            {
+                                                AudysseyMultEQAvr.AvrInfo_IsChecked = false;
                                             }
                                         }
                                         break;
@@ -325,7 +337,7 @@ namespace Audyssey
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
-                                            if (!Response.Comm.Equals(NACK))
+                                            if (Response.Comm.Equals(string.Empty))
                                             {
                                                 AudysseyMultEQAvr.ChSetup = null;
                                                 JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
@@ -334,7 +346,12 @@ namespace Audyssey
                                                     ContractResolver = new InterfaceContractResolver(typeof(IStatus)),
                                                     FloatParseHandling = FloatParseHandling.Decimal,
                                                 });
+                                                AudysseyMultEQAvr.AvrStatus_IsChecked = true;
                                                 cmdAck.Ack();
+                                            }
+                                            else
+                                            {
+                                                AudysseyMultEQAvr.AvrStatus_IsChecked = false;
                                             }
                                         }
                                         break;

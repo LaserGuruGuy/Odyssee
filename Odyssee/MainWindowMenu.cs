@@ -125,11 +125,7 @@ namespace Odyssee
 
         public void OnCmdAckAvrInfo(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AvrInfo_IsChecked = true;
-            }
-            else
+            if (!IsAck)
             {
                 audysseyMultEQAvr.AvrInfo_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
@@ -146,11 +142,7 @@ namespace Odyssee
 
         public void OnCmdAckAvrStatus(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AvrStatus_IsChecked = true;
-            }
-            else
+            if (!IsAck)
             {
                 audysseyMultEQAvr.AvrStatus_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
@@ -174,11 +166,7 @@ namespace Odyssee
 
         public void OnCmdAckEnterAudysseyMode(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = true;
-            }
-            else
+            if (!IsAck)
             {
                 audysseyMultEQAvr.AudysseyMode_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
@@ -187,11 +175,7 @@ namespace Odyssee
 
         public void OnCmdAckExitAudysseyMode(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = false;
-            }
-            else
+            if (!IsAck)
             {
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
@@ -214,11 +198,7 @@ namespace Odyssee
 
         public void OnCmdAckLvLm(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AvrLvlm_IsChecked = true;
-            }
-            else
+            if (!IsAck)
             {
                 audysseyMultEQAvr.AvrLvlm_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
@@ -227,11 +207,7 @@ namespace Odyssee
 
         public void OnCmdAckAbortOprt(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AvrLvlm_IsChecked = false;
-            }
-            else
+            if (!IsAck)
             {
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
@@ -297,11 +273,7 @@ namespace Odyssee
 
         public void OnCmdAckAudyFinFlag(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AudyFinFlag_IsChecked = true;
-            }
-            else
+            if (!IsAck)
             {
                 audysseyMultEQAvr.AudyFinFlag_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";

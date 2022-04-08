@@ -24,7 +24,6 @@ namespace Odyssee
         {
             if (IsAck)
             {
-                audysseyMultEQAvr.AvrInfo_IsChecked = true;
                 audysseyMultEQAvrTcp.GetAvrStatus(OnCmdAckAvrStatus);
             }
             else
