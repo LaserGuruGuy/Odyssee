@@ -48,6 +48,8 @@ namespace Odyssee
             {
                 if (audysseyMultEQAvrTcp != null)
                 {
+                    audysseyMultEQAvr.Reset();
+                    // close the connection
                     audysseyMultEQAvrTcp.Close();
                     // immediately clean up the object
                     audysseyMultEQAvrTcp = null;
