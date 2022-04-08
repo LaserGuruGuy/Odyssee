@@ -10,24 +10,24 @@ namespace Odyssee
     {
         public PlotModel PlotModel { get; private set; } = new();
 
+        private string ValueAxisLabelFormatter(double input)
+        {
+            return ("");
+        }
+
         public void InitOxyPlotLvlm()
         {
             PlotModel.Axes.Clear();
-            PlotModel.Axes.Add(new LogarithmicAxis { Position = AxisPosition.Left });
-
-            LineSeries Lineserie = new()
-            {
-                DataFieldX = "Time",
-                DataFieldY = "dB",
-                StrokeThickness = 2,
-                MarkerSize = 0,
-                LineStyle = LineStyle.Solid,
-                Color = OxyColor.FromRgb(0, 0, 0),
-                MarkerType = MarkerType.None,
-            };
+            PlotModel.Axes.Add(new LogarithmicAxis { Unit = "dB", Position = AxisPosition.Left,   Minimum = 65, Maximum = 85, Base = 10, MajorStep = 5, MinorStep = 1, TickStyle = TickStyle.Outside, MajorGridlineStyle = LineStyle.Dot, MinorGridlineStyle = LineStyle.Dot });
+            PlotModel.Axes.Add(new LinearAxis { LabelFormatter = ValueAxisLabelFormatter, Position = AxisPosition.Bottom, Minimum = 0, TickStyle = TickStyle.None, MajorGridlineStyle = LineStyle.Dot, MinorGridlineStyle = LineStyle.Dot });
 
             PlotModel.Series.Clear();
-            PlotModel.Series.Add(Lineserie);
+            LineSeries Lineserie1 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Solid, Color = OxyColors.Blue, MarkerType = MarkerType.None };
+            PlotModel.Series.Add(Lineserie1);
+            LineSeries Lineserie2 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Dash, Color = OxyColors.Green, MarkerType = MarkerType.None };
+            PlotModel.Series.Add(Lineserie2);
+            LineSeries Lineserie3 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Dash, Color = OxyColors.Green, MarkerType = MarkerType.None };
+            PlotModel.Series.Add(Lineserie3);
 
             PlotModel.InvalidatePlot(true);
         }
@@ -38,14 +38,21 @@ namespace Odyssee
             {
                 if (PlotModel.Series != null)
                 {
-                    if (PlotModel.Series.Count > 0)
+                    for(int i = 0; i < PlotModel.Series.Count; i++)
                     {
-                        var s = (LineSeries)PlotModel.Series[0];
-                        var y = audysseyMultEQAvr.SPLValue > 0 ? Math.Log10((double)audysseyMultEQAvr.SPLValue) : 0f - Math.Log10((double)(0 - audysseyMultEQAvr.SPLValue));
-                        Console.WriteLine("audysseyMultEQAvr.SPLValue " + audysseyMultEQAvr.SPLValue + " " + y);
-                        // TODO how to fix negative dB to show on Oxyplot?
-                        // Add half-scale and set vertical axis limits from max neg to max pos?
-                        s.Points.Add(new DataPoint(s.Points.Count, y));
+                        var s = (LineSeries)PlotModel.Series[i];
+                        switch (i)
+                        {
+                            case 0:
+                                s.Points.Add(new DataPoint(s.Points.Count, audysseyMultEQAvr.SPLValuedB));
+                                break;
+                            case 1:
+                                s.Points.Add(new DataPoint(s.Points.Count, 70));
+                                break;
+                            case 2:
+                                s.Points.Add(new DataPoint(s.Points.Count, 80));
+                                break;
+                        }
                         PlotModel.InvalidatePlot(true);
                     }
                 }

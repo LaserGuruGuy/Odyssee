@@ -27,7 +27,7 @@ namespace Audyssey
                     {
                         throw new JsonSerializationException();
                     }
-                    return Convert.ToInt16(str, 16);
+                    return Convert.ToUInt16(str, 16);
                 }
                 else
                 {
@@ -40,19 +40,19 @@ namespace Audyssey
         {
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public Int16? SPLValue { get; set; }
+            public UInt16? SPLValue { get; set; }
             #endregion
         }
 
         public partial class AudysseyMultEQAvr : ISPLValue, INotifyPropertyChanged
         {
             #region BackingField
-            public Int16? _SPLValue = null;
+            public UInt16? _SPLValue = null;
             #endregion
 
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public Int16? SPLValue
+            public UInt16? SPLValue
             {
                 get
                 {
@@ -62,6 +62,17 @@ namespace Audyssey
                 {
                     _SPLValue = value;
                     RaisePropertyChanged("SPLValue");
+                    if (value != 0xFE0C)
+                    {
+                        RaisePropertyChanged("SPLValuedB");
+                    }
+                }
+            }
+            public double SPLValuedB
+            {
+                get
+                {
+                    return 20.0*Math.Log10((double)_SPLValue);
                 }
             }
             #endregion

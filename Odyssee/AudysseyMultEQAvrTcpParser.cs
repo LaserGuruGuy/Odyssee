@@ -32,7 +32,7 @@ namespace Audyssey
             public AudysseyMultEQAvrTcp(ref AudysseyMultEQAvr audysseyMultEQAvr, string ClientAddress = "127.0.0.1", int ClientPort = 1256, int ClientTimeout = 5000)
             {
                 AudysseyMultEQAvr = audysseyMultEQAvr;
-                AudysseyMultEQAvrTcpClient = new(ClientAddress, ClientPort, ClientTimeout, Log, null, null, Populate);
+                AudysseyMultEQAvrTcpClient = new(ClientAddress, ClientPort, ClientTimeout, AvrConnectCallback, null, null, Populate);
             }
 
             ~AudysseyMultEQAvrTcp()
@@ -579,8 +579,15 @@ namespace Audyssey
                 }
             }
 
-            public void Log(string Result)
+            public void AvrConnectCallback(bool IsConnected, string Result)
             {
+                AudysseyMultEQAvr.AvrConnect_IsChecked = IsConnected;
+                AudysseyMultEQAvr.Serialized += Result;
+            }
+
+            public void AvrSnifferCallback(bool IsConnected, string Result)
+            {
+                AudysseyMultEQAvr.SnifferAttach_IsChecked = IsConnected;
                 AudysseyMultEQAvr.Serialized += Result;
             }
 

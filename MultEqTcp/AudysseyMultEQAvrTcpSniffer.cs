@@ -8,16 +8,16 @@ namespace Audyssey
 {
     namespace MultEQTcpSniffer
     {
-        public delegate void AudysseyMultEQAvrTcpSnifferConnectCallback(string Result);
+        public delegate void AudysseyMultEQAvrTcpSnifferConnectCallback(bool IsConnected, string Result);
         public delegate void AudysseyMultEQAvrTcpSnifferTransmitCallback(bool IsCompleted);
         public delegate void AudysseyMultEQAvrTcpSnifferReceiveCallback(bool IsCompleted);
 
         public class AudysseyMultEQTcpSniffer
         {
-            private string _ClientAddress;
+            private string _ClientName;
             private int _ClientPort;
 
-            private string _HostAddress;
+            private string _HostName;
             private int _HostPort;
 
             private Socket _Socket = null;
@@ -30,7 +30,7 @@ namespace Audyssey
 
             private AudysseyMultEQAvrTcpStream _AudysseyMultEQAvrTcpStream = null;
 
-            public AudysseyMultEQTcpSniffer(string HostAddress, string ClientAddress, int HostPort = 0, int ClientPort = 1256, int HostTimeout = 0, int ClientTimeout = 0,
+            public AudysseyMultEQTcpSniffer(string HostName, string ClientName, int HostPort = 0, int ClientPort = 1256, int HostTimeout = 0, int ClientTimeout = 0,
                     AudysseyMultEQAvrTcpSnifferConnectCallback AudysseyMultEQAvrTcpSnifferConnectCallback = null,
                     AudysseyMultEQAvrTcpSnifferTransmitCallback AudysseyMultEQAvrTcpSnifferTransmitCallback = null,
                     AudysseyMultEQAvrTcpSnifferReceiveCallback AudysseyMultEQAvrTcpSnifferReceiveCallback = null,
@@ -42,10 +42,10 @@ namespace Audyssey
 
                 _AudysseyMultEQAvrTcpStream = new(AudysseyMultEQAvrTcpStreamParseCallback);
 
-                _ClientAddress = ClientAddress;
+                _ClientName = ClientName;
                 _ClientPort = ClientPort;
 
-                _HostAddress = HostAddress;
+                _HostName = HostName;
                 _HostPort = HostPort;
             }
 
@@ -59,7 +59,7 @@ namespace Audyssey
                 //address family being of type internetwork, and protocol being IP
                 try
                 {
-                    IPEndPoint hostEndPoint = new(IPAddress.Parse(_HostAddress), _HostPort);
+                    IPEndPoint hostEndPoint = new(IPAddress.Parse(_HostName), _HostPort);
 
                     _Socket = new(AddressFamily.InterNetwork, SocketType.Raw, ProtocolType.IP);
 
@@ -87,32 +87,32 @@ namespace Audyssey
                     _Socket.BeginReceive(_PacketData, 0, _PacketData.Length, SocketFlags.None, new AsyncCallback(OnSocketReceive), null);
 
                     //Log
-                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke("Attached to " + _HostAddress + ":" + _HostPort + "\n");
+                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(true, "Attached " + _HostName + ":" + _HostPort + " to " + _ClientName + ":" + _ClientPort + "\n");
                 }
                 catch (ObjectDisposedException)
                 {
                 }
                 catch (Exception ex)
                 {
-                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(ex.Message);
+                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(false, ex.Message);
                 }
             }
 
             public void Close()
             {
-                _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke("Detached from " + _HostAddress + ":" + _HostPort + "\n");
                 if (_Socket != null)
                 {
                     try
                     {
                         _Socket.Close();
+                        _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(false, "Detached " + _HostName + ":" + _HostPort + " from " + _ClientName + ":" + _ClientPort + "\n");
                     }
                     catch (ObjectDisposedException)
                     {
                     }
                     catch (Exception ex)
                     {
-                        _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(ex.Message);
+                        _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(false, ex.Message);
                     }
                 }
             }
@@ -144,8 +144,8 @@ namespace Audyssey
                 //so we start by parsing the IP header and see what protocol data
                 //is being carried by it and filter source and destination address.
                 IPHeader ipHeader = new(byteData, nReceived);
-                if (ipHeader.SourceAddress.ToString().Equals(_ClientAddress) ||
-                    ipHeader.DestinationAddress.ToString().Equals(_ClientAddress))
+                if (ipHeader.SourceAddress.ToString().Equals(_ClientName) ||
+                    ipHeader.DestinationAddress.ToString().Equals(_ClientName))
                 {
                     //Now according to the protocol being carried by the IP datagram we parse 
                     //the data field of the datagram if it carries TCP protocol

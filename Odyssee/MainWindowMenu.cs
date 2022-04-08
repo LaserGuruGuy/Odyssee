@@ -22,13 +22,13 @@ namespace Odyssee
 
         private void ConnectReceiver()
         {
-            if (connectReceiver.IsChecked)
+            if (audysseyMultEQAvr.AvrConnect_IsChecked)
             {
                 // if there is no IP address text
                 if (string.IsNullOrEmpty(cmbInterfaceReceiver.Text))
                 {
                     // uncheck the menu item
-                    connectReceiver.IsChecked = false;
+                    audysseyMultEQAvr.AvrConnect_IsChecked = false;
                     // display message to report error to user
                     MessageBox.Show("Enter select a valid receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
@@ -64,13 +64,13 @@ namespace Odyssee
 
         private void ConnectSniffer()
         {
-            if (connectSniffer.IsChecked)
+            if (audysseyMultEQAvr.SnifferAttach_IsChecked)
             {
                 // sniffer must be elevated to capture raw packets
                 if (!IsElevated())
                 {
                     // we cannot create the sniffer...
-                    connectSniffer.IsChecked = false;
+                    audysseyMultEQAvr.SnifferAttach_IsChecked = false;
                     // but we can ask the user to elevate the program!
                     RunAsAdmin();
                 }
@@ -88,7 +88,7 @@ namespace Odyssee
                             audysseyMultEQTcpSniffer = new AudysseyMultEQTcpSniffer(
                                 cmbInterfaceComputer.Text.IndexOf(' ') > -1 ? cmbInterfaceComputer.Text.Substring(0, cmbInterfaceComputer.Text.IndexOf(' ')) : cmbInterfaceComputer.Text,
                                 cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text,
-                                0, 1256, 0, 0, audysseyMultEQAvrTcp.Log, null, null, audysseyMultEQAvrTcp.Populate);
+                                0, 1256, 0, 0, audysseyMultEQAvrTcp.AvrSnifferCallback, null, null, audysseyMultEQAvrTcp.Populate);
                             // open connection to receiver
                             audysseyMultEQTcpSniffer.Open();
                         }
@@ -119,11 +119,6 @@ namespace Odyssee
             {
                 audysseyMultEQAvrTcp.GetAvrInfo(OnCmdAckAvrInfo);
             }
-            else
-            {
-                ReceiverInfo.IsChecked = false;
-                audysseyMultEQAvr.Serialized += "No receiver connected\n";
-            }
         }
 
         public void OnCmdAckAvrInfo(bool IsAck)
@@ -145,11 +140,6 @@ namespace Odyssee
             {
                 audysseyMultEQAvrTcp.GetAvrStatus(OnCmdAckAvrStatus);
             }
-            else
-            {
-                ReceiverStatus.IsChecked = false;
-                audysseyMultEQAvr.Serialized += "No receiver connected\n";
-            }
         }
 
         public void OnCmdAckAvrStatus(bool IsAck)
@@ -167,27 +157,15 @@ namespace Odyssee
 
         private void MenuItem_AudysseyMode_OnClick(object sender, RoutedEventArgs e)
         {
-            if (AudysseyMode.IsChecked)
+            if (audysseyMultEQAvrTcp != null)
             {
-                if (audysseyMultEQAvrTcp != null)
+                if (audysseyMultEQAvr.AudysseyMode_IsChecked)
                 {
                     audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdAckEnterAudysseyMode);
                 }
                 else
                 {
-                    AudysseyMode.IsChecked = false;
-                    audysseyMultEQAvr.Serialized += "No receiver connected\n";
-                }
-            }
-            else
-            {
-                if (audysseyMultEQAvrTcp != null)
-                {
                     audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdAckExitAudysseyMode);
-                }
-                else
-                {
-                    AudysseyMode.IsChecked = false;
                 }
             }
         }
@@ -210,10 +188,6 @@ namespace Odyssee
             if (IsAck)
             {
                 audysseyMultEQAvr.AudysseyMode_IsChecked = false;
-                audysseyMultEQAvr.AvrInfo_IsChecked = false;
-                audysseyMultEQAvr.AvrStatus_IsChecked = false;
-                audysseyMultEQAvr.AvrLvlm_IsChecked = false;
-                audysseyMultEQAvr.AudyFinFlag_IsChecked = false;
             }
             else
             {
@@ -223,29 +197,16 @@ namespace Odyssee
 
         private void MenuItem_AvrLvLm_OnClick(object sender, RoutedEventArgs e)
         {
-            if (AvrLvLm.IsChecked)
+            if (audysseyMultEQAvrTcp != null)
             {
-                if (audysseyMultEQAvrTcp != null)
+                if (audysseyMultEQAvr.AvrLvlm_IsChecked)
                 {
                     audysseyMultEQAvrTcp.StartLvLm(OnCmdAckLvLm);
                     InitOxyPlotLvlm();
                 }
                 else
                 {
-                    AvrLvLm.IsChecked = false;
-                    audysseyMultEQAvr.Serialized += "No receiver connected\n";
-                }
-            }
-            else
-            {
-                if (audysseyMultEQAvrTcp != null)
-                {
                     audysseyMultEQAvrTcp.AbortOprt(OnCmdAckAbortOprt);
-                }
-                else
-                {
-                    AvrLvLm.IsChecked = false;
-                    audysseyMultEQAvr.Serialized += "No receiver connected\n";
                 }
             }
         }
@@ -258,20 +219,8 @@ namespace Odyssee
             }
             else
             {
+                audysseyMultEQAvr.AvrLvlm_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
-            }
-        }
-
-        private void MenuItem_AvrAbortOprt_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (audysseyMultEQAvrTcp != null)
-            {
-                audysseyMultEQAvrTcp.AbortOprt(OnCmdAckAbortOprt);
-            }
-            else
-            {
-                AvrAbortOprt.IsChecked = false;
-                audysseyMultEQAvr.Serialized += "No receiver connected\n";
             }
         }
 
@@ -341,11 +290,6 @@ namespace Odyssee
                 if (audysseyMultEQAvrTcp != null)
                 {
                     audysseyMultEQAvrTcp.AudyFinFlag(OnCmdAckAudyFinFlag);
-                }
-                else
-                {
-                    AudyFinFlag.IsChecked = false;
-                    audysseyMultEQAvr.Serialized += "No receiver connected\n";
                 }
             }
         }

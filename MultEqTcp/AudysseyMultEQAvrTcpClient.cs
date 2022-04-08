@@ -10,7 +10,7 @@ namespace Audyssey
 {
     namespace MultEQTcpClient
     {
-        public delegate void AudysseyMultEQAvrTcpClientConnectCallback(string Result);
+        public delegate void AudysseyMultEQAvrTcpClientConnectCallback(bool IsConnected, string Result);
         public delegate void AudysseyMultEQAvrTcpClientTransmitCallback(bool IsCompleted);
         public delegate void AudysseyMultEQAvrTcpClientReceiveCallback(bool IsCompleted);
 
@@ -136,7 +136,7 @@ namespace Audyssey
                 }
                 catch (Exception ex)
                 {
-                    _AudysseyMultEQAvrConnectCallBack?.Invoke(ex.Message);
+                    _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                     return;
                 }
                 try
@@ -145,13 +145,12 @@ namespace Audyssey
                 }
                 catch (Exception ex)
                 {
-                    _AudysseyMultEQAvrConnectCallBack?.Invoke(ex.Message);
+                    _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                 }
             }
 
             public void Close()
             {
-                _AudysseyMultEQAvrConnectCallBack?.Invoke("Disconnected from " + _TcpClient.Client.RemoteEndPoint.ToString() + "\n");
                 // workaround for a .net bug: http://support.microsoft.com/kb/821625
                 if (_NetworkStream != null)
                 {
@@ -161,7 +160,7 @@ namespace Audyssey
                     }
                     catch (Exception ex)
                     {
-                        _AudysseyMultEQAvrConnectCallBack?.Invoke(ex.Message);
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                     }
                 }
                 if (_TcpClient != null)
@@ -169,13 +168,14 @@ namespace Audyssey
                     try
                     {
                         _TcpClient.Close();
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(false, "Disconnected from " + _HostName + ":" + _HostPort + "\n");
                     }
                     catch (ObjectDisposedException)
                     {
                     }
                     catch (Exception ex)
                     {
-                        _AudysseyMultEQAvrConnectCallBack?.Invoke(ex.Message);
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                     }
                 }
             }
@@ -188,7 +188,7 @@ namespace Audyssey
                 }
                 catch (Exception ex)
                 {
-                    _AudysseyMultEQAvrConnectCallBack?.Invoke(ex.Message);
+                    _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                     return;
                 }
                 if (_NetworkStream.CanRead)
@@ -197,12 +197,12 @@ namespace Audyssey
                     {
                         _Buffer = new byte[_TcpClient.ReceiveBufferSize];
                         _ReadResult = _NetworkStream.BeginRead(_Buffer, 0, _Buffer.Length, ReadCallback, _Buffer);
-                        _AudysseyMultEQAvrConnectCallBack?.Invoke("Connected to " + _TcpClient.Client.RemoteEndPoint.ToString() + "\n");
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(true, "Connected to " + _TcpClient.Client.RemoteEndPoint.ToString() + "\n");
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
-                        _AudysseyMultEQAvrConnectCallBack?.Invoke(ex.Message);
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                     }
                 }
             }

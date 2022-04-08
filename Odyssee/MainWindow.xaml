@@ -48,16 +48,15 @@
                     </MenuItem>
                     <MenuItem Header="_Receiver"  Height="30" Width="70">
                         <MenuItem Header="_Detect Receiver" Name="detectReceiver" Click="MenuItem_DetectReceiver_OnClick"/>
-                        <MenuItem Header="Connect _Receiver" Name="connectReceiver" Click="MenuItem_ConnectReceiver_OnClick" IsCheckable="True"/>
-                        <MenuItem Header="Connect S_niffer" Name="connectSniffer" Click="MenuItem_ConnectSniffer_OnClick" IsCheckable="True"/>
+                        <MenuItem Header="Connect _Receiver" Name="MenuItem_ConnectReceiver" Click="MenuItem_ConnectReceiver_OnClick" IsCheckable="True" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Connect S_niffer" Name="connectSniffer" Click="MenuItem_ConnectSniffer_OnClick" IsCheckable="True" IsChecked="{Binding SnifferAttach_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Get Receiver _Info" Name="ReceiverInfo" Click="MenuItem_AvrInfo_OnClick" IsCheckable="True" IsChecked="{Binding AvrInfo_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Get Receiver _Status" Name="ReceiverStatus" Click="MenuItem_AvrStatus_OnClick" IsCheckable="True" IsChecked="{Binding AvrStatus_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Get Receiver _Info" Name="MenuItem_ReceiverInfo" Click="MenuItem_AvrInfo_OnClick" IsCheckable="True" IsChecked="{Binding AvrInfo_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Get Receiver _Status" Name="MenuItemReceiverStatus" Click="MenuItem_AvrStatus_OnClick" IsCheckable="True" IsChecked="{Binding AvrStatus_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
                         <MenuItem Header="Enter _Audyssey" Name="AudysseyMode" Click="MenuItem_AudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
                         <MenuItem Header="Set LvLm" Name="AvrLvLm" Click="MenuItem_AvrLvLm_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Abort Oprt" Name="AvrAbortOprt" Click="MenuItem_AvrAbortOprt_OnClick"/>
                         <Separator/>
                         <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" />
                         <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" />
@@ -68,18 +67,21 @@
                         <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="MenuItem_SetAvrSetDisFil_OnClick" />
                         <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" />
                         <MenuItem Header="Set CoefDt" Name="setAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" />
-                        <MenuItem Header="Set AudyFinFlg" Name="AudyFinFlag" Click="MenuItem_AudyFinFlag_OnClick"  IsChecked="{Binding AudyFinFlag_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Set AudyFinFlg" Name="AudyFinFlag" Click="MenuItem_AudyFinFlag_OnClick" IsCheckable="True" IsChecked="{Binding AudyFinFlag_IsChecked, Mode=TwoWay}"/>
                     </MenuItem>
                 </Menu>
-                <Button Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Connect to the Receiver">
+                <ToggleButton Name="ToggleButton_ConnectReceiver" Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}" ToolTip="Connect to the Receiver">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Ethernet.png"/>
-                </Button>
-                <Button Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Get receiver Info and Status">
+                </ToggleButton>
+                <ToggleButton Name="ToggleButton_Inspector" Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding Inspector_IsChecked, Mode=OneWay}"  ToolTip="Get receiver Info and Status">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Inspector.png"/>
-                </Button>
-                <Button Click="OnButtonClick_SubwooferLevel" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Adjust Subwoofer Level">
+                </ToggleButton>
+                <ToggleButton Click="OnButtonClick_Audyssey" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}" ToolTip="Enter Receiver remote control">
+                    <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Audyssey.png"/>
+                </ToggleButton>
+                <ToggleButton Click="OnButtonClick_SubwooferLevel" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}" ToolTip="Adjust Subwoofer Level">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Subwoofer.png"/>
-                </Button>
+                </ToggleButton>
                 <Button Click="OnButtonClick_Microphone" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Measure Chirp Response with Receiver Microphone">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Microphone.png"/>
                 </Button>
