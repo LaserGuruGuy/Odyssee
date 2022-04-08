@@ -116,6 +116,7 @@ namespace Odyssee
         {
             if (e.PropertyName.Equals("SPLValuedB"))
             {
+                InitOxyPlotLvlm();
                 AddOxyPlotLvlm();
             }
         }

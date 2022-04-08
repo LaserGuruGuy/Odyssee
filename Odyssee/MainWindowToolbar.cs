@@ -56,7 +56,6 @@ namespace Odyssee
                 if (audysseyMultEQAvr.AvrLvlm_IsChecked)
                 {
                     audysseyMultEQAvrTcp.StartLvLm(OnCmdAckLvLm);
-                    InitOxyPlotLvlm();
                 }
                 else
                 {

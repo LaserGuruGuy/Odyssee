@@ -17,19 +17,22 @@ namespace Odyssee
 
         public void InitOxyPlotLvlm()
         {
-            PlotModel.Axes.Clear();
-            PlotModel.Axes.Add(new LogarithmicAxis { Unit = "dB", Position = AxisPosition.Left,   Minimum = 65, Maximum = 85, Base = 10, MajorStep = 5, MinorStep = 1, TickStyle = TickStyle.Outside, MajorGridlineStyle = LineStyle.Dot, MinorGridlineStyle = LineStyle.Dot });
-            PlotModel.Axes.Add(new LinearAxis { LabelFormatter = ValueAxisLabelFormatter, Position = AxisPosition.Bottom, Minimum = 0, TickStyle = TickStyle.None, MajorGridlineStyle = LineStyle.Dot, MinorGridlineStyle = LineStyle.Dot });
+            if (PlotModel.Title != "Subwoofer Level")
+            {
+                PlotModel.Title = "Subwoofer Level";
+                
+                PlotModel.Axes.Clear();
+                PlotModel.Axes.Add(new LogarithmicAxis { Unit = "dB", Position = AxisPosition.Left, Minimum = 65, Maximum = 85, Base = 10, MajorStep = 5, MinorStep = 1, TickStyle = TickStyle.Outside, MajorGridlineStyle = LineStyle.Dot, MinorGridlineStyle = LineStyle.Dot });
+                PlotModel.Axes.Add(new LinearAxis { LabelFormatter = ValueAxisLabelFormatter, Position = AxisPosition.Bottom, Minimum = 0, TickStyle = TickStyle.None, MajorGridlineStyle = LineStyle.Dot, MinorGridlineStyle = LineStyle.Dot });
 
-            PlotModel.Series.Clear();
-            LineSeries Lineserie1 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Solid, Color = OxyColors.Blue, MarkerType = MarkerType.None };
-            PlotModel.Series.Add(Lineserie1);
-            LineSeries Lineserie2 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Dash, Color = OxyColors.Green, MarkerType = MarkerType.None };
-            PlotModel.Series.Add(Lineserie2);
-            LineSeries Lineserie3 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Dash, Color = OxyColors.Green, MarkerType = MarkerType.None };
-            PlotModel.Series.Add(Lineserie3);
-
-            PlotModel.InvalidatePlot(true);
+                PlotModel.Series.Clear();
+                LineSeries Lineserie1 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Solid, Color = OxyColors.Blue, MarkerType = MarkerType.None };
+                PlotModel.Series.Add(Lineserie1);
+                LineSeries Lineserie2 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Dash, Color = OxyColors.Green, MarkerType = MarkerType.None };
+                PlotModel.Series.Add(Lineserie2);
+                LineSeries Lineserie3 = new() { StrokeThickness = 2, MarkerSize = 0, LineStyle = LineStyle.Dash, Color = OxyColors.Green, MarkerType = MarkerType.None };
+                PlotModel.Series.Add(Lineserie3);
+            }
         }
 
         public void AddOxyPlotLvlm()
