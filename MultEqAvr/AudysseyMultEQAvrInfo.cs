@@ -159,16 +159,16 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            public void ResetIfver() { _Ifver = null; }
-            public void ResetDType() { _DType = null; }
-            public void ResetCoefWaitTime() { _CoefWaitTime = null; }
-            public void ResetADC() { _ADC = null; }
-            public void ResetSysDelay() { _SysDelay = null; }
-            public void ResetEQType() { _EQType = null; }
-            public void ResetSWLvlMatch() { _SWLvlMatch = null; }
-            public void ResetLFC() { _LFC = null; }
-            public void ResetAuro() { _Auro = null; }
-            public void ResetUpgrade() {_Upgrade = null; }
+            private void ResetIfver() { _Ifver = null; }
+            private void ResetDType() { _DType = null; }
+            private void ResetCoefWaitTime() { _CoefWaitTime = null; }
+            private void ResetADC() { _ADC = null; }
+            private void ResetSysDelay() { _SysDelay = null; }
+            private void ResetEQType() { _EQType = null; }
+            private void ResetSWLvlMatch() { _SWLvlMatch = null; }
+            private void ResetLFC() { _LFC = null; }
+            private void ResetAuro() { _Auro = null; }
+            private void ResetUpgrade() {_Upgrade = null; }
             #endregion
         }
     }

@@ -36,6 +36,54 @@ namespace Audyssey
             }
         }
 
+        public class RunningAverage : INotifyPropertyChanged
+        {
+            #region BackingField
+            private double _Average = 0;
+            private double _Count = 0;
+            #endregion
+
+            #region Properties
+            public double Average { get {return 10.0*Math.Log10(_Average); } }
+            public UInt16? Value
+            {
+                set 
+                {
+                    double lin_value = Math.Pow(10.0, (double)value/1000.0);
+                    _Count += 1;
+                    _Average = (_Average * (_Count - 1) + lin_value) / _Count;
+                }
+            }
+            #endregion
+
+            #region Methods
+            public void ResetAverage() { _Average = 0; }
+            public void ResetCount() { _Count = 0; }
+            public void Reset()
+            {
+                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
+                {
+                    if (prop.CanResetValue(this))
+                    {
+                        prop.ResetValue(this);
+                        RaisePropertyChanged(prop.Name);
+                    }
+                }
+            }
+            private void RaisePropertyChanged(string propertyName)
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+            #endregion
+
+            #region Events
+            public event PropertyChangedEventHandler PropertyChanged = delegate { };
+            #endregion
+        }
+
         public interface ISPLValue
         {
             #region Properties
@@ -47,7 +95,8 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : ISPLValue, INotifyPropertyChanged
         {
             #region BackingField
-            public UInt16? _SPLValue = null;
+            private UInt16? _SPLValue = null;
+            private RunningAverage _SPLAvg = new();
             #endregion
 
             #region Properties
@@ -60,11 +109,13 @@ namespace Audyssey
                 }
                 set
                 {
-                    _SPLValue = value;
-                    RaisePropertyChanged("SPLValue");
                     if (value != 0xFE0C)
                     {
+                        _SPLValue = value;
+                        _SPLAvg.Value = value;
+                        RaisePropertyChanged("SPLValue");
                         RaisePropertyChanged("SPLValuedB");
+                        RaisePropertyChanged("SPLAvgdB");
                     }
                 }
             }
@@ -73,16 +124,26 @@ namespace Audyssey
             {
                 get
                 {
-                    return 20.0*Math.Log10((double)_SPLValue);
+                    return _SPLValue != null ? (double)_SPLValue / 100.0 : 0;
+                }
+            }
+            public double SPLAvgdB
+            {
+                get
+                {
+                    return _SPLAvg.Average;
                 }
             }
             #endregion
 
             #region Methods
-            public void ResetSPLValue()
+            private void ResetSPLValue()
             {
                 _SPLValue = null;
-                RaisePropertyChanged("SPLValue");
+            }
+            public void ResetSPLAvg()
+            {
+                _SPLAvg.Reset();
             }
             #endregion
         }

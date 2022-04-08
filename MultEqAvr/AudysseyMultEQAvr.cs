@@ -54,14 +54,14 @@ namespace Audyssey
             public AudysseyMultEQAvr()
             {
             }
-            public void ResetSerialized() { _Serialized = string.Empty;  }
-            public void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
-            public void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
-            public void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
-            public void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }
-            public void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; }
-            public void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
-            public void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
+            private void ResetSerialized() { _Serialized = string.Empty;  }
+            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
+            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
+            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
+            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }
+            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; }
+            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
+            private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))

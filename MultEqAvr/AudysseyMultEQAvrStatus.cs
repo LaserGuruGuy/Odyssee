@@ -118,13 +118,13 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            public void ResetHPPlug() { _HPPlug = null; }
-            public void ResetMic() { _Mic = null; }
-            public void ResetAmpAssign() { _AmpAssign = null; }
-            public void ResetAssignBin() { _AssignBin = null; }
-            public void ResetChSetup() { _ChSetup = null; }
-            public void ResetBTTXStatus() { _BTTXStatus = null; }
-            public void ResetSpPreset() { _SpPreset = null; }
+            private void ResetHPPlug() { _HPPlug = null; }
+            private void ResetMic() { _Mic = null; }
+            private void ResetAmpAssign() { _AmpAssign = null; }
+            private void ResetAssignBin() { _AssignBin = null; }
+            private void ResetChSetup() { _ChSetup = null; }
+            private void ResetBTTXStatus() { _BTTXStatus = null; }
+            private void ResetSpPreset() { _SpPreset = null; }
             #endregion
         }
     }

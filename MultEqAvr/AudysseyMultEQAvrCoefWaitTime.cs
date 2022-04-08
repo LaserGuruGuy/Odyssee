@@ -45,8 +45,8 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            public void ResetInit() { _Init = null; }
-            public void ResetFinal() { _Final = null; }
+            private void ResetInit() { _Init = null; }
+            private void ResetFinal() { _Final = null; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
@@ -54,9 +54,9 @@ namespace Audyssey
                     if (prop.CanResetValue(this))
                     {
                         prop.ResetValue(this);
+                        RaisePropertyChanged(prop.Name);
                     }
                 }
-                RaisePropertyChanged("");
             }
             private void RaisePropertyChanged(string propertyName)
             {
