@@ -190,6 +190,9 @@
   <ItemGroup>
     <Resource Include="Icons\Audyssey.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\VU.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>rem xcopy /E /Y /R $(TargetDir) \\HTPC\Odyssee\</PostBuildEvent>
