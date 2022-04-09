@@ -147,6 +147,10 @@ namespace Odyssee
                 audysseyMultEQAvr.AvrStatus_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
+            else
+            {
+                audysseyMultEQAvr.Populate();
+            }
         }
 
         private void MenuItem_AudysseyMode_OnClick(object sender, RoutedEventArgs e)

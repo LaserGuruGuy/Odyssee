@@ -59,8 +59,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudysseyMultEQ.cs" />
     <Compile Include="AudysseyMultEQAvr.cs" />
     <Compile Include="AudysseyMultEQAvrCoefWaitTime.cs" />
+    <Compile Include="AudysseyMultEQAvrDetectedChannels.cs" />
     <Compile Include="AudysseyMultEQAvrUniqueObservableCollection.cs" />
     <Compile Include="AudysseyMultEQAvrInfo.cs" />
     <Compile Include="AudysseyMultEQAvrSPL.cs" />

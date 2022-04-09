@@ -10,6 +10,17 @@ namespace Audyssey
         {
             protected override void InsertItem(int index, T item)
             {
+                if (item.GetType() == typeof(DetectedChannel))
+                {
+                    foreach (var Item in Items)
+                    {
+                        if ((Item as DetectedChannel).Channel.Equals((item as DetectedChannel).Channel))
+                        {
+                            return;
+                        }
+                    }
+                    Items.Add(item);
+                }
                 if (item.GetType() == typeof(Dictionary<string, string>))
                 {
                     foreach (var Item in Items)
@@ -21,6 +32,7 @@ namespace Audyssey
                             break;
                         }
                     }
+                    base.InsertItem(index, item);
                 }
                 else if (item.GetType() == typeof(Dictionary<string, int>))
                 {
@@ -33,6 +45,7 @@ namespace Audyssey
                             break;
                         }
                     }
+                    base.InsertItem(index, item);
                 }
                 else if (item.GetType() == typeof(Dictionary<string, object>))
                 {
@@ -45,8 +58,8 @@ namespace Audyssey
                             break;
                         }
                     }
+                    base.InsertItem(index, item);
                 }
-                base.InsertItem(index, item);
             }
         }
     }

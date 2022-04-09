@@ -33,7 +33,8 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -109,18 +110,165 @@
                     <Path Width="46" Height="30" Data="M 18,11 27,20 M 18,20 27,11" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
                 </Button>
             </StackPanel>
-            <DockPanel Grid.Row="1" LastChildFill="True" Background="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}">
+            <GridSplitter Grid.Row="1" Height="1" HorizontalAlignment="Stretch" />
+            <DockPanel Grid.Row="2" LastChildFill="True">
                 <!-- TODO -->
-                <Button Content="L" DockPanel.Dock="Left"></Button>
+                <Grid DockPanel.Dock="Left">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Grid.Column="0" Header="Channel Setup">
+                                    <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, Mode=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0">
+                                    <ListView.View>
+                                        <GridView>
+                                            <GridViewColumn Header="Channel" Width="auto" DisplayMemberBinding="{Binding Channel}" />
+                                            <GridViewColumn Header="Setup" Width="auto" DisplayMemberBinding="{Binding Setup}" />
+                                            <GridViewColumn Header="Audy" Width="auto">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <CheckBox IsChecked="{Binding Path=Audy}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                </GroupBox>
+                                <GroupBox Grid.Column="2" Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=channelsView}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Content="Channel Level (dB)"></Label>
+                                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SelectedChLevel}" ItemsSource="{Binding SelectedChLevelList}" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="1" Grid.Column="0" Content="Channel Crossover (Hz)"></Label>
+                                        <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding SelectedCrossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="2" Grid.Column="0" Content="Channel Setup"></Label>
+                                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding SelectedChSetup}" ItemsSource="{Binding ChannelSetupList}" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="3" Grid.Column="0" Content="Speaker Config"></Label>
+                                        <ComboBox Grid.Row="3" Grid.Column="1" SelectedValue="{Binding SelectedSpConfig}" ItemsSource="{Binding SpeakerTypeList}" VerticalAlignment="Center"/>
+                                        <Label Grid.Row="4" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
+                                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedDistance}" VerticalAlignment="Center"></TextBox>
+                                        <Label Grid.Row="5" Grid.Column="0" Content="Speaker Level Value" VerticalAlignment="Center"></Label>
+                                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SPLValue}" VerticalAlignment="Center"></TextBox>
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </Grid>
+                        <GroupBox Grid.Row="1" Header="Audy">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Row="0" Grid.Column="0" Content="AudyMultEq" IsChecked="{Binding AudyMultEq}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Row="1" Grid.Column="0" Content="AudyLfc" IsChecked="{Binding AudyLfc}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Row="2" Grid.Column="0" Content="AudyDynVol" IsChecked="{Binding AudyDynVol}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <CheckBox Grid.Row="3" Grid.Column="0" Content="AudyDynEq" IsChecked="{Binding AudyDynEq}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Grid.Row="0" Grid.Column="1" Content="AudyEqSet"></Label>
+                                <ComboBox Grid.Row="0" Grid.Column="2" SelectedValue="{Binding AudyEqSet}" ItemsSource="{Binding AudyEqSetList}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="1" Grid.Column="1" Content="AudyLfcLev"></Label>
+                                <ComboBox Grid.Row="1" Grid.Column="2" SelectedValue="{Binding AudyLfcLev}" ItemsSource="{Binding AudyLfcLevList}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="2" Grid.Column="1" Content="AudyDynVolSet"></Label>
+                                <ComboBox Grid.Row="2" Grid.Column="2" SelectedValue="{Binding AudyDynSet}" ItemsSource="{Binding AudyDynSetList}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="3" Grid.Column="1" Content="AudyDynEqRef (dB)"></Label>
+                                <ComboBox Grid.Row="3" Grid.Column="2" SelectedValue="{Binding AudyEqRef}" ItemsSource="{Binding AudyEqRefList}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="4" Grid.Column="1" Content="AudyFinFlg"></Label>
+                                <ComboBox Grid.Row="4" Grid.Column="2" SelectedValue="{Binding AudyFinFlg}" ItemsSource="{Binding AudyFinFlgList}" VerticalAlignment="Center"/>
+                            </Grid>
+                        </GroupBox>
+                        <GroupBox Grid.Row="2" Header="Receiver">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0" Grid.Column="1" Content="Ifver"></Label>
+                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding Ifver}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="1" Grid.Column="1" Content="DType"></Label>
+                                <Label Grid.Row="1" Grid.Column="2" Content="{Binding DType}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="2" Grid.Column="1" Content="Upgrade"></Label>
+                                <Label Grid.Row="2" Grid.Column="2" Content="{Binding Upgrade}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="3" Grid.Column="1" Content="EQType"></Label>
+                                <Label Grid.Row="3" Grid.Column="2" Content="{Binding EQType}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="4" Grid.Column="1" Content="AdC"></Label>
+                                <Label Grid.Row="4" Grid.Column="2" Content="{Binding ADC}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="5" Grid.Column="1" Content="SysDelay"></Label>
+                                <Label Grid.Row="5" Grid.Column="2" Content="{Binding SysDelay}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="6" Grid.Column="1" Content="CoefWaitTimeInit"></Label>
+                                <Label Grid.Row="6" Grid.Column="2" Content="{Binding CoefWaitTime.Init}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="7" Grid.Column="1" Content="CoefWaitTimeFinal"></Label>
+                                <Label Grid.Row="7" Grid.Column="2" Content="{Binding CoefWaitTime.Final}" VerticalAlignment="Center"></Label>
+                                <CheckBox Grid.Row="1" Grid.Column="0" Content="LFC" IsChecked="{Binding LFC}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
+                                <CheckBox Grid.Row="0" Grid.Column="0" Content="Auro" IsChecked="{Binding Auro}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
+                                <CheckBox Grid.Row="2" Grid.Column="0" Content="SWLvlMatch" IsChecked="{Binding SWLvlMatch}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
+                                <CheckBox Grid.Row="3" Grid.Column="0" Content="HPPlug" IsChecked="{Binding HPPlug}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
+                                <CheckBox Grid.Row="4" Grid.Column="0" Content="Mic" IsChecked="{Binding Mic}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
+                                <CheckBox Grid.Row="5" Grid.Column="0" Content="BTTXStatus" IsChecked="{Binding BTTXStatus}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
+                                <CheckBox Grid.Row="6" Grid.Column="0" Content="SpPreset" IsChecked="{Binding SpPreset}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
+                                <StackPanel Grid.Row="7" Grid.Column="0" Orientation="Horizontal" >
+                                    <Label Content="AmpAssign"/>
+                                    <TextBlock Text="{Binding AmpAssign}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </Grid>
                 <Button Content="R" DockPanel.Dock="Right" HorizontalAlignment="Right"></Button>
                 <oxy:PlotView x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}"/>
-                <!--
-                <oxy:PlotView x:Name="plot" DataContext="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" Model="{Binding PlotModel}"/>
-                -->
-                <!-- TODO -->
             </DockPanel>
-            <GridSplitter Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
-            <ScrollViewer Grid.Row="3" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_Serialized_SizeChanged">
+            <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
+            <ScrollViewer Grid.Row="4" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_Serialized_SizeChanged">
                 <StackPanel>
                     <TextBlock Text="{Binding Serialized}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent"/>
                 </StackPanel>

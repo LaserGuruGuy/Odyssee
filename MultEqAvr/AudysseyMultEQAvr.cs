@@ -7,6 +7,43 @@ namespace Audyssey
     {
         public partial class AudysseyMultEQAvr : INotifyPropertyChanged
         {
+            #region TODO BackingField
+            private UniqueObservableCollection<DetectedChannel> _DetectedChannels = null;
+            private DetectedChannel _SelectedChannel = null;
+            #endregion
+
+            #region TODO Properties
+            public UniqueObservableCollection<DetectedChannel> DetectedChannels
+            {
+                get
+                {
+                    return _DetectedChannels;
+                }
+                set
+                {
+                    _DetectedChannels = value;
+                    RaisePropertyChanged("DetectedChannels");
+                }
+            }
+            public DetectedChannel SelectedChannel
+            {
+                get
+                {
+                    return _SelectedChannel;
+                }
+                set
+                {
+                    _SelectedChannel = value;
+                    RaisePropertyChanged("SelectedChannel");
+                }
+            }
+            #endregion
+
+            #region TODO Methods
+            private void ResetDetectedChannels() { _DetectedChannels = null; }
+            private void ResetSelectedChannel() { _SelectedChannel = null; }
+            #endregion
+
             #region BackingField
             private string _Serialized;
             private bool _AvrConnect_IsChecked = false;
@@ -79,6 +116,26 @@ namespace Audyssey
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                 }
+            }
+
+            public void Populate()
+            {
+                if (ChSetup != null)
+                {
+                    if (DetectedChannels == null)
+                    {
+                        DetectedChannels = new();
+                    }
+                    foreach (var Element in ChSetup)
+                    {
+                        foreach (var Item in Element)
+                        {
+                            DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Audy = Item.Value == "N" ? false : true });
+                        }
+                    }
+                }
+                ResetChSetup();
+                RaisePropertyChanged("");
             }
             #endregion
 
