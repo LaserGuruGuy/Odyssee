@@ -339,13 +339,13 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(string.Empty))
                                             {
-                                                AudysseyMultEQAvr.ChSetup = null;
                                                 JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
                                                 {
                                                     ObjectCreationHandling = ObjectCreationHandling.Replace,
                                                     ContractResolver = new InterfaceContractResolver(typeof(IStatus)),
                                                     FloatParseHandling = FloatParseHandling.Decimal,
                                                 });
+                                                AudysseyMultEQAvr.Populate();
                                                 AudysseyMultEQAvr.AvrStatus_IsChecked = true;
                                                 cmdAck.Ack();
                                             }

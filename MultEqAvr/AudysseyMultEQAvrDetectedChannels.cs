@@ -9,9 +9,9 @@ namespace Audyssey
         public class DetectedChannel : MultEQList, INotifyPropertyChanged
         {
             #region BackingField
-            private string _Channel = null;
-            private string _Setup = null;
-            private bool? _Audy = null;
+            private string _Channel;
+            private string _Setup;
+            private bool? _Skip;
             #endregion
 
             #region Properties
@@ -39,15 +39,15 @@ namespace Audyssey
                     RaisePropertyChanged("Setup");
                 }
             }
-            public bool? Audy
+            public bool? Skip
             {
                 get
                 {
-                    return _Audy;
+                    return _Skip;
                 }
                 set
                 {
-                    _Audy = value;
+                    _Skip = value;
                     RaisePropertyChanged("Sticky");
                 }
             }
@@ -56,7 +56,7 @@ namespace Audyssey
             #region Methods
             private void ResetChannel() { _Channel = null; }
             private void ResetSetup() { _Setup = null; }
-            private void ResetSticky() { _Audy = false; }
+            private void ResetSkip() { _Skip = false; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))

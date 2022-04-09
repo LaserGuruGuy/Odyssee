@@ -22,13 +22,13 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : IStatus, INotifyPropertyChanged
         {
             #region BackingField
-            private bool? _HPPlug = null;
-            private bool? _Mic = null;
-            private string _AmpAssign = null;
-            private string _AssignBin = null;
-            private UniqueObservableCollection<Dictionary<string, string>> _ChSetup = null;
-            private bool? _BTTXStatus = null;
-            private bool? _SpPreset = null;
+            private bool? _HPPlug;
+            private bool? _Mic;
+            private string _AmpAssign;
+            private string _AssignBin;
+            private UniqueObservableCollection<Dictionary<string, string>> _ChSetup;
+            private bool? _BTTXStatus;
+            private bool? _SpPreset;
             #endregion
 
             #region Properties

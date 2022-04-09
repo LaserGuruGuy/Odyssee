@@ -135,15 +135,15 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <GroupBox Grid.Column="0" Header="Channel Setup">
-                                    <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, Mode=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0">
+                                    <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, Mode=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="False" >
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Channel" Width="auto" DisplayMemberBinding="{Binding Channel}" />
                                             <GridViewColumn Header="Setup" Width="auto" DisplayMemberBinding="{Binding Setup}" />
-                                            <GridViewColumn Header="Audy" Width="auto">
+                                            <GridViewColumn Header="Skip" Width="auto">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
-                                                        <CheckBox IsChecked="{Binding Path=Audy}"/>
+                                                        <CheckBox IsChecked="{Binding Path=Skip}"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
