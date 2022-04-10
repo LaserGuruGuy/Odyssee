@@ -17,7 +17,7 @@ namespace Odyssee
 
         public void InitOxyPlotLvlm()
         {
-            if (PlotModel.Title != "Subwoofer Level")
+            if ((PlotModel.Title != "Subwoofer Level") && (audysseyMultEQAvr.SPLValue != 0))
             {
                 PlotModel.Title = "Subwoofer Level";
                 
@@ -41,7 +41,7 @@ namespace Odyssee
 
         public void AddOxyPlotLvlm()
         {
-            if (PlotModel != null)
+            if ((PlotModel != null) && (audysseyMultEQAvr.SPLValue != 0))
             {
                 if (PlotModel.Series != null)
                 {

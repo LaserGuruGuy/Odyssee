@@ -88,20 +88,20 @@ namespace Audyssey
         {
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public UInt16? SPLValue { get; set; }
+            public UInt16 SPLValue { get; set; }
             #endregion
         }
 
         public partial class AudysseyMultEQAvr : ISPLValue, INotifyPropertyChanged
         {
             #region BackingField
-            private UInt16? _SPLValue = null;
+            private UInt16 _SPLValue;
             private RunningAverage _SPLAvg = new();
             #endregion
 
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public UInt16? SPLValue
+            public UInt16 SPLValue
             {
                 get
                 {
@@ -124,10 +124,10 @@ namespace Audyssey
             {
                 get
                 {
-                    return _SPLValue != null ? (double)_SPLValue / 100.0 : 0;
+                    return (double)_SPLValue / 100.0;
                 }
             }
-            public double SPLAvgdB
+            public double? SPLAvgdB
             {
                 get
                 {
@@ -139,7 +139,7 @@ namespace Audyssey
             #region Methods
             private void ResetSPLValue()
             {
-                _SPLValue = null;
+                _SPLValue = 0;
             }
             public void ResetSPLAvg()
             {

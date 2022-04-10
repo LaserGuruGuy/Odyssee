@@ -10,6 +10,7 @@ namespace Audyssey
             #region TODO BackingField
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
+            private string _NumPos = "2";
             #endregion
 
             #region TODO Properties
@@ -35,6 +36,19 @@ namespace Audyssey
                 {
                     _SelectedChannel = value;
                     RaisePropertyChanged("SelectedChannel");
+                }
+            }
+            [JsonIgnore]
+            public string NumPos
+            {
+                get
+                {
+                    return _NumPos;
+                }
+                set
+                {
+                    _NumPos = value;
+                    RaisePropertyChanged("NumPos");
                 }
             }
             #endregion
@@ -95,8 +109,8 @@ namespace Audyssey
             private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
             private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
             private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
-            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }
-            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; }
+            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
             private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
             private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
             public void Reset()
@@ -106,9 +120,9 @@ namespace Audyssey
                     if (prop.CanResetValue(this))
                     {
                         prop.ResetValue(this);
+                        RaisePropertyChanged(prop.Name);
                     }
                 }
-                RaisePropertyChanged("");
             }
             private void RaisePropertyChanged(string propertyName)
             {

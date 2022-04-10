@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:CustomControls="clr-namespace:CustomControls;assembly=CustomControls"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1280" Height="1024" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
@@ -210,8 +211,12 @@
                                 <ComboBox Grid.Row="2" Grid.Column="2" SelectedValue="{Binding AudyDynSet}" ItemsSource="{Binding AudyDynSetList}" VerticalAlignment="Center"/>
                                 <Label Grid.Row="3" Grid.Column="1" Content="AudyDynEqRef (dB)"></Label>
                                 <ComboBox Grid.Row="3" Grid.Column="2" SelectedValue="{Binding AudyEqRef}" ItemsSource="{Binding AudyEqRefList}" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
+                                    <CustomControls:NumericUpDown x:Name="NumericUpDownControl"  Value="{Binding NumPos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MaxValue="6" MinValue="1" Width="34" Margin="6,0,0,0" />
+                                    <Label Content="NumPos" VerticalAlignment="Center"></Label>
+                                </StackPanel>
                                 <Label Grid.Row="4" Grid.Column="1" Content="AudyFinFlg"></Label>
-                                <ComboBox Grid.Row="4" Grid.Column="2" SelectedValue="{Binding AudyFinFlg}" ItemsSource="{Binding AudyFinFlgList}" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Row="4" Grid.Column="2" SelectedValue="{Binding AudyFinFlg}" ItemsSource="{Binding AudyFinFlgList}" IsSynchronizedWithCurrentItem="False" VerticalAlignment="Center"/>
                             </Grid>
                         </GroupBox>
                         <GroupBox Grid.Row="2" Header="Receiver">

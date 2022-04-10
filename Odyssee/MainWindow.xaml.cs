@@ -113,7 +113,8 @@ namespace Odyssee
         }
 
         private void AudysseyMultEQAvr_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {            
+        {
+            Console.WriteLine(e.PropertyName);
             if (e.PropertyName.Equals("SPLValue"))
             {
                 InitOxyPlotLvlm();
