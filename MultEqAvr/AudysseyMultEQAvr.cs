@@ -1,16 +1,30 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Audyssey
 {
     namespace MultEQAvr
     {
+        public interface IPosNum
+        {
+            public int Position { get; set; }
+            public ObservableCollection<string> ChSetup { get; set; }
+        }
+
+        public class MeasuredChannels : IPosNum
+        {
+            public int Position { get; set; }
+            public ObservableCollection<string> ChSetup { get; set; } = new();
+        }
+
         public partial class AudysseyMultEQAvr : INotifyPropertyChanged
         {
             #region TODO BackingField
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
-            private string _NumPos = "2";
+            private int _NumPos = 2;//"2";
+            private MeasuredChannels _EnabledChannels;
             #endregion
 
             #region TODO Properties
@@ -26,6 +40,7 @@ namespace Audyssey
                     RaisePropertyChanged("DetectedChannels");
                 }
             }
+            [JsonIgnore]
             public DetectedChannel SelectedChannel
             {
                 get
@@ -39,7 +54,45 @@ namespace Audyssey
                 }
             }
             [JsonIgnore]
-            public string NumPos
+            public MeasuredChannels MeasuredChannels
+            {
+                get
+                {
+                    if (DetectedChannels != null)
+                    {
+                        _EnabledChannels = new();
+                        _EnabledChannels.Position = _Position;
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (ch.Skip == false)
+                            {
+                                _EnabledChannels.ChSetup.Add(ch.Channel);
+                            }
+                        }
+                    }
+                    return _EnabledChannels;
+                }
+                set
+                {
+                    _EnabledChannels = value;
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (_EnabledChannels.ChSetup.Contains(ch.Channel))
+                            {
+                                ch.Skip = false;
+                            }
+                            else
+                            {
+                                ch.Skip = true;
+                            }
+                        }
+                    }
+                }
+            }
+            [JsonIgnore]
+            public int NumPos
             {
                 get
                 {
@@ -67,6 +120,7 @@ namespace Audyssey
             private bool _AvrStatus_IsChecked;
             private bool _AudysseyMode_IsChecked;
             private bool _AudyFinFlag_IsChecked;
+            private bool _SetPosNum_IsChecked;
             #endregion
 
             #region Properties
@@ -99,6 +153,8 @@ namespace Audyssey
             public bool AudysseyMode_IsChecked { get { return _AudysseyMode_IsChecked; } set { _AudysseyMode_IsChecked = value; RaisePropertyChanged("AudysseyMode_IsChecked"); } }
             [JsonIgnore]
             public bool AudyFinFlag_IsChecked { get { return _AudyFinFlag_IsChecked; } set { _AudyFinFlag_IsChecked = value; RaisePropertyChanged("AudyFinFlag_IsChecked"); } }
+            [JsonIgnore]
+            public bool SetPosNum_IsChecked { get { return _SetPosNum_IsChecked; } set { _SetPosNum_IsChecked = value; RaisePropertyChanged("SetPosNum_IsChecked"); } }
             #endregion
 
             #region Methods
@@ -113,6 +169,7 @@ namespace Audyssey
             private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
             private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
             private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
+            private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
@@ -132,7 +189,7 @@ namespace Audyssey
                 }
             }
 
-            public void Populate()
+            public void PopulateDetectedChannels()
             {
                 if (DetectedChannels == null) DetectedChannels = new();
                 foreach (var Element in ChSetup)
@@ -141,6 +198,11 @@ namespace Audyssey
                     {
                         DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
                     }
+                }
+                foreach (var SelectedChannel in DetectedChannels)
+                {
+                    // TODO add response coeff
+
                 }
                 RaisePropertyChanged("DetectedChannels");
             }

@@ -191,6 +191,34 @@ namespace Audyssey
                 }
             }
 
+            public bool SetPosNum(CmdAckCallBack CallBack = null)
+            {
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
+                {
+                    // set the first position number
+                    string CmdString = "SET_POSNUM";
+                    // build JSON {"Position":1,"ChSetup":["FL","FR"]}; TODO: iterate
+                    AudysseyMultEQAvr.Position = 1;
+                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.MeasuredChannels, new JsonSerializerSettings
+                    {
+                        ContractResolver = new InterfaceContractResolver(typeof(IPosNum))
+                    });
+                    // toolbar
+                    AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
+                    // transmit
+                    AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(CallBack);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
+
             public bool AudyFinFlag(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
@@ -345,7 +373,7 @@ namespace Audyssey
                                                     ContractResolver = new InterfaceContractResolver(typeof(IStatus)),
                                                     FloatParseHandling = FloatParseHandling.Decimal,
                                                 });
-                                                AudysseyMultEQAvr.Populate();
+                                                AudysseyMultEQAvr.PopulateDetectedChannels();
                                                 AudysseyMultEQAvr.AvrStatus_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
@@ -458,20 +486,29 @@ namespace Audyssey
                                     case "SET_POSNUM":
                                         if (TransmitReceiveChar == 'T')
                                         {
+                                            JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr.MeasuredChannels, new JsonSerializerSettings
+                                            {
+                                                NullValueHandling = NullValueHandling.Ignore,
+                                                ContractResolver = new InterfaceContractResolver(typeof(IPosNum)),
+                                            });
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.PopulateDetectedChannels();
+                                                AudysseyMultEQAvr.SetPosNum_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
                                                 cmdAck.Progress();
+                                                AudysseyMultEQAvr.SetPosNum_IsChecked = false;
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
                                                 cmdAck.Nack();
+                                                AudysseyMultEQAvr.SetPosNum_IsChecked = false;
                                             }
                                         }
                                         break;
@@ -656,7 +693,7 @@ namespace Audyssey
             }
         }
 
-        public class AudysseyMultEQAvrComm
+        class AudysseyMultEQAvrComm
         {
             public string Comm { get; set; } = string.Empty;
         }

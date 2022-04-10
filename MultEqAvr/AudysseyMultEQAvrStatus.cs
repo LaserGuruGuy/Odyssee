@@ -29,6 +29,7 @@ namespace Audyssey
             private UniqueObservableCollection<Dictionary<string, string>> _ChSetup;
             private bool? _BTTXStatus;
             private bool? _SpPreset;
+            private int _Position;
             #endregion
 
             #region Properties
@@ -80,6 +81,7 @@ namespace Audyssey
                     RaisePropertyChanged("AssignBin");
                 }
             }
+
             public UniqueObservableCollection<Dictionary<string, string>> ChSetup
             {
                 get
@@ -114,6 +116,17 @@ namespace Audyssey
                 {
                     _SpPreset = value;
                     RaisePropertyChanged("SpPreset");
+                }
+            }
+            public int Position
+            { 
+                get
+                {
+                    return _Position;
+                }
+                set
+                {
+                    _Position = value;
                 }
             }
             #endregion

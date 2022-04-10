@@ -215,8 +215,19 @@ namespace Odyssee
 
         private void MenuItem_SetAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.SetPosNum(OnCmdAckSetPosNum);
+            }
+        }
+
+        public void OnCmdAckSetPosNum(bool IsAck)
+        {
+            if (!IsAck)
+            {
+                audysseyMultEQAvr.SetPosNum_IsChecked = false;
+                audysseyMultEQAvr.Serialized += "Failed\n";
+            }
         }
 
         private void MenuItem_SetAvrStartChnl_OnClick(object sender, RoutedEventArgs e)

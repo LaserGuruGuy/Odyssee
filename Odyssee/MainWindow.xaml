@@ -60,7 +60,7 @@
                         <Separator/>
                         <MenuItem Header="Set LvLm" Name="AvrLvLm" Click="MenuItem_AvrLvLm_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" />
+                        <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" IsCheckable="True" IsChecked="{Binding SetPosNum_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" />
                         <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="MenuItem_SetAvrGetRespon_OnClick" />
                         <Separator/>
