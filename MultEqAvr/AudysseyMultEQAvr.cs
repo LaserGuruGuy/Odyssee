@@ -23,8 +23,7 @@ namespace Audyssey
             #region TODO BackingField
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
-            private int _NumPos = 2;//"2";
-            private MeasuredChannels _EnabledChannels;
+            private int _NumPos = 1;
             #endregion
 
             #region TODO Properties
@@ -40,7 +39,6 @@ namespace Audyssey
                     RaisePropertyChanged("DetectedChannels");
                 }
             }
-            [JsonIgnore]
             public DetectedChannel SelectedChannel
             {
                 get
@@ -53,33 +51,33 @@ namespace Audyssey
                     RaisePropertyChanged("SelectedChannel");
                 }
             }
-            [JsonIgnore]
             public MeasuredChannels MeasuredChannels
             {
                 get
                 {
+                    MeasuredChannels _MeasuredChannels = new();
                     if (DetectedChannels != null)
                     {
-                        _EnabledChannels = new();
-                        _EnabledChannels.Position = _Position;
+                        _MeasuredChannels.Position = _Position;
                         foreach (var ch in DetectedChannels)
                         {
                             if (ch.Skip == false)
                             {
-                                _EnabledChannels.ChSetup.Add(ch.Channel);
+                                _MeasuredChannels.ChSetup.Add(ch.Channel);
                             }
                         }
                     }
-                    return _EnabledChannels;
+                    return _MeasuredChannels;
                 }
                 set
                 {
-                    _EnabledChannels = value;
+                    MeasuredChannels _MeasuredChannels = value;
                     if (DetectedChannels != null)
                     {
+                        _Position = _MeasuredChannels.Position;
                         foreach (var ch in DetectedChannels)
                         {
-                            if (_EnabledChannels.ChSetup.Contains(ch.Channel))
+                            if (_MeasuredChannels.ChSetup.Contains(ch.Channel))
                             {
                                 ch.Skip = false;
                             }
@@ -91,7 +89,6 @@ namespace Audyssey
                     }
                 }
             }
-            [JsonIgnore]
             public int NumPos
             {
                 get
@@ -158,9 +155,6 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            public AudysseyMultEQAvr()
-            {
-            }
             private void ResetSerialized() { _Serialized = string.Empty;  }
             private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
             private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
@@ -189,22 +183,23 @@ namespace Audyssey
                 }
             }
 
-            public void PopulateDetectedChannels()
+            public void PopulateDetectedChannels(object item)
             {
-                if (DetectedChannels == null) DetectedChannels = new();
-                foreach (var Element in ChSetup)
+                if (item.ToString().EndsWith(nameof(IStatus)))
                 {
-                    foreach (var Item in Element)
+                    DetectedChannels = new();
+                    foreach (var Element in ChSetup)
                     {
-                        DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
+                        foreach (var Item in Element)
+                        {
+                            DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
+                        }
                     }
                 }
-                foreach (var SelectedChannel in DetectedChannels)
+                if (item.ToString().EndsWith(nameof(IPosNum)))
                 {
-                    // TODO add response coeff
-
+                    ;
                 }
-                RaisePropertyChanged("DetectedChannels");
             }
             #endregion
 

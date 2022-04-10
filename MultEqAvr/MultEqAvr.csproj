@@ -59,15 +59,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnnotationObservableCollection.cs" />
     <Compile Include="AudysseyMultEQ.cs" />
     <Compile Include="AudysseyMultEQAvr.cs" />
     <Compile Include="AudysseyMultEQAvrCoefWaitTime.cs" />
     <Compile Include="AudysseyMultEQAvrDetectedChannels.cs" />
-    <Compile Include="AudysseyMultEQAvrUniqueObservableCollection.cs" />
+    <Compile Include="UniqueObservableCollection.cs" />
     <Compile Include="AudysseyMultEQAvrInfo.cs" />
     <Compile Include="AudysseyMultEQAvrSPL.cs" />
     <Compile Include="AudysseyMultEQAvrStatus.cs" />
     <Compile Include="ClassInterfaceContractResolver.cs" />
+    <Compile Include="ObservableDictonary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

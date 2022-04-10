@@ -136,7 +136,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <GroupBox Grid.Column="0" Header="Channel Setup">
-                                    <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, Mode=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="False" >
+                                    <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, AsyncState=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="False" >
                                     <ListView.View>
                                         <GridView>
                                             <GridViewColumn Header="Channel" Width="auto" DisplayMemberBinding="{Binding Channel}" />
@@ -152,7 +152,7 @@
                                     </ListView.View>
                                 </ListView>
                                 </GroupBox>
-                                <GroupBox Grid.Column="2" Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=channelsView}">
+                                <GroupBox Grid.Column="2" Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=channelsView}" >
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto"/>
@@ -212,7 +212,7 @@
                                 <Label Grid.Row="3" Grid.Column="1" Content="AudyDynEqRef (dB)"></Label>
                                 <ComboBox Grid.Row="3" Grid.Column="2" SelectedValue="{Binding AudyEqRef}" ItemsSource="{Binding AudyEqRefList}" VerticalAlignment="Center"/>
                                 <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
-                                    <CustomControls:NumericUpDown x:Name="NumericUpDownControl"  Value="{Binding NumPos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MaxValue="6" MinValue="1" Width="34" Margin="6,0,0,0" />
+                                    <CustomControls:NumericUpDown x:Name="NumericUpDownControl"  Value="{Binding NumPos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MaxValue="8" MinValue="1" Width="34" Margin="6,0,0,0" />
                                     <Label Content="NumPos" VerticalAlignment="Center"></Label>
                                 </StackPanel>
                                 <Label Grid.Row="4" Grid.Column="1" Content="AudyFinFlg"></Label>

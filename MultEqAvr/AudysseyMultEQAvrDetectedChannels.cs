@@ -34,6 +34,12 @@ namespace Audyssey
             private string _Channel;
             private string _Setup;
             private bool? _Skip;
+            private string _SpConnect;
+            private string _Polarity;
+            private int? _Distance;
+            private decimal? _ResponseCoef;
+            private string _ChData;
+            private Int32[] _ResponseData;
             #endregion
 
             #region Properties
@@ -73,12 +79,79 @@ namespace Audyssey
                     RaisePropertyChanged("Sticky");
                 }
             }
-            public string SpConnect { get; set; }
-            public string Polarity { get; set; }
-            public int? Distance { get; set; }
-            public decimal? ResponseCoef { get; set; }
-            public string ChData { get; set; }
-            public Int32[] ResponseData { get; set; }
+            public string SpConnect
+            {
+                get
+                {
+                    return _SpConnect;
+                }
+                set
+                {
+                    _SpConnect = value;
+                    RaisePropertyChanged("SpConnect");
+                }
+            }
+            public string Polarity
+            {
+                get
+                {
+                    return _Polarity;
+                }
+                set
+                {
+                    _Polarity = value;
+                    RaisePropertyChanged("Polarity");
+                }
+            }
+            public int? Distance
+            {
+                get
+                {
+                    return _Distance;
+                }
+                set
+                {
+                    _Distance = value;
+                    RaisePropertyChanged("Distance");
+                }
+            }
+            public decimal? ResponseCoef
+            {
+                get
+                {
+                    return _ResponseCoef;
+                }
+                set
+                {
+                    _ResponseCoef = value;
+                    RaisePropertyChanged("ResponseCoef");
+                }
+            }
+            public string ChData
+            {
+                get
+                {
+                    return _ChData;
+                }
+                set
+                {
+                    _ChData = value;
+                    RaisePropertyChanged("ChData");
+                }
+            }
+            public Int32[] ResponseData
+            {
+                get
+                {
+                    return _ResponseData;
+                }
+                set
+                {
+                    _ResponseData = value;
+                    RaisePropertyChanged("ResponseData");
+                    RaisePropertyChanged("ResponseDataString");
+                }
+            }
             public string[] ResponseDataString
             {
                 get
@@ -91,7 +164,7 @@ namespace Audyssey
             #region Methods
             private void ResetChannel() { _Channel = null; }
             private void ResetSetup() { _Setup = null; }
-            private void ResetSkip() { _Skip = false; }
+            private void ResetSkip() { _Skip = null; }
             private void ResetSpConnect() { SpConnect = null; }
             private void ResetPolarity() { Polarity = null; }
             private void ResetDistance() { Distance = null; }

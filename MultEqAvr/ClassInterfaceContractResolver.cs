@@ -20,14 +20,9 @@ namespace Audyssey
             _typeToSerializeMap = new ConcurrentDictionary<Type, Type>();
         }
 
-        protected override IList<JsonProperty> CreateProperties(
-            Type type,
-            MemberSerialization memberSerialization)
+        protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            var typeToSerialize = _typeToSerializeMap.GetOrAdd(
-                type,
-                t => _interfaceTypes.FirstOrDefault(
-                    it => it.IsAssignableFrom(t)) ?? t);
+            var typeToSerialize = _typeToSerializeMap.GetOrAdd(type, t => _interfaceTypes.FirstOrDefault(it => it.IsAssignableFrom(t)) ?? t);
 
             var props = base.CreateProperties(typeToSerialize, memberSerialization);
 

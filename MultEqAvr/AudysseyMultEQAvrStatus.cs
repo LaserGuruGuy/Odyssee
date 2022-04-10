@@ -13,7 +13,7 @@ namespace Audyssey
             public bool? Mic { get; set; }
             public string AmpAssign { get; set; }
             public string AssignBin { get; set; }
-            public UniqueObservableCollection<Dictionary<string, string>> ChSetup { get; set; }
+            public UniqueObservableCollection<ObservableDictionary> ChSetup { get; set; }
             public bool? BTTXStatus { get; set; }
             public bool? SpPreset { get; set; }
             #endregion
@@ -26,7 +26,7 @@ namespace Audyssey
             private bool? _Mic;
             private string _AmpAssign;
             private string _AssignBin;
-            private UniqueObservableCollection<Dictionary<string, string>> _ChSetup;
+            private UniqueObservableCollection<ObservableDictionary> _ChSetup;
             private bool? _BTTXStatus;
             private bool? _SpPreset;
             private int _Position;
@@ -82,7 +82,7 @@ namespace Audyssey
                 }
             }
 
-            public UniqueObservableCollection<Dictionary<string, string>> ChSetup
+            public UniqueObservableCollection<ObservableDictionary> ChSetup
             {
                 get
                 {

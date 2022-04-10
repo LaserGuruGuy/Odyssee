@@ -203,6 +203,7 @@ namespace Audyssey
                     {
                         ContractResolver = new InterfaceContractResolver(typeof(IPosNum))
                     });
+
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
@@ -373,7 +374,7 @@ namespace Audyssey
                                                     ContractResolver = new InterfaceContractResolver(typeof(IStatus)),
                                                     FloatParseHandling = FloatParseHandling.Decimal,
                                                 });
-                                                AudysseyMultEQAvr.PopulateDetectedChannels();
+                                                AudysseyMultEQAvr.PopulateDetectedChannels(typeof(IStatus));
                                                 AudysseyMultEQAvr.AvrStatus_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
@@ -486,17 +487,13 @@ namespace Audyssey
                                     case "SET_POSNUM":
                                         if (TransmitReceiveChar == 'T')
                                         {
-                                            JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr.MeasuredChannels, new JsonSerializerSettings
-                                            {
-                                                NullValueHandling = NullValueHandling.Ignore,
-                                                ContractResolver = new InterfaceContractResolver(typeof(IPosNum)),
-                                            });
+                                            AudysseyMultEQAvr.MeasuredChannels = JsonConvert.DeserializeObject<MeasuredChannels>(DataString);
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
-                                                AudysseyMultEQAvr.PopulateDetectedChannels();
+                                                AudysseyMultEQAvr.PopulateDetectedChannels(typeof(IPosNum));
                                                 AudysseyMultEQAvr.SetPosNum_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
