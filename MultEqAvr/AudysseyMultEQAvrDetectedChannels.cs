@@ -28,7 +28,7 @@ namespace Audyssey
             public Int32[] ResponseData { get; set; }
         }
 
-        public class DetectedChannel : MultEQList, IChannel, IResponseData, INotifyPropertyChanged
+        public class DetectedChannel : ChannelList, IChannel, IResponseData, INotifyPropertyChanged
         {
             #region BackingField
             private string _Channel;

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Audyssey.MultEQ;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -18,7 +19,7 @@ namespace Audyssey
             public ObservableCollection<string> ChSetup { get; set; } = new();
         }
 
-        public partial class AudysseyMultEQAvr : INotifyPropertyChanged
+        public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region TODO BackingField
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
