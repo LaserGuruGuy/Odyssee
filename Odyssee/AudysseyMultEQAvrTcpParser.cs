@@ -198,9 +198,9 @@ namespace Audyssey
                     // set the first position number
                     string CmdString = "SET_POSNUM";
                     // build JSON {"Position":1,"ChSetup":["FL","FR"]};
-                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.MeasuredPositionChSetup, new JsonSerializerSettings
+                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.MeasuredPosition, new JsonSerializerSettings
                     {
-                        ContractResolver = new InterfaceContractResolver(typeof(IPosNum))
+                        ContractResolver = new InterfaceContractResolver(typeof(MeasuredPosition))
                     });
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
@@ -227,7 +227,7 @@ namespace Audyssey
                     // build JSON {"Channel":"FL"}
                     string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.MeasuredChannel, new JsonSerializerSettings
                     {
-                        ContractResolver = new InterfaceContractResolver(typeof(IChannel)),
+                        ContractResolver = new InterfaceContractResolver(typeof(MeasuredChannel)),
                         NullValueHandling = NullValueHandling.Ignore
                     });
                     // toolbar
@@ -519,11 +519,10 @@ namespace Audyssey
                                             { "Position":2,"ChSetup":["FL","FR"]}
                                             { "Position":3,"ChSetup":["FL","FR"]}
                                             */
-                                            //AudysseyMultEQAvr.MeasuredPositionChSetup = JsonConvert.DeserializeObject<MeasuredPositionChSetup>(DataString);
-                                            JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr.MeasuredPositionChSetup, new JsonSerializerSettings
+                                            AudysseyMultEQAvr.MeasuredPosition = JsonConvert.DeserializeObject<MeasuredPosition>(DataString, new JsonSerializerSettings
                                             {
                                                 NullValueHandling = NullValueHandling.Ignore,
-                                                ContractResolver = new InterfaceContractResolver(typeof(IPosNum)),
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
                                             });
                                         }
                                         if (TransmitReceiveChar == 'R')
@@ -555,10 +554,10 @@ namespace Audyssey
                                             {"Channel":"FL"}
                                             */
                                             // populate the channel object
-                                            JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr.MeasuredChannel, new JsonSerializerSettings
+                                            AudysseyMultEQAvr.MeasuredChannel = JsonConvert.DeserializeObject<MeasuredChannel>(DataString, new JsonSerializerSettings
                                             {
                                                 NullValueHandling = NullValueHandling.Ignore,
-                                                ContractResolver = new InterfaceContractResolver(typeof(IChannel)),
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
                                             });
                                         }
                                         if (TransmitReceiveChar == 'R')
@@ -570,10 +569,10 @@ namespace Audyssey
                                             if (Response.Comm.Equals(ACK))
                                             {
                                                 // populate the channel object
-                                                JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr.MeasuredChannel, new JsonSerializerSettings
+                                                AudysseyMultEQAvr.MeasuredChannel = JsonConvert.DeserializeObject<MeasuredChannel>(DataString, new JsonSerializerSettings
                                                 {
                                                     NullValueHandling = NullValueHandling.Ignore,
-                                                    ContractResolver = new InterfaceContractResolver(typeof(IChannel)),
+                                                    ObjectCreationHandling = ObjectCreationHandling.Replace,
                                                 });
                                                 AudysseyMultEQAvr.StartChnl_IsChecked = true;
                                                 cmdAck.Ack();

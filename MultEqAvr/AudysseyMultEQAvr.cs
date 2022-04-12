@@ -8,22 +8,21 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public interface IPosNum
+        public class MeasuredPosition
         {
-            public int Position { get; set; }
-            public ObservableCollection<string> ChSetup { get; set; }
+            public int Position { get; set; } = 0;
+            public ObservableCollection<string> ChSetup { get; set; } = new();
         }
 
-        public class MeasuredPositionChSetup : IPosNum
+        public class MeasuredChannel : ChannelReport
         {
-            public int Position { get; set; }
-            public ObservableCollection<string> ChSetup { get; set; } = new();
+            public string Channel { get; set; }
         }
 
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region TODO BackingField
-            private UniqueObservableCollection<DetectedChannel> _DetectedChannels = new();
+            private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
             private int _NumPos = 1;
             #endregion
@@ -53,122 +52,104 @@ namespace Audyssey
                     RaisePropertyChanged("SelectedChannel");
                 }
             }
-            public MeasuredPositionChSetup MeasuredPositionChSetup
+            public MeasuredPosition MeasuredPosition
             {
+                // Property for "SET_POSNUM"
                 get
                 {
-                    MeasuredPositionChSetup _MeasuredPositionChSetup = new();
+                    MeasuredPosition _MeasuredPosition = new();
                     if (DetectedChannels != null)
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            // add al channels we do not want to skip to the Collection 
-                            if (ch.Skip == false)
-                            {
-                                _MeasuredPositionChSetup.ChSetup.Add(ch.Channel);
-                            }
-                            // create the Dictionary if it does not exist
+                            // create the Dictionary if it does not exist but do not add any key/value pair ResponseData yet
                             if (ch.ResponseData == null)
                             {
-                                ch.ResponseData = new();
+                                DetectedChannels[DetectedChannels.IndexOf(ch)].ResponseData = new();
                             }
-                            // the position number is the the number of key/value pairs contained in the Dictionary
-                            _MeasuredPositionChSetup.Position = ch.ResponseData.Count + 1;
+                            // the position number is the the number of key/value pairs aleady contained in the Dictionary of the first channel in the Collection
+                            if (ch.Skip == false && _MeasuredPosition.Position == 0)
+                            {
+                                _MeasuredPosition.Position = ch.ResponseData.Count + 1;
+                            }
+                            // add channels we do not want to skip to the position Collection 
+                            if (ch.Skip == false)
+                            {
+                                _MeasuredPosition.ChSetup.Add(ch.Channel);
+                            }
                         }
                     }
-                    return _MeasuredPositionChSetup;
+                    return _MeasuredPosition;
                 }
                 set
                 {
+                    // flag all skip channels the sniffer captured
                     if (DetectedChannels != null)
                     {
-                        // flag all channels the sniffer captured to not skip
                         foreach (var ch in DetectedChannels)
                         {
                             if (value.ChSetup.Contains(ch.Channel))
                             {
-                                ch.Skip = false;
+                                DetectedChannels[DetectedChannels.IndexOf(ch)].Skip = false;
                             }
                             else
                             {
-                                ch.Skip = true;
+                                DetectedChannels[DetectedChannels.IndexOf(ch)].Skip = true;
                             }
                         }
                         RaisePropertyChanged("DetectedChannels");
                     }
                 }
             }
-            public DetectedChannel MeasuredChannel
+            public MeasuredChannel MeasuredChannel
             {
+                // Property for "START_CHNL"
                 get
                 {
-                    DetectedChannel _DetectedChannel = null;
+                    MeasuredChannel _MeasuredChannel = null;
                     if (DetectedChannels != null)
                     {
-                        // find the channel without skip with the smallest responsedata Dictonary count
                         foreach (var ch in DetectedChannels)
                         {
                             if (ch.Skip == false)
                             {
-                                if (_DetectedChannel == null)
+                                if (string.IsNullOrEmpty(ch.ChannelReport.SpConnect))
                                 {
-                                    _DetectedChannel = ch;
-                                }
-                                if (ch.SpConnect == null && ch.Polarity == null && ch.Distance == null && ch.ResponseCoef == null)
-                                {
-                                    _DetectedChannel = ch;
+                                    _MeasuredChannel = new() { Channel = ch.Channel };
                                     break;
                                 }
-                                //else if (ch.ResponseData.Count < _DetectedChannel.ResponseData.Count)
-                                //{
-                                //    _DetectedChannel = ch;
-                                //}
                             }
                         }
                     }
-                    return _DetectedChannel;
+                    return _MeasuredChannel;
                 }
                 set
                 {
-                    DetectedChannel _DetectedChannel = null;
                     if (DetectedChannels != null)
                     {
-                        // find the channel without skip with the smallest responsedata Dictonary count
                         foreach (var ch in DetectedChannels)
                         {
                             if (value.Channel == null)
                             {
                                 if (ch.Skip == false)
                                 {
-                                    if (_DetectedChannel == null)
+                                    if (string.IsNullOrEmpty(ch.ChannelReport.SpConnect))
                                     {
-                                        _DetectedChannel = ch;
-                                    }
-                                    if (ch.SpConnect == null && ch.Polarity == null && ch.Distance == null && ch.ResponseCoef == null)
-                                    {
-                                        _DetectedChannel = ch;
+                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.SpConnect = value.SpConnect;
+                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.Polarity = value.Polarity;
+                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.Distance = value.Distance;
+                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.ResponseCoef = value.ResponseCoef;
                                         break;
                                     }
-                                    //else if (ch.ResponseData.Count < _DetectedChannel.ResponseData.Count)
-                                    //{
-                                    //    _DetectedChannel = ch;
-                                    //}
                                 }
-                                _DetectedChannel.SpConnect = value.SpConnect;
-                                _DetectedChannel.Polarity = value.Polarity;
-                                _DetectedChannel.Distance = value.Distance;
-                                _DetectedChannel.ResponseCoef = value.ResponseCoef;
                             }
                             else if (value.Channel.Equals(ch.Channel))
                             {
-                                _DetectedChannel = ch;
-                                _DetectedChannel.SpConnect = null;
-                                _DetectedChannel.Polarity = null;
-                                _DetectedChannel.Distance = null;
-                                _DetectedChannel.ResponseCoef = null;
+                                DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport = null;
+                                break;
                             }
                         }
-                        RaisePropertyChanged("DetectedChannels");
+                        RaisePropertyChanged("ChannelReport");
                     }
                 }
             }

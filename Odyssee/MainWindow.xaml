@@ -152,33 +152,55 @@
                                     </ListView.View>
                                 </ListView>
                                 </GroupBox>
-                                <GroupBox Grid.Column="2" Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="auto"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="auto"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Label Grid.Row="0" Grid.Column="0" Content="Channel Level (dB)"></Label>
-                                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding ChLevel}" ItemsSource="{Binding ChLevelList}" VerticalAlignment="Center"/>
-                                        <Label Grid.Row="1" Grid.Column="0" Content="Channel Crossover (Hz)"></Label>
-                                        <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding Crossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
-                                        <Label Grid.Row="2" Grid.Column="0" Content="Channel Setup"></Label>
-                                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Setup}" ItemsSource="{Binding SetupList}" VerticalAlignment="Center"/>
-                                        <Label Grid.Row="3" Grid.Column="0" Content="Speaker Config"></Label>
-                                        <ComboBox Grid.Row="3" Grid.Column="1" SelectedValue="{Binding SpConfig}" ItemsSource="{Binding SpConfigList}" VerticalAlignment="Center"/>
-                                        <Label Grid.Row="4" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
-                                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
-                                    </Grid>
-                                </GroupBox>
+                                <StackPanel Grid.Column="2" Orientation="Vertical">
+                                    <GroupBox Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
+                                        <Grid DataContext="{Binding ChannelReport}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Row="0" Grid.Column="0" Content="Speaker Connect"></Label>
+                                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SpConnect}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                            <Label Grid.Row="1" Grid.Column="0" Content="Speaker Polarity"></Label>
+                                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Polarity}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                            <Label Grid.Row="2" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
+                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                            <Label Grid.Row="3" Grid.Column="0" Content="Response Coefficient"></Label>
+                                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ResponseCoef}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                        </Grid>
+                                    </GroupBox>
+                                    <GroupBox Header="Channel Data" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
+                                        <Grid >
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Grid.Row="0" Grid.Column="0" Content="Channel Level (dB)"></Label>
+                                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding ChLevel}" ItemsSource="{Binding ChLevelList}" VerticalAlignment="Center"/>
+                                            <Label Grid.Row="1" Grid.Column="0" Content="Channel Crossover (Hz)"></Label>
+                                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding Crossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
+                                            <Label Grid.Row="2" Grid.Column="0" Content="Channel Setup"></Label>
+                                            <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Setup}" ItemsSource="{Binding SetupList}" VerticalAlignment="Center"/>
+                                            <Label Grid.Row="3" Grid.Column="0" Content="Speaker Config"></Label>
+                                            <ComboBox Grid.Row="3" Grid.Column="1" SelectedValue="{Binding SpConfig}" ItemsSource="{Binding SpConfigList}" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </GroupBox>
+                                </StackPanel>
                             </Grid>
                         </Grid>
                         <GroupBox Grid.Row="1" Header="Audyssey">
