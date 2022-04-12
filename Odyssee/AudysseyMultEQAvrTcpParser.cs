@@ -245,9 +245,6 @@ namespace Audyssey
                 }
             }
 
-
-
-
             public bool AudyFinFlag(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))

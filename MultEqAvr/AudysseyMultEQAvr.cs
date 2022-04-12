@@ -1,5 +1,4 @@
-﻿using Audyssey.MultEQ;
-using Audyssey.MultEQ.List;
+﻿using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -21,13 +20,13 @@ namespace Audyssey
 
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
-            #region TODO BackingField
+            #region BackingField
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
             private int _NumPos = 1;
             #endregion
 
-            #region TODO Properties
+            #region Properties
             public UniqueObservableCollection<DetectedChannel> DetectedChannels
             {
                 get
@@ -54,7 +53,7 @@ namespace Audyssey
             }
             public MeasuredPosition MeasuredPosition
             {
-                // Property for "SET_POSNUM"
+                // SET_POSNUM {"Position":1,"ChSetup":["FL","FR"]}
                 get
                 {
                     MeasuredPosition _MeasuredPosition = new();
@@ -103,7 +102,7 @@ namespace Audyssey
             }
             public MeasuredChannel MeasuredChannel
             {
-                // Property for "START_CHNL"
+                // START_CHNL {"SpConnect":"S","Polarity":"N","Distance":237,"ResponseCoef":1}
                 get
                 {
                     MeasuredChannel _MeasuredChannel = null;
@@ -153,11 +152,10 @@ namespace Audyssey
                     }
                 }
             }
-
             public int NumPos { get { return _NumPos; } set { _NumPos = value; RaisePropertyChanged("NumPos"); } }
             #endregion
 
-            #region TODO Methods
+            #region Methods
             private void ResetDetectedChannels() { _DetectedChannels = null; }
             private void ResetSelectedChannel() { _SelectedChannel = null; }
             #endregion
