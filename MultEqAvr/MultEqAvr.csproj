@@ -60,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnotationObservableCollection.cs" />
-    <Compile Include="AudysseyMultEQ.cs" />
+    <Compile Include="AudysseyMultEQList.cs" />
     <Compile Include="AudysseyMultEQAvr.cs" />
     <Compile Include="AudysseyMultEQAvrCoefWaitTime.cs" />
     <Compile Include="AudysseyMultEQAvrDetectedChannels.cs" />

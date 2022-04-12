@@ -232,8 +232,19 @@ namespace Odyssee
 
         private void MenuItem_SetAvrStartChnl_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.StartChnl(OnCmdAckStartChnl);
+            }
+        }
+
+        public void OnCmdAckStartChnl(bool IsAck)
+        {
+            if (!IsAck)
+            {
+                audysseyMultEQAvr.StartChnl_IsChecked = false;
+                audysseyMultEQAvr.Serialized += "Failed\n";
+            }
         }
 
         private void MenuItem_SetAvrGetRespon_OnClick(object sender, RoutedEventArgs e)

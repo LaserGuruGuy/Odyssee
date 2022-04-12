@@ -61,7 +61,7 @@
                         <MenuItem Header="Set LvLm" Name="AvrLvLm" Click="MenuItem_AvrLvLm_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
                         <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" IsCheckable="True" IsChecked="{Binding SetPosNum_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" />
+                        <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" IsCheckable="True" IsChecked="{Binding StartChnl_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="MenuItem_SetAvrGetRespon_OnClick" />
                         <Separator/>
                         <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="MenuItem_SetAvrSetAmp_OnClick" />
@@ -152,7 +152,7 @@
                                     </ListView.View>
                                 </ListView>
                                 </GroupBox>
-                                <GroupBox Grid.Column="2" Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=ChannelsView}" >
+                                <GroupBox Grid.Column="2" Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="auto"/>
@@ -168,17 +168,15 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
                                         <Label Grid.Row="0" Grid.Column="0" Content="Channel Level (dB)"></Label>
-                                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SelectedChLevel}" ItemsSource="{Binding SelectedChLevelList}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding ChLevel}" ItemsSource="{Binding ChLevelList}" VerticalAlignment="Center"/>
                                         <Label Grid.Row="1" Grid.Column="0" Content="Channel Crossover (Hz)"></Label>
-                                        <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding SelectedCrossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding Crossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
                                         <Label Grid.Row="2" Grid.Column="0" Content="Channel Setup"></Label>
-                                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Setup}" ItemsSource="{Binding ChannelSetupList}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Setup}" ItemsSource="{Binding SetupList}" VerticalAlignment="Center"/>
                                         <Label Grid.Row="3" Grid.Column="0" Content="Speaker Config"></Label>
-                                        <ComboBox Grid.Row="3" Grid.Column="1" SelectedValue="{Binding SelectedSpConfig}" ItemsSource="{Binding SpeakerTypeList}" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Row="3" Grid.Column="1" SelectedValue="{Binding SpConfig}" ItemsSource="{Binding SpConfigList}" VerticalAlignment="Center"/>
                                         <Label Grid.Row="4" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
-                                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding SelectedDistance}" VerticalAlignment="Center"></TextBox>
-                                        <Label Grid.Row="5" Grid.Column="0" Content="Speaker Level Value" VerticalAlignment="Center"></Label>
-                                        <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding SPLValue}" VerticalAlignment="Center"></TextBox>
+                                        <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
                                     </Grid>
                                 </GroupBox>
                             </Grid>
@@ -254,7 +252,7 @@
                                 <Label Grid.Row="1" Grid.Column="1" Content="DType"></Label>
                                 <Label Grid.Row="1" Grid.Column="2" Content="{Binding DType}" VerticalAlignment="Center"></Label>
                                 <Label Grid.Row="2" Grid.Column="1" Content="AmpAssign"/>
-                                <ComboBox Grid.Row="2" Grid.Column="2" SelectedValue="{Binding AmpAssign}" ItemsSource="{Binding AmpAssignTypeList}" VerticalAlignment="Center"/>
+                                <ComboBox Grid.Row="2" Grid.Column="2" SelectedValue="{Binding AmpAssign}" ItemsSource="{Binding AmpAssignList}" VerticalAlignment="Center"/>
                                 <Label Grid.Row="3" Grid.Column="1" Content="EQType"></Label>
                                 <ComboBox Grid.Row="3" Grid.Column="2" SelectedValue="{Binding EQType}" ItemsSource="{Binding EQTypeList}" VerticalAlignment="Center"/>
                                 <Label Grid.Row="4" Grid.Column="1" Content="AdC"></Label>
@@ -269,7 +267,50 @@
                         </GroupBox>
                     </Grid>
                 </Grid>
-                <Button Content="R" DockPanel.Dock="Right" HorizontalAlignment="Right"></Button>
+                <StackPanel DockPanel.Dock="Right" Orientation="Vertical" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
+                    <ListView ItemsSource="{Binding ResponseData}" SelectedItem="{Binding SelectedResponseData}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Response Data" Width="auto" DisplayMemberBinding="{Binding Key}"/>
+                                <GridViewColumn Header="Sticky" Width="auto" >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding Path=Sticky}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <ListView ItemsSource="{Binding ReferenceCurveFilter}" SelectedItem="{Binding SelectedReferenceCurveFilter}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Reference Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
+                                <GridViewColumn Header="Sticky" Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding Path=Sticky}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <ListView ItemsSource="{Binding FlatCurveFilter}" SelectedItem="{Binding SelectedFlatCurveFilter}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
+                                <GridViewColumn Header="Sticky" Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding Path=Sticky}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </StackPanel>
                 <oxy:PlotView x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}"/>
             </DockPanel>
             <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />

@@ -1,4 +1,5 @@
 ﻿using Audyssey.MultEQ;
+using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ namespace Audyssey
             public ObservableCollection<string> ChSetup { get; set; }
         }
 
-        public class MeasuredChannels : IPosNum
+        public class MeasuredPositionChSetup : IPosNum
         {
             public int Position { get; set; }
             public ObservableCollection<string> ChSetup { get; set; } = new();
@@ -22,7 +23,7 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region TODO BackingField
-            private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
+            private UniqueObservableCollection<DetectedChannel> _DetectedChannels = new();
             private DetectedChannel _SelectedChannel;
             private int _NumPos = 1;
             #endregion
@@ -52,33 +53,39 @@ namespace Audyssey
                     RaisePropertyChanged("SelectedChannel");
                 }
             }
-            public MeasuredChannels MeasuredChannels
+            public MeasuredPositionChSetup MeasuredPositionChSetup
             {
                 get
                 {
-                    MeasuredChannels _MeasuredChannels = new();
+                    MeasuredPositionChSetup _MeasuredPositionChSetup = new();
                     if (DetectedChannels != null)
                     {
-                        _MeasuredChannels.Position = _Position;
                         foreach (var ch in DetectedChannels)
                         {
+                            // add al channels we do not want to skip to the Collection 
                             if (ch.Skip == false)
                             {
-                                _MeasuredChannels.ChSetup.Add(ch.Channel);
+                                _MeasuredPositionChSetup.ChSetup.Add(ch.Channel);
                             }
+                            // create the Dictionary if it does not exist
+                            if (ch.ResponseData == null)
+                            {
+                                ch.ResponseData = new();
+                            }
+                            // the position number is the the number of key/value pairs contained in the Dictionary
+                            _MeasuredPositionChSetup.Position = ch.ResponseData.Count + 1;
                         }
                     }
-                    return _MeasuredChannels;
+                    return _MeasuredPositionChSetup;
                 }
                 set
                 {
-                    MeasuredChannels _MeasuredChannels = value;
                     if (DetectedChannels != null)
                     {
-                        _Position = _MeasuredChannels.Position;
+                        // flag all channels the sniffer captured to not skip
                         foreach (var ch in DetectedChannels)
                         {
-                            if (_MeasuredChannels.ChSetup.Contains(ch.Channel))
+                            if (value.ChSetup.Contains(ch.Channel))
                             {
                                 ch.Skip = false;
                             }
@@ -87,21 +94,86 @@ namespace Audyssey
                                 ch.Skip = true;
                             }
                         }
+                        RaisePropertyChanged("DetectedChannels");
                     }
                 }
             }
-            public int NumPos
+            public DetectedChannel MeasuredChannel
             {
                 get
                 {
-                    return _NumPos;
+                    DetectedChannel _DetectedChannel = null;
+                    if (DetectedChannels != null)
+                    {
+                        // find the channel without skip with the smallest responsedata Dictonary count
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (ch.Skip == false)
+                            {
+                                if (_DetectedChannel == null)
+                                {
+                                    _DetectedChannel = ch;
+                                }
+                                if (ch.SpConnect == null && ch.Polarity == null && ch.Distance == null && ch.ResponseCoef == null)
+                                {
+                                    _DetectedChannel = ch;
+                                    break;
+                                }
+                                //else if (ch.ResponseData.Count < _DetectedChannel.ResponseData.Count)
+                                //{
+                                //    _DetectedChannel = ch;
+                                //}
+                            }
+                        }
+                    }
+                    return _DetectedChannel;
                 }
                 set
                 {
-                    _NumPos = value;
-                    RaisePropertyChanged("NumPos");
+                    DetectedChannel _DetectedChannel = null;
+                    if (DetectedChannels != null)
+                    {
+                        // find the channel without skip with the smallest responsedata Dictonary count
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (value.Channel == null)
+                            {
+                                if (ch.Skip == false)
+                                {
+                                    if (_DetectedChannel == null)
+                                    {
+                                        _DetectedChannel = ch;
+                                    }
+                                    if (ch.SpConnect == null && ch.Polarity == null && ch.Distance == null && ch.ResponseCoef == null)
+                                    {
+                                        _DetectedChannel = ch;
+                                        break;
+                                    }
+                                    //else if (ch.ResponseData.Count < _DetectedChannel.ResponseData.Count)
+                                    //{
+                                    //    _DetectedChannel = ch;
+                                    //}
+                                }
+                                _DetectedChannel.SpConnect = value.SpConnect;
+                                _DetectedChannel.Polarity = value.Polarity;
+                                _DetectedChannel.Distance = value.Distance;
+                                _DetectedChannel.ResponseCoef = value.ResponseCoef;
+                            }
+                            else if (value.Channel.Equals(ch.Channel))
+                            {
+                                _DetectedChannel = ch;
+                                _DetectedChannel.SpConnect = null;
+                                _DetectedChannel.Polarity = null;
+                                _DetectedChannel.Distance = null;
+                                _DetectedChannel.ResponseCoef = null;
+                            }
+                        }
+                        RaisePropertyChanged("DetectedChannels");
+                    }
                 }
             }
+
+            public int NumPos { get { return _NumPos; } set { _NumPos = value; RaisePropertyChanged("NumPos"); } }
             #endregion
 
             #region TODO Methods
@@ -119,6 +191,7 @@ namespace Audyssey
             private bool _AudysseyMode_IsChecked;
             private bool _AudyFinFlag_IsChecked;
             private bool _SetPosNum_IsChecked;
+            private bool _StartChnl_IsChecked;
             #endregion
 
             #region Properties
@@ -153,6 +226,8 @@ namespace Audyssey
             public bool AudyFinFlag_IsChecked { get { return _AudyFinFlag_IsChecked; } set { _AudyFinFlag_IsChecked = value; RaisePropertyChanged("AudyFinFlag_IsChecked"); } }
             [JsonIgnore]
             public bool SetPosNum_IsChecked { get { return _SetPosNum_IsChecked; } set { _SetPosNum_IsChecked = value; RaisePropertyChanged("SetPosNum_IsChecked"); } }
+            [JsonIgnore]
+            public bool StartChnl_IsChecked { get { return _StartChnl_IsChecked; } set { _StartChnl_IsChecked = value; RaisePropertyChanged("StartChnl_IsChecked"); } }
             #endregion
 
             #region Methods
@@ -181,25 +256,6 @@ namespace Audyssey
                 if (PropertyChanged != null)
                 {
                     PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-                }
-            }
-
-            public void PopulateDetectedChannels(object item)
-            {
-                if (item.ToString().EndsWith(nameof(IStatus)))
-                {
-                    DetectedChannels = new();
-                    foreach (var Element in ChSetup)
-                    {
-                        foreach (var Item in Element)
-                        {
-                            DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
-                        }
-                    }
-                }
-                if (item.ToString().EndsWith(nameof(IPosNum)))
-                {
-                    ;
                 }
             }
             #endregion

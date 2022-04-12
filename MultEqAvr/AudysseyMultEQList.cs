@@ -1,30 +1,14 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Windows.Data;
 using Newtonsoft.Json;
 
 namespace Audyssey
 {
-    namespace MultEQ
+    namespace MultEQ.List
     {
-        public class MultEQConverter : IValueConverter
-        {
-            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                throw new NotImplementedException();
-            }
-
-            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-
         public class ChannelList
         {
-            static ObservableCollection<decimal> _SelectedChLevelList = new()
+            static ObservableCollection<decimal> _ChLevelList = new()
             {
                 -12m,
                 -11.5m,
@@ -80,18 +64,18 @@ namespace Audyssey
             static ObservableCollection<string> _CrossoverList = new()
             { " ", "40", "60", "80", "90", "100", "110", "120", "150", "180", "200", "250", "F" };
 
-            static ObservableCollection<string> _ChannelSetupList = new()
+            static ObservableCollection<string> _SetupList = new()
             { "L", "N", "S", "E" };
 
-            static ObservableCollection<string> _SpeakerTypeList = new()
+            static ObservableCollection<string> _SpConfigList = new()
             { " ", "S", "L" };
 
             [JsonIgnore]
-            public ObservableCollection<decimal> SelectedChLevelList
+            public ObservableCollection<decimal> ChLevelList
             {
                 get
                 {
-                    return _SelectedChLevelList;
+                    return _ChLevelList;
                 }
             }
 
@@ -105,20 +89,20 @@ namespace Audyssey
             }
 
             [JsonIgnore]
-            public ObservableCollection<string> ChannelSetupList
+            public ObservableCollection<string> SetupList
             {
                 get
                 {
-                    return _ChannelSetupList;
+                    return _SetupList;
                 }
             }
 
             [JsonIgnore]
-            public ObservableCollection<string> SpeakerTypeList
+            public ObservableCollection<string> SpConfigList
             {
                 get
                 {
-                    return _SpeakerTypeList;
+                    return _SpConfigList;
                 }
             }
         }
@@ -140,7 +124,7 @@ namespace Audyssey
             static ObservableCollection<string> _AudyFinFlgList = new()
             { "Fin", "NotFin" };
 
-            static ObservableCollection<string> _AmpAssignTypeList = new()
+            static ObservableCollection<string> _AmpAssignList = new()
             {
                 "FrontA",
                 "FrontB",
@@ -213,11 +197,11 @@ namespace Audyssey
             }
 
             [JsonIgnore]
-            public ObservableCollection<string> AmpAssignTypeList
+            public ObservableCollection<string> AmpAssignList
             {
                 get
                 {
-                    return _AmpAssignTypeList;
+                    return _AmpAssignList;
                 }
             }
 

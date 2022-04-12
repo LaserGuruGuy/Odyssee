@@ -26,10 +26,9 @@ namespace Audyssey
             private bool? _Mic;
             private string _AmpAssign;
             private string _AssignBin;
-            private UniqueObservableCollection<ObservableDictionary> _ChSetup;
+            //private UniqueObservableCollection<ObservableDictionary> _ChSetup;
             private bool? _BTTXStatus;
             private bool? _SpPreset;
-            private int _Position;
             #endregion
 
             #region Properties
@@ -86,12 +85,19 @@ namespace Audyssey
             {
                 get
                 {
-                    return _ChSetup;
+                    return null;
                 }
                 set
                 {
-                    _ChSetup = value;
-                    RaisePropertyChanged("ChSetup");
+                    DetectedChannels = new();
+                    foreach (var Element in value)
+                    {
+                        foreach (var Item in Element)
+                        {
+                            DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
+                        }
+                    }
+                    RaisePropertyChanged("DetectedChannels");
                 }
             }
             public bool? BTTXStatus
@@ -118,17 +124,6 @@ namespace Audyssey
                     RaisePropertyChanged("SpPreset");
                 }
             }
-            public int Position
-            { 
-                get
-                {
-                    return _Position;
-                }
-                set
-                {
-                    _Position = value;
-                }
-            }
             #endregion
 
             #region Methods
@@ -136,7 +131,6 @@ namespace Audyssey
             private void ResetMic() { _Mic = null; }
             private void ResetAmpAssign() { _AmpAssign = null; }
             private void ResetAssignBin() { _AssignBin = null; }
-            private void ResetChSetup() { _ChSetup = null; }
             private void ResetBTTXStatus() { _BTTXStatus = null; }
             private void ResetSpPreset() { _SpPreset = null; }
             #endregion

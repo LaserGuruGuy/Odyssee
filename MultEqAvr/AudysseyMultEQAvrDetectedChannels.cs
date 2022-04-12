@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Audyssey.MultEQ;
+using Audyssey.MultEQ.List;
 
 namespace Audyssey
 {
@@ -20,26 +24,22 @@ namespace Audyssey
             public decimal? ResponseCoef { get; set; } // TODO: int but not for SW?
         }
 
-        public interface IResponseData
-        {
-            // GET_RESPON {"ChData":"FL"}
-            public string ChData { get; set; }
-            // GET_RESPON 128 * 512 bytes or 128 float
-            public Int32[] ResponseData { get; set; }
-        }
-
-        public class DetectedChannel : ChannelList, IChannel, IResponseData, INotifyPropertyChanged
+        public class DetectedChannel : ChannelList, IChannel, INotifyPropertyChanged
         {
             #region BackingField
+            // SET_POSNUM
             private string _Channel;
             private string _Setup;
             private bool? _Skip;
+
+            // START_CHNL
             private string _SpConnect;
             private string _Polarity;
             private int? _Distance;
             private decimal? _ResponseCoef;
-            private string _ChData;
-            private Int32[] _ResponseData;
+          
+            //  
+            private Dictionary<string, Int32[]> _ResponseData;
             #endregion
 
             #region Properties
@@ -79,6 +79,8 @@ namespace Audyssey
                     RaisePropertyChanged("Sticky");
                 }
             }
+
+            /*"START_CHNL"*/
             public string SpConnect
             {
                 get
@@ -127,19 +129,8 @@ namespace Audyssey
                     RaisePropertyChanged("ResponseCoef");
                 }
             }
-            public string ChData
-            {
-                get
-                {
-                    return _ChData;
-                }
-                set
-                {
-                    _ChData = value;
-                    RaisePropertyChanged("ChData");
-                }
-            }
-            public Int32[] ResponseData
+
+            public Dictionary<string, Int32[]> ResponseData
             {
                 get
                 {
@@ -149,14 +140,6 @@ namespace Audyssey
                 {
                     _ResponseData = value;
                     RaisePropertyChanged("ResponseData");
-                    RaisePropertyChanged("ResponseDataString");
-                }
-            }
-            public string[] ResponseDataString
-            {
-                get
-                {
-                    return ResponseData?.Select(x => ((float)x / (float)0x7fffffff).ToString(CultureInfo.InvariantCulture)).ToArray();
                 }
             }
             #endregion
@@ -165,12 +148,12 @@ namespace Audyssey
             private void ResetChannel() { _Channel = null; }
             private void ResetSetup() { _Setup = null; }
             private void ResetSkip() { _Skip = null; }
-            private void ResetSpConnect() { SpConnect = null; }
-            private void ResetPolarity() { Polarity = null; }
-            private void ResetDistance() { Distance = null; }
-            private void ResetResponseCoef() { ResponseCoef = null; }
-            public void ResetChata() { ChData = null; }
-            public void ResetResponseData() { ResponseData = null; }
+
+            private void ResetSpConnect() { _SpConnect = null; }
+            private void ResetPolarity() { _Polarity = null; }
+            private void ResetDistance() { _Distance = null; }
+            private void ResetResponseCoef() { _ResponseCoef = null; }
+
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
