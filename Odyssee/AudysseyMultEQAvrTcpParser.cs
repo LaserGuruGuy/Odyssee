@@ -55,8 +55,8 @@ namespace Audyssey
                 {
                     string CmdString = "GET_AVRINF";
                     // build JSON and replace values with "?"
-                    string AvrString = MakeQuery(JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings {
-                        ContractResolver = new InterfaceContractResolver(typeof(IInfo))
+                    string AvrString = MakeQuery(JsonConvert.SerializeObject(AudysseyMultEQAvr.AvrInfo, new JsonSerializerSettings {
+                        ContractResolver = new InterfaceContractResolver(typeof(AvrInfo))
                     }));
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
@@ -80,8 +80,8 @@ namespace Audyssey
                 {
                     string CmdString = "GET_AVRSTS";
                     // build JSON and replace values with "?"
-                    string AvrString = MakeQuery(JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings {
-                        ContractResolver = new InterfaceContractResolver(typeof(IStatus))
+                    string AvrString = MakeQuery(JsonConvert.SerializeObject(AudysseyMultEQAvr.AvrStatus, new JsonSerializerSettings {
+                        ContractResolver = new InterfaceContractResolver(typeof(AvrStatus))
                     }));
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
@@ -370,10 +370,10 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(string.Empty))
                                             {
-                                                JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
+                                                JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr.AvrInfo, new JsonSerializerSettings
                                                 {
                                                     ObjectCreationHandling = ObjectCreationHandling.Replace,
-                                                    ContractResolver = new InterfaceContractResolver(typeof(IInfo)),
+                                                    ContractResolver = new InterfaceContractResolver(typeof(AvrInfo)),
                                                     FloatParseHandling = FloatParseHandling.Decimal
                                                 });
                                                 AudysseyMultEQAvr.AvrInfo_IsChecked = true;
@@ -393,10 +393,10 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(string.Empty))
                                             {
-                                                JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
+                                                JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr.AvrStatus, new JsonSerializerSettings
                                                 {
                                                     ObjectCreationHandling = ObjectCreationHandling.Replace,
-                                                    ContractResolver = new InterfaceContractResolver(typeof(IStatus)),
+                                                    ContractResolver = new InterfaceContractResolver(typeof(AvrStatus)),
                                                     FloatParseHandling = FloatParseHandling.Decimal,
                                                 });
                                                 AudysseyMultEQAvr.AvrStatus_IsChecked = true;

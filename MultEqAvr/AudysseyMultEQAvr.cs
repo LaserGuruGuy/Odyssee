@@ -21,12 +21,38 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region BackingField
+            private AvrInfo _AvrInfo;
+            private AvrStatus _AvrStatus;
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
-            private int _NumPos = 1;
+            private int _NumPos;
             #endregion
 
             #region Properties
+            public AvrInfo AvrInfo
+            {
+                get
+                {
+                    return _AvrInfo;
+                }
+                set
+                {
+                    _AvrInfo = value;
+                    RaisePropertyChanged("AvrInfo");
+                }
+            }
+            public AvrStatus AvrStatus
+            {
+                get
+                {
+                    return _AvrStatus;
+                }
+                set
+                {
+                    _AvrStatus = value;
+                    RaisePropertyChanged("AvrStatus");
+                }
+            }
             public UniqueObservableCollection<DetectedChannel> DetectedChannels
             {
                 get
@@ -156,6 +182,12 @@ namespace Audyssey
             #endregion
 
             #region Methods
+            public AudysseyMultEQAvr()
+            {
+                _AvrInfo = new();
+                _AvrStatus = new(this);
+                _NumPos = 1;
+            }
             private void ResetDetectedChannels() { _DetectedChannels = null; }
             private void ResetSelectedChannel() { _SelectedChannel = null; }
             #endregion
@@ -210,15 +242,6 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            private void ResetSerialized() { _Serialized = string.Empty;  }
-            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
-            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
-            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
-            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
-            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
-            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
-            private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
-            private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
@@ -230,6 +253,15 @@ namespace Audyssey
                     }
                 }
             }
+            private void ResetSerialized() { _Serialized = string.Empty;  }
+            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
+            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
+            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
+            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
+            private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
+            private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
             private void RaisePropertyChanged(string propertyName)
             {
                 if (PropertyChanged != null)

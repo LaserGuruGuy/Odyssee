@@ -1,3 +1,4 @@
+using Audyssey.MultEQ.List;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -5,21 +6,10 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public interface IStatus
+        public class AvrStatus : AvrStatusList, INotifyPropertyChanged
         {
-            #region Properties
-            public bool? HPPlug { get; set; }
-            public bool? Mic { get; set; }
-            public string AmpAssign { get; set; }
-            public string AssignBin { get; set; }
-            public UniqueObservableCollection<Dictionary<string,string>> ChSetup { get; set; }
-            public bool? BTTXStatus { get; set; }
-            public bool? SpPreset { get; set; }
-            #endregion
-        }
+            private AudysseyMultEQAvr _Parent;
 
-        public partial class AudysseyMultEQAvr : IStatus, INotifyPropertyChanged
-        {
             #region BackingField
             private bool? _HPPlug;
             private bool? _Mic;
@@ -78,7 +68,6 @@ namespace Audyssey
                     RaisePropertyChanged("AssignBin");
                 }
             }
-
             public UniqueObservableCollection<Dictionary<string,string>> ChSetup
             {
                 get
@@ -87,12 +76,12 @@ namespace Audyssey
                 }
                 set
                 {
-                    DetectedChannels = new();
+                    _Parent.DetectedChannels = new();
                     foreach (var Element in value)
                     {
                         foreach (var Item in Element)
                         {
-                            DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
+                            _Parent.DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
                         }
                     }
                     RaisePropertyChanged("DetectedChannels");
@@ -125,12 +114,35 @@ namespace Audyssey
             #endregion
 
             #region Methods
+            public AvrStatus(AudysseyMultEQAvr Parent) { _Parent = Parent; }
+            public void Reset()
+            {
+                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
+                {
+                    if (prop.CanResetValue(this))
+                    {
+                        prop.ResetValue(this);
+                        RaisePropertyChanged(prop.Name);
+                    }
+                }
+            }
             private void ResetHPPlug() { _HPPlug = null; }
             private void ResetMic() { _Mic = null; }
             private void ResetAmpAssign() { _AmpAssign = null; }
             private void ResetAssignBin() { _AssignBin = null; }
             private void ResetBTTXStatus() { _BTTXStatus = null; }
             private void ResetSpPreset() { _SpPreset = null; }
+            private void RaisePropertyChanged(string propertyName)
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+            #endregion
+
+            #region Events
+            public event PropertyChangedEventHandler PropertyChanged = delegate { };
             #endregion
         }
     }

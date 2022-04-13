@@ -1,38 +1,23 @@
+using Audyssey.MultEQ.List;
 using System.ComponentModel;
 
 namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public interface IInfo
-        {
-            #region Properties
-            public string Ifver { get; set; }
-            public string DType { get; set; }
-            public CoefWaitTime CoefWaitTime { get; set; }
-            public decimal? ADC { get; set; }
-            public int? SysDelay { get; set; }
-            public string EQType { get; set; }
-            public bool? SWLvlMatch { get; set; }
-            public bool? LFC { get; set; }
-            public bool? Auro { get; set; }
-            public string Upgrade { get; set; }
-            #endregion
-        }
-
-        public partial class AudysseyMultEQAvr : IInfo, INotifyPropertyChanged
+        public class AvrInfo : AvrInfoList, INotifyPropertyChanged
         {
             #region BackingField
-            private string _Ifver = null;
-            private string _DType = null;
-            private CoefWaitTime _CoefWaitTime = null;
-            private decimal? _ADC = null;
-            private int? _SysDelay = null;
-            private string _EQType = null;
-            private bool? _SWLvlMatch = null;
-            private bool? _LFC = null;
-            private bool? _Auro = null;
-            private string _Upgrade = null;
+            private string _Ifver;
+            private string _DType;
+            private CoefWaitTime _CoefWaitTime;
+            private decimal? _ADC;
+            private int? _SysDelay;
+            private string _EQType;
+            private bool? _SWLvlMatch;
+            private bool? _LFC;
+            private bool? _Auro;
+            private string _Upgrade;
             #endregion
 
             #region Properties
@@ -159,6 +144,17 @@ namespace Audyssey
             #endregion
 
             #region Methods
+            public void Reset()
+            {
+                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
+                {
+                    if (prop.CanResetValue(this))
+                    {
+                        prop.ResetValue(this);
+                        RaisePropertyChanged(prop.Name);
+                    }
+                }
+            }
             private void ResetIfver() { _Ifver = null; }
             private void ResetDType() { _DType = null; }
             private void ResetCoefWaitTime() { _CoefWaitTime = null; }
@@ -168,7 +164,18 @@ namespace Audyssey
             private void ResetSWLvlMatch() { _SWLvlMatch = null; }
             private void ResetLFC() { _LFC = null; }
             private void ResetAuro() { _Auro = null; }
-            private void ResetUpgrade() {_Upgrade = null; }
+            private void ResetUpgrade() { _Upgrade = null; }
+            private void RaisePropertyChanged(string propertyName)
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
+            #endregion
+
+            #region Events
+            public event PropertyChangedEventHandler PropertyChanged;
             #endregion
         }
     }

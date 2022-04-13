@@ -107,23 +107,8 @@ namespace Audyssey
             }
         }
 
-        public class MultEQList
+        public class AvrStatusList
         {
-            static ObservableCollection<string> _AudyDynSetList = new()
-            { "H", "M", "L" };
-
-            static ObservableCollection<string> _AudyEqSetList = new()
-            { "Audy", "Flat" };
-
-            static ObservableCollection<int> _AudyEqRefList = new()
-            { 0, 5, 10, 15 };
-
-            static ObservableCollection<int> _AudyLfcLevList = new()
-            { 1, 2, 3, 4, 5, 6, 7 };
-
-            static ObservableCollection<string> _AudyFinFlgList = new()
-            { "Fin", "NotFin" };
-
             static ObservableCollection<string> _AmpAssignList = new()
             {
                 "FrontA",
@@ -148,8 +133,52 @@ namespace Audyssey
                 "Type20"
             };
 
+            [JsonIgnore]
+            public ObservableCollection<string> AmpAssignList
+            {
+                get
+                {
+                    return _AmpAssignList;
+                }
+            }
+        }
+
+        public class AvrInfoList
+        {
             static ObservableCollection<string> _EQTypeList = new()
-            { "MultEQ", "MultEQXT", "MultEQXT32" };
+            {
+                "MultEQ",
+                "MultEQXT",
+                "MultEQXT32"
+            };
+
+            [JsonIgnore]
+            public ObservableCollection<string> EQTypeList
+            {
+                get
+                {
+                    return _EQTypeList;
+                }
+            }
+        }
+
+        public class MultEQList
+        {
+
+            static ObservableCollection<string> _AudyDynSetList = new()
+            { "H", "M", "L" };
+
+            static ObservableCollection<string> _AudyEqSetList = new()
+            { "Audy", "Flat" };
+
+            static ObservableCollection<int> _AudyEqRefList = new()
+            { 0, 5, 10, 15 };
+
+            static ObservableCollection<int> _AudyLfcLevList = new()
+            { 1, 2, 3, 4, 5, 6, 7 };
+
+            static ObservableCollection<string> _AudyFinFlgList = new()
+            { "Fin", "NotFin" };
 
             [JsonIgnore]
             public ObservableCollection<string> AudyDynSetList
@@ -193,24 +222,6 @@ namespace Audyssey
                 get
                 {
                     return _AudyFinFlgList;
-                }
-            }
-
-            [JsonIgnore]
-            public ObservableCollection<string> AmpAssignList
-            {
-                get
-                {
-                    return _AmpAssignList;
-                }
-            }
-
-            [JsonIgnore]
-            public ObservableCollection<string> EQTypeList
-            {
-                get
-                {
-                    return _EQTypeList;
                 }
             }
         }
