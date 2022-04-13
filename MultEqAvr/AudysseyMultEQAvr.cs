@@ -21,11 +21,11 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region BackingField
-            private AvrInfo _AvrInfo;
-            private AvrStatus _AvrStatus;
+            private AvrInfo _AvrInfo = new();
+            private AvrStatus _AvrStatus = new();
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
-            private int _NumPos;
+            private int _NumPos = 8;
             #endregion
 
             #region Properties
@@ -178,18 +178,42 @@ namespace Audyssey
                     }
                 }
             }
-            public int NumPos { get { return _NumPos; } set { _NumPos = value; RaisePropertyChanged("NumPos"); } }
+            public int NumPos
+            {
+                get
+                {
+                    return _NumPos;
+                }
+                set
+                {
+                    _NumPos = value;
+                    RaisePropertyChanged("NumPos");
+                }
+            }
             #endregion
 
             #region Methods
-            public AudysseyMultEQAvr()
+            public void ResetDetectedChannels()
             {
-                _AvrInfo = new();
-                _AvrStatus = new(this);
-                _NumPos = 1;
+                if (AvrStatus != null)
+                {
+                    if (AvrStatus.ChSetup != null)
+                    {
+                        DetectedChannels = new();
+                        foreach (var Element in AvrStatus.ChSetup)
+                        {
+                            foreach (var Item in Element)
+                            {
+                                DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
+                            }
+                        }
+                    }
+                }
             }
-            private void ResetDetectedChannels() { _DetectedChannels = null; }
-            private void ResetSelectedChannel() { _SelectedChannel = null; }
+            private void ResetSelectedChannel()
+            {
+                _SelectedChannel = null;
+            }
             #endregion
 
             #region BackingField

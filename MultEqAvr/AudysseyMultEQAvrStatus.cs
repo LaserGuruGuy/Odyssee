@@ -1,5 +1,6 @@
 using Audyssey.MultEQ.List;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Audyssey
@@ -8,13 +9,12 @@ namespace Audyssey
     {
         public class AvrStatus : AvrStatusList, INotifyPropertyChanged
         {
-            private AudysseyMultEQAvr _Parent;
-
             #region BackingField
             private bool? _HPPlug;
             private bool? _Mic;
             private string _AmpAssign;
             private string _AssignBin;
+            public ObservableCollection<Dictionary<string, string>> _ChSetup;
             private bool? _BTTXStatus;
             private bool? _SpPreset;
             #endregion
@@ -68,23 +68,16 @@ namespace Audyssey
                     RaisePropertyChanged("AssignBin");
                 }
             }
-            public UniqueObservableCollection<Dictionary<string,string>> ChSetup
+            public ObservableCollection<Dictionary<string,string>> ChSetup
             {
                 get
                 {
-                    return null;
+                    return _ChSetup;
                 }
                 set
                 {
-                    _Parent.DetectedChannels = new();
-                    foreach (var Element in value)
-                    {
-                        foreach (var Item in Element)
-                        {
-                            _Parent.DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
-                        }
-                    }
-                    RaisePropertyChanged("DetectedChannels");
+                    _ChSetup = value;
+                    RaisePropertyChanged("ChSetup");
                 }
             }
             public bool? BTTXStatus
@@ -114,7 +107,6 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            public AvrStatus(AudysseyMultEQAvr Parent) { _Parent = Parent; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))

@@ -38,7 +38,9 @@ namespace Odyssee
             SearchForComputerIpAddress();
 
             audysseyMultEQAvr = new();
-            audysseyMultEQAvr.PropertyChanged += AudysseyMultEQAvr_PropertyChanged;
+            audysseyMultEQAvr.PropertyChanged += PropertyChanged;
+            audysseyMultEQAvr.AvrStatus.PropertyChanged += PropertyChanged;
+            audysseyMultEQAvr.AvrInfo.PropertyChanged += PropertyChanged;
 
             this.DataContext = audysseyMultEQAvr;
         }
@@ -112,13 +114,17 @@ namespace Odyssee
             }
         }
 
-        private void AudysseyMultEQAvr_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Console.WriteLine(e.PropertyName);
             if (e.PropertyName.Equals("SPLValue"))
             {
                 InitOxyPlotLvlm();
                 AddOxyPlotLvlm();
+            }
+            if (e.PropertyName.Equals("ChSetup"))
+            {
+                audysseyMultEQAvr.ResetDetectedChannels();
             }
         }
     }
