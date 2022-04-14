@@ -7,13 +7,24 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
+        public interface IMeasuredPosition
+        {
+            public int Position { get; set; }
+            public ObservableCollection<string> ChSetup { get; set; }
+        }
+
         public class MeasuredPosition
         {
             public int Position { get; set; } = 0;
             public ObservableCollection<string> ChSetup { get; set; } = new();
         }
 
-        public class MeasuredChannel : ChannelReport
+        public interface IMeasuredChannel
+        {
+            public string Channel { get; set; }
+        }
+
+        public class MeasuredChannel : ChannelReport, IMeasuredChannel, IChannelReport
         {
             public string Channel { get; set; }
         }
@@ -23,7 +34,7 @@ namespace Audyssey
             #region BackingField
             private AvrInfo _AvrInfo = new();
             private AvrStatus _AvrStatus = new();
-            private UniqueObservableCollection<DetectedChannel> _DetectedChannels;
+            UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
             private int _NumPos = 8;
             #endregion
@@ -61,8 +72,21 @@ namespace Audyssey
                 }
                 set
                 {
-                    _DetectedChannels = value;
-                    RaisePropertyChanged("DetectedChannels");
+                    if (AvrStatus != null)
+                    {
+                        if (AvrStatus.ChSetup != null)
+                        {
+                            _DetectedChannels = new();
+                            foreach (var Element in AvrStatus.ChSetup)
+                            {
+                                foreach (var Item in Element)
+                                {
+                                    _DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
+                                }
+                            }
+                            RaisePropertyChanged("DetectedChannels");
+                        }
+                    }
                 }
             }
             public DetectedChannel SelectedChannel
@@ -193,22 +217,9 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            public void ResetDetectedChannels()
+            private void ResetDetectedChannels()
             {
-                if (AvrStatus != null)
-                {
-                    if (AvrStatus.ChSetup != null)
-                    {
-                        DetectedChannels = new();
-                        foreach (var Element in AvrStatus.ChSetup)
-                        {
-                            foreach (var Item in Element)
-                            {
-                                DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
-                            }
-                        }
-                    }
-                }
+                _DetectedChannels = null;
             }
             private void ResetSelectedChannel()
             {
@@ -227,6 +238,7 @@ namespace Audyssey
             private bool _AudyFinFlag_IsChecked;
             private bool _SetPosNum_IsChecked;
             private bool _StartChnl_IsChecked;
+            private bool _SetAmp_IsChecked;
             #endregion
 
             #region Properties
@@ -263,6 +275,8 @@ namespace Audyssey
             public bool SetPosNum_IsChecked { get { return _SetPosNum_IsChecked; } set { _SetPosNum_IsChecked = value; RaisePropertyChanged("SetPosNum_IsChecked"); } }
             [JsonIgnore]
             public bool StartChnl_IsChecked { get { return _StartChnl_IsChecked; } set { _StartChnl_IsChecked = value; RaisePropertyChanged("StartChnl_IsChecked"); } }
+            [JsonIgnore]
+            public bool SetAmp_IsChecked { get { return _SetAmp_IsChecked; } set { _SetAmp_IsChecked = value; RaisePropertyChanged("SetAmp_IsChecked"); } }
             #endregion
 
             #region Methods

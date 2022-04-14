@@ -124,7 +124,7 @@ namespace Odyssee
             }
             if (e.PropertyName.Equals("ChSetup"))
             {
-                audysseyMultEQAvr.ResetDetectedChannels();
+                audysseyMultEQAvr.DetectedChannels = null;
             }
         }
     }

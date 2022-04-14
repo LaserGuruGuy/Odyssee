@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnnotationObservableCollection.cs" />
+    <Compile Include="AudysseyMultEQAvrAmp.cs" />
     <Compile Include="AudysseyMultEQAvrChannelReport.cs" />
     <Compile Include="AudysseyMultEQList.cs" />
     <Compile Include="AudysseyMultEQAvr.cs" />

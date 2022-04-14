@@ -200,7 +200,7 @@ namespace Audyssey
                     // build JSON {"Position":1,"ChSetup":["FL","FR"]};
                     string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.MeasuredPosition, new JsonSerializerSettings
                     {
-                        ContractResolver = new InterfaceContractResolver(typeof(MeasuredPosition))
+                        ContractResolver = new InterfaceContractResolver(typeof(IMeasuredPosition))
                     });
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
@@ -227,13 +227,41 @@ namespace Audyssey
                     // build JSON {"Channel":"FL"}
                     string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.MeasuredChannel, new JsonSerializerSettings
                     {
-                        ContractResolver = new InterfaceContractResolver(typeof(MeasuredChannel)),
+                        ContractResolver = new InterfaceContractResolver(typeof(IMeasuredChannel)),
                         NullValueHandling = NullValueHandling.Ignore
                     });
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    cmdAck.Rqst(CallBack);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
+
+            public bool SetAmp(CmdAckCallBack CallBack = null)
+            {
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
+                {
+                    // clear finflag
+                    AudysseyMultEQAvr.AudyFinFlg = "NotFin";  //TODO what does this flag do?
+                    string CmdString = "SET_SETDAT";
+                    // build JSON for class Dat on interface Iamp
+                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
+                    {
+                        ContractResolver = new InterfaceContractResolver(typeof(IAmp))
+                    });
+                    // toolbar
+                    AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
+                    // transmit request
+                    AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // callback
                     cmdAck.Rqst(CallBack);
                     // return command was issued
                     return true;

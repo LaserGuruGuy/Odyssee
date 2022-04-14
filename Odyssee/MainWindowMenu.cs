@@ -255,8 +255,19 @@ namespace Odyssee
 
         private void MenuItem_SetAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.SetAmp(OnCmdAckSetAmp);
+            }
+        }
+
+        public void OnCmdAckSetAmp(bool IsAck)
+        {
+            if (!IsAck)
+            {
+                audysseyMultEQAvr.SetAmp_IsChecked = false;
+                audysseyMultEQAvr.Serialized += "Failed\n";
+            }
         }
 
         private void MenuItem_SetAvrSetAudy_OnClick(object sender, RoutedEventArgs e)

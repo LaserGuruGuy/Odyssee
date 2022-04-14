@@ -62,13 +62,7 @@ namespace Audyssey
             };
 
             static ObservableCollection<string> _CrossoverList = new()
-            { " ", "40", "60", "80", "90", "100", "110", "120", "150", "180", "200", "250", "F" };
-
-            static ObservableCollection<string> _SetupList = new()
-            { "L", "N", "S", "E" };
-
-            static ObservableCollection<string> _SpConfigList = new()
-            { " ", "S", "L" };
+            { "40", "60", "80", "90", "100", "110", "120", "150", "180", "200", "250", "F" };
 
             [JsonIgnore]
             public ObservableCollection<decimal> ChLevelList
@@ -87,6 +81,12 @@ namespace Audyssey
                     return _CrossoverList;
                 }
             }
+        }
+
+        public class ChannelReportList
+        {
+            static ObservableCollection<string> _SetupList = new()
+            { "L", "N", "S", "E" };
 
             [JsonIgnore]
             public ObservableCollection<string> SetupList
@@ -94,15 +94,6 @@ namespace Audyssey
                 get
                 {
                     return _SetupList;
-                }
-            }
-
-            [JsonIgnore]
-            public ObservableCollection<string> SpConfigList
-            {
-                get
-                {
-                    return _SpConfigList;
                 }
             }
         }

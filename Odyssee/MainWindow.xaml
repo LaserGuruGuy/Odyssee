@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1280" Height="1024" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
         Icon=".\Icons\Odyssee.ico">
+    <!-- DataContext="{Binding RelativeSource={RelativeSource Self}}" -->
     <WindowChrome.WindowChrome>
         <WindowChrome
             CaptionHeight="30"
@@ -64,7 +65,7 @@
                         <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" IsCheckable="True" IsChecked="{Binding StartChnl_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="MenuItem_SetAvrGetRespon_OnClick" />
                         <Separator/>
-                        <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="MenuItem_SetAvrSetAmp_OnClick" />
+                        <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="MenuItem_SetAvrSetAmp_OnClick" IsCheckable="True" IsChecked="{Binding SetAmp_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Set Audy" Name="setAvrSetAudy" Click="MenuItem_SetAvrSetAudy_OnClick" />
                         <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="MenuItem_SetAvrSetDisFil_OnClick" />
                         <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" />
@@ -158,6 +159,7 @@
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="*"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
@@ -165,7 +167,7 @@
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Row="0" Grid.Column="0" Content="Speaker Connect"></Label>
-                                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SpConnect}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SpConnect}" ItemsSource="{Binding SetupList}" VerticalAlignment="Center"/>
                                             <Label Grid.Row="1" Grid.Column="0" Content="Speaker Polarity"></Label>
                                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Polarity}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
                                             <Label Grid.Row="2" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
@@ -178,11 +180,6 @@
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="auto"/>
-                                                <RowDefinition Height="auto"/>
-                                                <RowDefinition Height="auto"/>
-                                                <RowDefinition Height="auto"/>
-                                                <RowDefinition Height="auto"/>
-                                                <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="*"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
@@ -193,10 +190,6 @@
                                             <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding ChLevel}" ItemsSource="{Binding ChLevelList}" VerticalAlignment="Center"/>
                                             <Label Grid.Row="1" Grid.Column="0" Content="Channel Crossover (Hz)"></Label>
                                             <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding Crossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
-                                            <Label Grid.Row="2" Grid.Column="0" Content="Channel Setup"></Label>
-                                            <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Setup}" ItemsSource="{Binding SetupList}" VerticalAlignment="Center"/>
-                                            <Label Grid.Row="3" Grid.Column="0" Content="Speaker Config"></Label>
-                                            <ComboBox Grid.Row="3" Grid.Column="1" SelectedValue="{Binding SpConfig}" ItemsSource="{Binding SpConfigList}" VerticalAlignment="Center"/>
                                         </Grid>
                                     </GroupBox>
                                 </StackPanel>

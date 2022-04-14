@@ -5,15 +5,21 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public class ChannelReport : INotifyPropertyChanged
+        public interface IChannelReport
         {
-            // START_CHNL {"SpConnect":"S","Polarity":"N","Distance":237,"ResponseCoef":1}
+            public string SpConnect { get; set; }
+            public string Polarity { get; set; }
+            public int? Distance { get; set; }
+            public decimal? ResponseCoef { get; set; }
+        }
 
+        public class ChannelReport : ChannelReportList, INotifyPropertyChanged
+        {
             #region BackingField
             private string _SpConnect = string.Empty;
             private string _Polarity = string.Empty;
-            private int _Distance = 0;
-            private decimal _ResponseCoef = 0;
+            private int? _Distance;
+            private decimal? _ResponseCoef;
             #endregion
 
             #region Properties
@@ -41,7 +47,7 @@ namespace Audyssey
                     RaisePropertyChanged("Polarity");
                 }
             }
-            public int Distance
+            public int? Distance
             {
                 get
                 {
@@ -53,7 +59,7 @@ namespace Audyssey
                     RaisePropertyChanged("Distance");
                 }
             }
-            public decimal ResponseCoef
+            public decimal? ResponseCoef
             {
                 get
                 {
