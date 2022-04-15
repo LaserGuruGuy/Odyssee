@@ -282,6 +282,17 @@ namespace Audyssey
             #endregion
 
             #region Methods
+            public void Reset()
+            {
+                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
+                {
+                    if (prop.CanResetValue(this))
+                    {
+                        prop.ResetValue(this);
+                        RaisePropertyChanged(prop.Name);
+                    }
+                }
+            }
             private void ResetSerialized() { _Serialized = string.Empty;  }
             private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
             private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
@@ -294,20 +305,6 @@ namespace Audyssey
             private void ResetStartChnl_IsChecked() { _StartChnl_IsChecked = false; }
             private void ResetSetAmp_IsChecked() { _SetAmp_IsChecked = false; }
             private void ResetSetAudy_IsChecked() { _SetAudy_IsChecked = false; }
-            #endregion
-
-            #region Methods
-            public void Reset()
-            {
-                foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
-                {
-                    if (prop.CanResetValue(this))
-                    {
-                        prop.ResetValue(this);
-                        RaisePropertyChanged(prop.Name);
-                    }
-                }
-            }
             private void RaisePropertyChanged(string propertyName)
             {
                 if (PropertyChanged != null)
