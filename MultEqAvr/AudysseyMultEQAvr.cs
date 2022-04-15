@@ -1,5 +1,7 @@
 ﻿using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -32,11 +34,13 @@ namespace Audyssey
         public interface IResponseData
         {
             public string ChData { get; set; }
+            public Int32[] RspData { get; set; }
         }
 
-        public class ResponseData : ChannelReport, IResponseData, IChannelReport
+        public class ResponseData : IResponseData
         {
             public string ChData { get; set; }
+            public Int32[] RspData { get; set; }
         }
 
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
@@ -191,24 +195,27 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (value.Channel == null)
+                            if (ch.Skip != null && ch.Channel != null && ch.ChannelReport != null)
                             {
-                                if (ch.Skip == false)
+                                if (value.Channel == null)
                                 {
-                                    if (string.IsNullOrEmpty(ch.ChannelReport.SpConnect))
+                                    if (ch.Skip == false)
                                     {
-                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.SpConnect = value.SpConnect;
-                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.Polarity = value.Polarity;
-                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.Distance = value.Distance;
-                                        DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.ResponseCoef = value.ResponseCoef;
-                                        break;
+                                        if (string.IsNullOrEmpty(ch.ChannelReport.SpConnect))
+                                        {
+                                            DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.SpConnect = value.SpConnect;
+                                            DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.Polarity = value.Polarity;
+                                            DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.Distance = value.Distance;
+                                            DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport.ResponseCoef = value.ResponseCoef;
+                                            break;
+                                        }
                                     }
                                 }
-                            }
-                            else if (value.Channel.Equals(ch.Channel))
-                            {
-                                DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport = null;
-                                break;
+                                else if (value.Channel.Equals(ch.Channel))
+                                {
+                                    DetectedChannels[DetectedChannels.IndexOf(ch)].ChannelReport = null;
+                                    break;
+                                }
                             }
                         }
                         RaisePropertyChanged("ChannelReport");
@@ -221,28 +228,67 @@ namespace Audyssey
                 get
                 {
                     ResponseData ResponseData = null;
+                    //find the first or default channel with the lowest responsedata count
                     if (DetectedChannels != null)
                     {
+                        DetectedChannel DetectedChannel = DetectedChannels[0];
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Skip != null && ch.ChannelReport != null)
+                            if (ch.Skip != null)
                             {
                                 if (ch.Skip == false)
                                 {
-                                    if (ch.ChannelReport.ResponseData == null)
+                                    if (ch.ResponseData == null)
                                     {
-                                        ResponseData = new() { ChData = ch.Channel };
+                                        DetectedChannel = ch;
                                         break;
+                                    }
+                                    else if (ch.ResponseData.Count == 0)
+                                    {
+                                        DetectedChannel = ch;
+                                        break;
+                                    }
+                                    else if (ch.ResponseData.Count < DetectedChannel.ResponseData.Count)
+                                    {
+                                        DetectedChannel = ch;
                                     }
                                 }
                             }
                         }
+                        ResponseData = new() { ChData = DetectedChannel.Channel };
                     }
                     return ResponseData;
                 }
                 set
                 {
-
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (string.IsNullOrEmpty(value.ChData))
+                            {
+                                if (ch.Channel.Equals(ResponseData.ChData))
+                                {
+                                    if (ch.ResponseData == null)
+                                    {
+                                        ch.ResponseData = new();
+                                    }
+                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), value.RspData);
+                                    break;
+                                }
+                            }
+                            else if (ch.Channel.Equals(value.ChData))
+                            {
+                                if (ch.ResponseData == null)
+                                {
+                                    ch.ResponseData = new();
+                                }
+                                ch.ResponseData.Add(ch.ResponseData.Count.ToString(), value.RspData);
+                                break;
+                            }
+                        }
+                        RaisePropertyChanged("DetectedChannels");
+                    }
                 }
             }
             public int NumPos

@@ -116,6 +116,8 @@ namespace Audyssey
             private void ResetChannel() { _Channel = null; }
             private void ResetSetup() { _Setup = null; }
             private void ResetSkip() { _Skip = null; }
+            private void ResetChannelReport() { _ChannelReport = new(); }
+            private void ResetResponseData() { _ResponseData = null; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))

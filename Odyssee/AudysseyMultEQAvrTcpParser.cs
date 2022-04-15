@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcpClient;
+using System.Collections.Generic;
 
 namespace Audyssey
 {
@@ -568,6 +569,17 @@ namespace Audyssey
                                             }
                                         }
                                         break;
+                                    case "GET_RESPON":
+                                        if (TransmitReceiveChar == 'T')
+                                        {
+                                            AudysseyMultEQAvr.ResponseData = JsonConvert.DeserializeObject<ResponseData>(DataString, new JsonSerializerSettings
+                                            {
+                                                NullValueHandling = NullValueHandling.Ignore,
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                            });
+                                            AudysseyMultEQAvr.Serialized += "TOTEST\n";
+                                        }
+                                        break;
                                     case "SET_SETDAT":
                                         if (TransmitReceiveChar == 'T')
                                         {
@@ -737,24 +749,12 @@ namespace Audyssey
                                 }
                                 break;
                             case "GET_RESPON":
-                                if (TransmitReceiveChar == 'T')
-                                {
-                                    if (TransferComplete)
-                                    {
-                                        AudysseyMultEQAvr.Serialized += "TODO\n";
-                                        cmdAck.Ack();
-                                    }
-                                    else
-                                    {
-                                        AudysseyMultEQAvr.Serialized += CmdString + " segment " + CurrentPacket.ToString() + " of " + TotalPackets.ToString() + " with " + Encoding.ASCII.GetString(DataByte) + " bytes" + "\n";
-                                        cmdAck.Progress();
-                                    }
-                                }
                                 if (TransmitReceiveChar == 'R')
                                 {
                                     if (TransferComplete)
                                     {
-                                        AudysseyMultEQAvr.Serialized += "TODO\n";
+                                        AudysseyMultEQAvr.ResponseData = new() { RspData = ByteToInt32Array(DataByte) };
+                                        AudysseyMultEQAvr.Serialized += "TOTEST\n";
                                         cmdAck.Ack();
                                     }
                                     else

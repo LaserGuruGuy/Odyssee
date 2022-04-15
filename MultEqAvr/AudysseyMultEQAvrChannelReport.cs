@@ -72,7 +72,6 @@ namespace Audyssey
                     RaisePropertyChanged("ResponseCoef");
                 }
             }
-            public Int32[] ResponseData { get; set; } // GET_RESPON 128 * 512 bytes or 128 float
             #endregion
 
             #region Methods
