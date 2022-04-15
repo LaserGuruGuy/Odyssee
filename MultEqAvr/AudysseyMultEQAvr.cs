@@ -34,13 +34,13 @@ namespace Audyssey
         public interface IResponseData
         {
             public string ChData { get; set; }
-            public Int32[] RspData { get; set; }
+            public float[] RspData { get; set; }
         }
 
         public class ResponseData : IResponseData
         {
             public string ChData { get; set; }
-            public Int32[] RspData { get; set; }
+            public float[] RspData { get; set; }
         }
 
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
@@ -51,6 +51,7 @@ namespace Audyssey
             UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
             private int _NumPos = 8;
+            private int _SmoothingFactor = 1;
             #endregion
 
             #region Properties
@@ -303,6 +304,19 @@ namespace Audyssey
                     RaisePropertyChanged("NumPos");
                 }
             }
+            [JsonIgnore]
+            public int SmoothingFactor
+            {
+                get
+                {
+                    return _SmoothingFactor;
+                }
+                set
+                {
+                    _SmoothingFactor = value > 48 ? 48 : value < 0 ? 0 : value;
+                    RaisePropertyChanged("SmoothingFactor");
+                }
+            }
             #endregion
 
             #region Methods
@@ -313,6 +327,8 @@ namespace Audyssey
             private void ResetMeasuredPosition() { /* property has no backingfield */ }
             private void ResetMeasuredChannel() { /* property has no backingfield */ }
             private void ResetNumPos() { _NumPos = 8; }
+            public void ResetSmoothingFactor() { _SmoothingFactor = 1; }
+
             #endregion
 
             #region BackingField

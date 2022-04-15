@@ -577,7 +577,7 @@ namespace Audyssey
                                                 NullValueHandling = NullValueHandling.Ignore,
                                                 ObjectCreationHandling = ObjectCreationHandling.Replace,
                                             });
-                                            AudysseyMultEQAvr.Serialized += "TOTEST\n";
+                                            AudysseyMultEQAvr.Serialized += "\n";
                                         }
                                         break;
                                     case "SET_SETDAT":
@@ -753,8 +753,8 @@ namespace Audyssey
                                 {
                                     if (TransferComplete)
                                     {
-                                        AudysseyMultEQAvr.ResponseData = new() { RspData = ByteToInt32Array(DataByte) };
-                                        AudysseyMultEQAvr.Serialized += "TOTEST\n";
+                                        AudysseyMultEQAvr.ResponseData = new() { RspData = ByteToFloatArray(DataByte) };
+                                        AudysseyMultEQAvr.Serialized += "Success\n";
                                         cmdAck.Ack();
                                     }
                                     else
@@ -839,6 +839,19 @@ namespace Audyssey
                 }
                 return Int32s;
             }
+
+            public float[] ByteToFloatArray(byte[] Bytes)
+            {
+                if (Bytes.Length % 4 != 0) throw new ArgumentException();
+
+                float[] result = new float[Bytes.Length / 4];
+                for (int i = 0; i < Bytes.Length / 4; i++)
+                {
+                    result[i] = (float)(BitConverter.ToInt32(Bytes, i * 4)) / (float)(Int32.MaxValue);
+                }
+                return result;
+            }
+
         }
 
         class AudysseyMultEQAvrComm

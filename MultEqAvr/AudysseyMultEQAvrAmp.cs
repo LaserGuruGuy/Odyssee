@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -256,17 +257,17 @@ namespace Audyssey
             #endregion
 
             #region ResetMethods
-            public void ResetAudyFinFlg() 
-            { 
-                _AudyFinFlg = "NotFin"; 
+            public void ResetAudyFinFlg()
+            {
+                _AudyFinFlg = "NotFin";
             }
-            public void ResetAudyDynEq() 
-            { 
-                _AudyDynEq = true; 
+            public void ResetAudyDynEq()
+            {
+                _AudyDynEq = true;
             }
-            public void ResetAudyEqRef() 
-            { 
-                _AudyEqRef = 0; 
+            public void ResetAudyEqRef()
+            {
+                _AudyEqRef = 0;
             }
             #endregion
         }
