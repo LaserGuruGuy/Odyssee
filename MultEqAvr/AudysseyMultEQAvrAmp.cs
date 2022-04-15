@@ -42,9 +42,12 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Skip == false)
+                            if (ch.Channel != null && ch.ChLevel != null && ch.Skip != null)
                             {
-                                ChLevel.Add(new Dictionary<string, decimal>() { { ch.Channel, ch.ChLevel * 10m } });
+                                if (ch.Skip == false)
+                                {
+                                    ChLevel.Add(new Dictionary<string, decimal>() { { (string)ch.Channel, (decimal)ch.ChLevel * 10m } });
+                                }
                             }
                         }
                     }
@@ -79,9 +82,12 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Skip == false)
+                            if (ch.Channel != null && ch.Crossover != null && ch.Skip != null)
                             {
-                                Crossover.Add(new Dictionary<string, object>() { { ch.Channel, ch.Crossover.GetType() == typeof(string) ? ch.Crossover : (int.Parse(ch.Crossover.ToString()) / 10) } });
+                                if (ch.Skip == false)
+                                {
+                                    Crossover.Add(new Dictionary<string, object>() { { ch.Channel, ch.Crossover.GetType() == typeof(string) ? ch.Crossover : (int.Parse(ch.Crossover.ToString()) / 10) } });
+                                }
                             }
                         }
                     }
@@ -93,13 +99,16 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            foreach (var sp in value)
+                            if (ch.Crossover != null)
                             {
-                                foreach (var el in sp)
+                                foreach (var sp in value)
                                 {
-                                    if (ch.Channel.Equals(el.Key))
+                                    foreach (var el in sp)
                                     {
-                                        ch.Crossover = el.Value;
+                                        if (ch.Channel.Equals(el.Key))
+                                        {
+                                            ch.Crossover = el.Value;
+                                        }
                                     }
                                 }
                             }
@@ -116,9 +125,18 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Skip == false)
+                            if (ch.ChannelReport != null && ch.Skip != null)
                             {
-                                SpConfig.Add(new Dictionary<string, string>() { { ch.Channel, ch.ChannelReport.SpConnect } });
+                                if (ch.ChannelReport.SpConnect != null)
+                                {
+                                    if (ch.Skip == false)
+                                    {
+                                        if (ch.Skip == false)
+                                        {
+                                            SpConfig.Add(new Dictionary<string, string>() { { ch.Channel, ch.ChannelReport.SpConnect } });
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -130,13 +148,19 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            foreach (var sp in value)
+                            if (ch.Channel != null && ch.ChannelReport != null)
                             {
-                                foreach (var el in sp)
+                                if (ch.ChannelReport.SpConnect != null)
                                 {
-                                    if (ch.Channel.Equals(el.Key))
+                                    foreach (var sp in value)
                                     {
-                                        ch.ChannelReport.SpConnect = el.Value;
+                                        foreach (var el in sp)
+                                        {
+                                            if (ch.Channel.Equals(el.Key))
+                                            {
+                                                ch.ChannelReport.SpConnect = el.Value;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -153,9 +177,15 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Skip == false)
+                            if (ch.ChannelReport != null && ch.Skip != null)
                             {
-                                Distance.Add(new Dictionary<string, int>() { { ch.Channel, (int)ch.ChannelReport.Distance } });
+                                if (ch.ChannelReport.Distance != null)
+                                {
+                                    if (ch.Skip == false)
+                                    {
+                                        Distance.Add(new Dictionary<string, int>() { { ch.Channel, (int)ch.ChannelReport.Distance } });
+                                    }
+                                }
                             }
                         }
                     }
@@ -167,13 +197,19 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            foreach (var sp in value)
+                            if (ch.Channel != null && ch.ChannelReport != null)
                             {
-                                foreach (var el in sp)
+                                if (ch.ChannelReport.Distance != null)
                                 {
-                                    if (ch.Channel.Equals(el.Key))
+                                    foreach (var sp in value)
                                     {
-                                        ch.ChannelReport.Distance = el.Value;
+                                        foreach (var el in sp)
+                                        {
+                                            if (ch.Channel.Equals(el.Key))
+                                            {
+                                                ch.ChannelReport.Distance = el.Value;
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -223,17 +259,14 @@ namespace Audyssey
             public void ResetAudyFinFlg() 
             { 
                 _AudyFinFlg = "NotFin"; 
-                RaisePropertyChanged("AudyFinFlg"); 
             }
             public void ResetAudyDynEq() 
             { 
                 _AudyDynEq = true; 
-                RaisePropertyChanged("AudyDynEq"); 
             }
             public void ResetAudyEqRef() 
             { 
                 _AudyEqRef = 0; 
-                RaisePropertyChanged("AudyEqRef"); 
             }
             #endregion
         }

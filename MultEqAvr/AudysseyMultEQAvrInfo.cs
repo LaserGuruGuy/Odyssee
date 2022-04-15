@@ -5,7 +5,7 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public class AvrInfo : AvrInfoList, INotifyPropertyChanged
+        public class AvrInfo : INotifyPropertyChanged
         {
             #region BackingField
             private string _Ifver;

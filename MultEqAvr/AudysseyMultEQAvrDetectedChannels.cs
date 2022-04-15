@@ -21,8 +21,8 @@ namespace Audyssey
             private bool? _Skip;
             private ChannelReport _ChannelReport = new();
             private Dictionary<string, Int32[]> _ResponseData;
-            private decimal _ChLevel = 0m;
-            private object _Crossover = "F";
+            private decimal? _ChLevel = 0m;
+            private object? _Crossover = "F";
             #endregion
 
             #region Properties
@@ -86,7 +86,7 @@ namespace Audyssey
                     RaisePropertyChanged("ResponseData");
                 }
             }
-            public decimal ChLevel
+            public decimal? ChLevel
             {
                 get
                 {
@@ -98,7 +98,7 @@ namespace Audyssey
                     RaisePropertyChanged("ChLevel");
                 }
             }
-            public object Crossover
+            public object? Crossover
             {
                 get
                 {

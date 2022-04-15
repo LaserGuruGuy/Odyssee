@@ -7,7 +7,7 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public class AvrStatus : AvrStatusList, INotifyPropertyChanged
+        public class AvrStatus : INotifyPropertyChanged
         {
             #region BackingField
             private bool? _HPPlug;

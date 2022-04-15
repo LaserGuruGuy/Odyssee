@@ -259,11 +259,19 @@ namespace Odyssee
             {
                 audysseyMultEQAvrTcp.SetAmp(OnCmdAckSetAmp);
             }
+            else
+            {
+                audysseyMultEQAvr.SetAmp_IsChecked = false;
+            }
         }
 
         public void OnCmdAckSetAmp(bool IsAck)
         {
-            if (!IsAck)
+            if (IsAck)
+            {
+                audysseyMultEQAvr.SetAmp_IsChecked = true;
+            }
+            else
             {
                 audysseyMultEQAvr.SetAmp_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
@@ -272,8 +280,27 @@ namespace Odyssee
 
         private void MenuItem_SetAvrSetAudy_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.SetAudy(OnCmdAckSetAudy);
+            }
+            else
+            {
+                audysseyMultEQAvr.SetAudy_IsChecked = false;
+            }
+        }
+
+        public void OnCmdAckSetAudy(bool IsAck)
+        {
+            if (IsAck)
+            {
+                audysseyMultEQAvr.SetAudy_IsChecked = true;
+            }
+            else
+            {
+                audysseyMultEQAvr.SetAudy_IsChecked = false;
+                audysseyMultEQAvr.Serialized += "Failed\n";
+            }
         }
 
         private void MenuItem_SetAvrSetDisFil_OnClick(object sender, RoutedEventArgs e)
@@ -306,7 +333,10 @@ namespace Odyssee
 
         public void OnCmdAckAudyFinFlag(bool IsAck)
         {
-            if (!IsAck)
+            if (IsAck)
+            {
+                audysseyMultEQAvr.AudyFinFlag_IsChecked = true;
+            }
             {
                 audysseyMultEQAvr.AudyFinFlag_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";

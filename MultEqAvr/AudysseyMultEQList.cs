@@ -98,61 +98,6 @@ namespace Audyssey
             }
         }
 
-        public class AvrStatusList
-        {
-            static ObservableCollection<string> _AmpAssignList = new()
-            {
-                "FrontA",
-                "FrontB",
-                "Type3",
-                "Type4",
-                "Type5",
-                "Type6",
-                "Type7",
-                "Type8",
-                "Type9",
-                "Type10",
-                "Type11",
-                "Type12",
-                "Type13",
-                "Type14",
-                "Type15",
-                "Type16",
-                "Type17",
-                "Type18",
-                "Type19",
-                "Type20"
-            };
-
-            [JsonIgnore]
-            public ObservableCollection<string> AmpAssignList
-            {
-                get
-                {
-                    return _AmpAssignList;
-                }
-            }
-        }
-
-        public class AvrInfoList
-        {
-            static ObservableCollection<string> _EQTypeList = new()
-            {
-                "MultEQ",
-                "MultEQXT",
-                "MultEQXT32"
-            };
-
-            [JsonIgnore]
-            public ObservableCollection<string> EQTypeList
-            {
-                get
-                {
-                    return _EQTypeList;
-                }
-            }
-        }
-
         public class MultEQList
         {
 

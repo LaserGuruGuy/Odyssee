@@ -217,14 +217,13 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            private void ResetDetectedChannels()
-            {
-                _DetectedChannels = null;
-            }
-            private void ResetSelectedChannel()
-            {
-                _SelectedChannel = null;
-            }
+            private void ResetAvrInfo() { _AvrInfo?.Reset(); }
+            private void ResetAvrStatus() { _AvrStatus?.Reset(); }
+            private void ResetDetectedChannels() { _DetectedChannels = null; }
+            private void ResetSelectedChannel() { _SelectedChannel?.Reset(); }
+            private void ResetMeasuredPosition() { /* property has no backingfield */ }
+            private void ResetMeasuredChannel() { /* property has no backingfield */ }
+            private void ResetNumPos() { _NumPos = 8; }
             #endregion
 
             #region BackingField
@@ -239,6 +238,7 @@ namespace Audyssey
             private bool _SetPosNum_IsChecked;
             private bool _StartChnl_IsChecked;
             private bool _SetAmp_IsChecked;
+            private bool _SetAudy_IsChecked;
             #endregion
 
             #region Properties
@@ -277,6 +277,23 @@ namespace Audyssey
             public bool StartChnl_IsChecked { get { return _StartChnl_IsChecked; } set { _StartChnl_IsChecked = value; RaisePropertyChanged("StartChnl_IsChecked"); } }
             [JsonIgnore]
             public bool SetAmp_IsChecked { get { return _SetAmp_IsChecked; } set { _SetAmp_IsChecked = value; RaisePropertyChanged("SetAmp_IsChecked"); } }
+            [JsonIgnore]
+            public bool SetAudy_IsChecked { get { return _SetAudy_IsChecked; } set { _SetAudy_IsChecked = value; RaisePropertyChanged("SetAudy_IsChecked"); } }
+            #endregion
+
+            #region Methods
+            private void ResetSerialized() { _Serialized = string.Empty;  }
+            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
+            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
+            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
+            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
+            private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
+            private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
+            private void ResetStartChnl_IsChecked() { _StartChnl_IsChecked = false; }
+            private void ResetSetAmp_IsChecked() { _SetAmp_IsChecked = false; }
+            private void ResetSetAudy_IsChecked() { _SetAudy_IsChecked = false; }
             #endregion
 
             #region Methods
@@ -291,15 +308,6 @@ namespace Audyssey
                     }
                 }
             }
-            private void ResetSerialized() { _Serialized = string.Empty;  }
-            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
-            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
-            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
-            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
-            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
-            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
-            private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
-            private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
             private void RaisePropertyChanged(string propertyName)
             {
                 if (PropertyChanged != null)

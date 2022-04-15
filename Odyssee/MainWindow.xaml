@@ -66,7 +66,7 @@
                         <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="MenuItem_SetAvrGetRespon_OnClick" />
                         <Separator/>
                         <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="MenuItem_SetAvrSetAmp_OnClick" IsCheckable="True" IsChecked="{Binding SetAmp_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Set Audy" Name="setAvrSetAudy" Click="MenuItem_SetAvrSetAudy_OnClick" />
+                        <MenuItem Header="Set Audy" Name="setAvrSetAudy" Click="MenuItem_SetAvrSetAudy_OnClick" IsCheckable="True" IsChecked="{Binding SetAudy_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="MenuItem_SetAvrSetDisFil_OnClick" />
                         <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" />
                         <MenuItem Header="Set CoefDt" Name="setAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" />
@@ -231,7 +231,7 @@
                                 <ComboBox Grid.Row="4" Grid.Column="2" SelectedValue="{Binding AudyFinFlg}" ItemsSource="{Binding AudyFinFlgList}" IsSynchronizedWithCurrentItem="False" VerticalAlignment="Center"/>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Grid.Row="2" Header="Amplifier">
+                        <GroupBox Grid.Row="2" Header="Audio Video Receiver Info and Status">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -250,33 +250,33 @@
                                 </Grid.ColumnDefinitions>
                                 <!---AvrInfo-->
                                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" >
-                                    <Label Content="Ifver"></Label>
-                                    <Label Content="{Binding AvrInfo.Ifver}" VerticalAlignment="Center"></Label>
+                                    <Label Content="Ifver"/>
+                                    <Label Content="{Binding AvrInfo.Ifver}" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <Label Grid.Row="3" Grid.Column="1" Content="DType"></Label>
-                                <Label Grid.Row="3" Grid.Column="2" Content="{Binding AvrInfo.DType}" VerticalAlignment="Center"></Label>
-                                <Label Grid.Row="6" Grid.Column="1" Content="CoefWaitTimeInit"></Label>
-                                <Label Grid.Row="6" Grid.Column="2" Content="{Binding AvrInfo.CoefWaitTime.Init}" VerticalAlignment="Center"></Label>
-                                <Label Grid.Row="7" Grid.Column="1" Content="CoefWaitTimeFinal"></Label>
-                                <Label Grid.Row="7" Grid.Column="2" Content="{Binding AvrInfo.CoefWaitTime.Final}" VerticalAlignment="Center"></Label>
-                                <Label Grid.Row="4" Grid.Column="1" Content="AdC"></Label>
-                                <Label Grid.Row="4" Grid.Column="2" Content="{Binding AvrInfo.ADC}" VerticalAlignment="Center"></Label>
-                                <Label Grid.Row="5" Grid.Column="1" Content="SysDelay"></Label>
-                                <Label Grid.Row="5" Grid.Column="2" Content="{Binding AvrInfo.SysDelay}" VerticalAlignment="Center"></Label>
-                                <Label Grid.Row="2" Grid.Column="1" Content="EQType"></Label>
-                                <ComboBox Grid.Row="2" Grid.Column="2" SelectedValue="{Binding AvrInfo.EQType}" ItemsSource="{Binding AvrInfo.EQTypeList}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="3" Grid.Column="1" Content="DType"/>
+                                <Label Grid.Row="3" Grid.Column="2" Content="{Binding AvrInfo.DType}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="6" Grid.Column="1" Content="CoefWaitTimeInit"/>
+                                <Label Grid.Row="6" Grid.Column="2" Content="{Binding AvrInfo.CoefWaitTime.Init}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="7" Grid.Column="1" Content="CoefWaitTimeFinal"/>
+                                <Label Grid.Row="7" Grid.Column="2" Content="{Binding AvrInfo.CoefWaitTime.Final}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="4" Grid.Column="1" Content="AdC"/>
+                                <Label Grid.Row="4" Grid.Column="2" Content="{Binding AvrInfo.ADC}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="5" Grid.Column="1" Content="SysDelay"/>
+                                <Label Grid.Row="5" Grid.Column="2" Content="{Binding AvrInfo.SysDelay}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="2" Grid.Column="1" Content="EQType"/>
+                                <Label Grid.Row="2" Grid.Column="2" Content="{Binding AvrInfo.EQType}" VerticalAlignment="Center"/>
                                 <CheckBox Grid.Row="3" Grid.Column="0" Content="SWLvlMatch" IsChecked="{Binding AvrInfo.SWLvlMatch}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
                                 <CheckBox Grid.Row="1" Grid.Column="0" Content="Auro" IsChecked="{Binding AvrInfo.Auro}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
                                 <CheckBox Grid.Row="2" Grid.Column="0" Content="LFC" IsChecked="{Binding AvrInfo.LFC}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
-                                <Label Grid.Row="0" Grid.Column="1" Content="Upgrade"></Label>
-                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding AvrInfo.Upgrade}" VerticalAlignment="Center"></Label>
+                                <Label Grid.Row="0" Grid.Column="1" Content="Upgrade"/>
+                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding AvrInfo.Upgrade}" VerticalAlignment="Center"/>
                                 <!---AvrStatus-->
                                 <CheckBox Grid.Row="4" Grid.Column="0" Content="HPPlug" IsChecked="{Binding AvrStatus.HPPlug}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
                                 <CheckBox Grid.Row="5" Grid.Column="0" Content="Mic" IsChecked="{Binding AvrStatus.Mic}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
                                 <CheckBox Grid.Row="6" Grid.Column="0" Content="BTTXStatus" IsChecked="{Binding AvrStatus.BTTXStatus}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
                                 <CheckBox Grid.Row="7" Grid.Column="0" Content="SpPreset" IsChecked="{Binding AvrStatus.SpPreset}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center" IsEnabled="False"/>
                                 <Label Grid.Row="1" Grid.Column="1" Content="AmpAssign"/>
-                                <ComboBox Grid.Row="1" Grid.Column="2" SelectedValue="{Binding AvrStatus.AmpAssign}" ItemsSource="{Binding AvrStatus.AmpAssignList}" VerticalAlignment="Center"/>
+                                <Label Grid.Row="1" Grid.Column="2" Content="{Binding AvrStatus.AmpAssign}" VerticalAlignment="Center"/>
                             </Grid>
                         </GroupBox>
                     </Grid>

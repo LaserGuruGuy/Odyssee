@@ -273,6 +273,33 @@ namespace Audyssey
                 }
             }
 
+            public bool SetAudy(CmdAckCallBack CallBack = null)
+            {
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
+                {
+                    string CmdString = "SET_SETDAT";
+                    Console.Write(CmdString);
+                    // build JSON for class Dat on interface IAudy
+                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
+                    {
+                        ContractResolver = new InterfaceContractResolver(typeof(IAudy))
+                    });
+                    // toolbar
+                    AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
+                    // transmit request
+                    AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // callback
+                    cmdAck.Rqst(CallBack);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
+
             public bool AudyFinFlag(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
@@ -436,9 +463,99 @@ namespace Audyssey
                                             }
                                         }
                                         break;
+                                    case "SET_POSNUM":
+                                        if (TransmitReceiveChar == 'T')
+                                        {
+                                            /*
+                                            { "Position":1,"ChSetup":["FL","FR"]}
+                                            { "Position":2,"ChSetup":["FL","FR"]}
+                                            { "Position":3,"ChSetup":["FL","FR"]}
+                                            */
+                                            AudysseyMultEQAvr.MeasuredPosition = JsonConvert.DeserializeObject<MeasuredPosition>(DataString, new JsonSerializerSettings
+                                            {
+                                                NullValueHandling = NullValueHandling.Ignore,
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                            });
+                                        }
+                                        if (TransmitReceiveChar == 'R')
+                                        {
+                                            /*
+                                            { "Comm":"ACK"}
+                                            */
+                                            if (Response.Comm.Equals(ACK))
+                                            {
+                                                AudysseyMultEQAvr.SetPosNum_IsChecked = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                cmdAck.Progress();
+                                                AudysseyMultEQAvr.SetPosNum_IsChecked = false;
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                cmdAck.Nack();
+                                                AudysseyMultEQAvr.SetPosNum_IsChecked = false;
+                                            }
+                                        }
+                                        break;
+                                    case "START_CHNL":
+                                        if (TransmitReceiveChar == 'T')
+                                        {
+                                            /*
+                                            {"Channel":"FL"}
+                                            */
+                                            // populate the channel object
+                                            AudysseyMultEQAvr.MeasuredChannel = JsonConvert.DeserializeObject<MeasuredChannel>(DataString, new JsonSerializerSettings
+                                            {
+                                                NullValueHandling = NullValueHandling.Ignore,
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                            });
+                                        }
+                                        if (TransmitReceiveChar == 'R')
+                                        {
+                                            /*
+                                            {"Comm":"INPROGRESS"}
+                                            {"Comm":"ACK","SpConnect":"S","Polarity":"N","Distance":192,"ResponseCoef":2}                                         
+                                             */
+                                            if (Response.Comm.Equals(ACK))
+                                            {
+                                                // populate the channel object
+                                                AudysseyMultEQAvr.MeasuredChannel = JsonConvert.DeserializeObject<MeasuredChannel>(DataString, new JsonSerializerSettings
+                                                {
+                                                    NullValueHandling = NullValueHandling.Ignore,
+                                                    ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                                });
+                                                AudysseyMultEQAvr.StartChnl_IsChecked = true;
+                                                cmdAck.Ack();
+                                            }
+                                            if (Response.Comm.Equals(INPROGRESS))
+                                            {
+                                                AudysseyMultEQAvr.StartChnl_IsChecked = false;
+                                                cmdAck.Progress();
+                                            }
+                                            if (Response.Comm.Equals(NACK))
+                                            {
+                                                AudysseyMultEQAvr.StartChnl_IsChecked = true;
+                                                cmdAck.Nack();
+                                            }
+                                        }
+                                        break;
                                     case "SET_SETDAT":
                                         if (TransmitReceiveChar == 'T')
                                         {
+                                            JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
+                                            {
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                                ContractResolver = new InterfaceContractResolver(typeof(IAmp)),
+                                                FloatParseHandling = FloatParseHandling.Decimal,
+                                            });
+                                            JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
+                                            {
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                                ContractResolver = new InterfaceContractResolver(typeof(IAudy)),
+                                                FloatParseHandling = FloatParseHandling.Decimal,
+                                            });
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
@@ -533,84 +650,6 @@ namespace Audyssey
                                                 byte[] Data = new byte[] { EOT };
                                                 AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(Data, null, null);
                                                 cmdAck.Ack();
-                                            }
-                                        }
-                                        break;
-                                    case "SET_POSNUM":
-                                        if (TransmitReceiveChar == 'T')
-                                        {
-                                            /*
-                                            { "Position":1,"ChSetup":["FL","FR"]}
-                                            { "Position":2,"ChSetup":["FL","FR"]}
-                                            { "Position":3,"ChSetup":["FL","FR"]}
-                                            */
-                                            AudysseyMultEQAvr.MeasuredPosition = JsonConvert.DeserializeObject<MeasuredPosition>(DataString, new JsonSerializerSettings
-                                            {
-                                                NullValueHandling = NullValueHandling.Ignore,
-                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
-                                            });
-                                        }
-                                        if (TransmitReceiveChar == 'R')
-                                        {
-                                            /*
-                                            { "Comm":"ACK"}
-                                            */
-                                            if (Response.Comm.Equals(ACK))
-                                            {
-                                                AudysseyMultEQAvr.SetPosNum_IsChecked = true;
-                                                cmdAck.Ack();
-                                            }
-                                            if (Response.Comm.Equals(INPROGRESS))
-                                            {
-                                                cmdAck.Progress();
-                                                AudysseyMultEQAvr.SetPosNum_IsChecked = false;
-                                            }
-                                            if (Response.Comm.Equals(NACK))
-                                            {
-                                                cmdAck.Nack();
-                                                AudysseyMultEQAvr.SetPosNum_IsChecked = false;
-                                            }
-                                        }
-                                        break;
-                                    case "START_CHNL":
-                                        if (TransmitReceiveChar == 'T')
-                                        {
-                                            /*
-                                            {"Channel":"FL"}
-                                            */
-                                            // populate the channel object
-                                            AudysseyMultEQAvr.MeasuredChannel = JsonConvert.DeserializeObject<MeasuredChannel>(DataString, new JsonSerializerSettings
-                                            {
-                                                NullValueHandling = NullValueHandling.Ignore,
-                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
-                                            });
-                                        }
-                                        if (TransmitReceiveChar == 'R')
-                                        {
-                                            /*
-                                            {"Comm":"INPROGRESS"}
-                                            {"Comm":"ACK","SpConnect":"S","Polarity":"N","Distance":192,"ResponseCoef":2}                                         
-                                             */
-                                            if (Response.Comm.Equals(ACK))
-                                            {
-                                                // populate the channel object
-                                                AudysseyMultEQAvr.MeasuredChannel = JsonConvert.DeserializeObject<MeasuredChannel>(DataString, new JsonSerializerSettings
-                                                {
-                                                    NullValueHandling = NullValueHandling.Ignore,
-                                                    ObjectCreationHandling = ObjectCreationHandling.Replace,
-                                                });
-                                                AudysseyMultEQAvr.StartChnl_IsChecked = true;
-                                                cmdAck.Ack();
-                                            }
-                                            if (Response.Comm.Equals(INPROGRESS))
-                                            {
-                                                AudysseyMultEQAvr.StartChnl_IsChecked = false;
-                                                cmdAck.Progress();
-                                            }
-                                            if (Response.Comm.Equals(NACK))
-                                            {
-                                                AudysseyMultEQAvr.StartChnl_IsChecked = true;
-                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
