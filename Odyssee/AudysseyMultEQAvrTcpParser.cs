@@ -245,6 +245,33 @@ namespace Audyssey
                 }
             }
 
+            public bool GetRespon(CmdAckCallBack CallBack = null)
+            {
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
+                {
+                    // get 128 * 512 bytes channel response
+                    string CmdString = "GET_RESPON";
+                    // build JSON {"ChData":"FL"}
+                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.ResponseData, new JsonSerializerSettings
+                    {
+                        ContractResolver = new InterfaceContractResolver(typeof(IResponseData)),
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
+                    // toolbar
+                    AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
+                    // transmit
+                    AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    cmdAck.Rqst(CallBack);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
+
             public bool SetAmp(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))

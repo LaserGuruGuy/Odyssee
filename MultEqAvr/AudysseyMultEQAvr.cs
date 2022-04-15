@@ -29,6 +29,16 @@ namespace Audyssey
             public string Channel { get; set; }
         }
 
+        public interface IResponseData
+        {
+            public string ChData { get; set; }
+        }
+
+        public class ResponseData : ChannelReport, IResponseData, IChannelReport
+        {
+            public string ChData { get; set; }
+        }
+
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region BackingField
@@ -155,22 +165,25 @@ namespace Audyssey
                 // START_CHNL {"SpConnect":"S","Polarity":"N","Distance":237,"ResponseCoef":1}
                 get
                 {
-                    MeasuredChannel _MeasuredChannel = null;
+                    MeasuredChannel MeasuredChannel = null;
                     if (DetectedChannels != null)
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Skip == false)
+                            if (ch.Skip != null && ch.ChannelReport != null)
                             {
-                                if (string.IsNullOrEmpty(ch.ChannelReport.SpConnect))
+                                if (ch.Skip == false)
                                 {
-                                    _MeasuredChannel = new() { Channel = ch.Channel };
-                                    break;
+                                    if (string.IsNullOrEmpty(ch.ChannelReport.SpConnect))
+                                    {
+                                        MeasuredChannel = new() { Channel = ch.Channel };
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
-                    return _MeasuredChannel;
+                    return MeasuredChannel;
                 }
                 set
                 {
@@ -200,6 +213,36 @@ namespace Audyssey
                         }
                         RaisePropertyChanged("ChannelReport");
                     }
+                }
+            }
+            public ResponseData ResponseData
+            {
+                // GET_RESPON {"ChData":"FL"}
+                get
+                {
+                    ResponseData ResponseData = null;
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (ch.Skip != null && ch.ChannelReport != null)
+                            {
+                                if (ch.Skip == false)
+                                {
+                                    if (ch.ChannelReport.ResponseData == null)
+                                    {
+                                        ResponseData = new() { ChData = ch.Channel };
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return ResponseData;
+                }
+                set
+                {
+
                 }
             }
             public int NumPos

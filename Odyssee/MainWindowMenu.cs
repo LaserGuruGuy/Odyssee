@@ -242,15 +242,24 @@ namespace Odyssee
         {
             if (!IsAck)
             {
-                audysseyMultEQAvr.StartChnl_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
         }
 
         private void MenuItem_SetAvrGetRespon_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            if (audysseyMultEQAvrTcp != null)
+            {
+                audysseyMultEQAvrTcp.GetRespon(OnCmdAckGetRespon);
+            }
+        }
+
+        public void OnCmdAckGetRespon(bool IsAck)
+        {
+            if (!IsAck)
+            {
+                audysseyMultEQAvr.Serialized += "Failed\n";
+            }
         }
 
         private void MenuItem_SetAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
