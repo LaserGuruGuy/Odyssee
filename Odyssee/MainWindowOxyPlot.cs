@@ -34,6 +34,8 @@ namespace Odyssee
         }
 
         const double SecondsToMilliseconds = 1000;
+        const double SampleRate48KHz = 48000;
+        const double SampleSize = 16384;
 
         private string selectedCurveFilter = string.Empty;
         bool LogarithmicAxis = false;
@@ -45,9 +47,9 @@ namespace Odyssee
         private string selectedAxisLimits = "RadioButton_RangeChirp";
         private Dictionary<string, AxisLimit> AxisLimits = new Dictionary<string, AxisLimit>()
         {
-            {"RadioButton_RangeFull", new AxisLimit { XMin = 10, XMax = 24000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
+            {"RadioButton_RangeFull", new AxisLimit { XMin = 10, XMax = SampleRate48KHz/2.0d, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
             {"RadioButton_RangeSubwoofer", new AxisLimit { XMin = 10, XMax = 1000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
-            {"RadioButton_RangeChirp", new AxisLimit { XMin = 0, XMax = SecondsToMilliseconds*16384.0/48000.0, YMin = -0.1, YMax = 0.1, MajorStep = 0.01, MinorStep = 0.001 } }
+            {"RadioButton_RangeChirp", new AxisLimit { XMin = 0, XMax = SecondsToMilliseconds*SampleSize/SampleRate48KHz, YMin = -0.1, YMax = 0.1, MajorStep = 0.01, MinorStep = 0.001 } }
         };
 
         private void DrawChart()
@@ -123,7 +125,7 @@ namespace Odyssee
                 if ((selectedChannel.SelectedResponseData.Key != null) && (selectedChannel.SelectedResponseData.Value != null))
                 {
                     CurveColor = OxyColor.Parse(ResponseDataTraceColor[selectedChannel.SelectedResponseData.Key].ToString());
-                    PlotCurve(48000d, selectedChannel.SelectedResponseData.Value, SmoothingFactor, CurveColor, secondaryChannel ? LineStyle.Dot : LineStyle.Solid, 1);
+                    PlotCurve(SampleRate48KHz, selectedChannel.SelectedResponseData.Value, SmoothingFactor, CurveColor, secondaryChannel ? LineStyle.Dot : LineStyle.Solid, 1);
                 }
 
                 /* Iterate ove all the sticky positions */
@@ -136,7 +138,7 @@ namespace Odyssee
                         if (!stickyResponseData.Equals(selectedChannel.SelectedResponseData))
                         {
                             CurveColor = OxyColor.Parse(ResponseDataTraceColor[stickyResponseData.Key].ToString());
-                            PlotCurve(48000d, stickyResponseData.Value, SmoothingFactor, CurveColor, secondaryChannel ? LineStyle.Dot : LineStyle.Solid, 1);
+                            PlotCurve(SampleRate48KHz, stickyResponseData.Value, SmoothingFactor, CurveColor, secondaryChannel ? LineStyle.Dot : LineStyle.Solid, 1);
                         }
                     }
                 }
