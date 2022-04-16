@@ -33,6 +33,8 @@ namespace Odyssee
             return (string.Empty);
         }
 
+        const double SecondsToMilliseconds = 1000;
+
         private string selectedCurveFilter = string.Empty;
         bool LogarithmicAxis = false;
 
@@ -45,7 +47,7 @@ namespace Odyssee
         {
             {"RadioButton_RangeFull", new AxisLimit { XMin = 10, XMax = 24000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
             {"RadioButton_RangeSubwoofer", new AxisLimit { XMin = 10, XMax = 1000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
-            {"RadioButton_RangeChirp", new AxisLimit { XMin = 0, XMax = 1000*48000/16384, YMin = -0.1, YMax = 0.1, MajorStep = 0.01, MinorStep = 0.001 } }
+            {"RadioButton_RangeChirp", new AxisLimit { XMin = 0, XMax = SecondsToMilliseconds*16384.0/48000.0, YMin = -0.1, YMax = 0.1, MajorStep = 0.01, MinorStep = 0.001 } }
         };
 
         private void DrawChart()
@@ -54,7 +56,7 @@ namespace Odyssee
             PlotModel.Axes.Clear();
             if (audysseyMultEQAvr != null)
             {
-                PlotModel.Title = "Channel Response";
+                PlotModel.Title = string.Empty;
                 PlotAxis();
                 /* plot selected channel */
                 if (audysseyMultEQAvr.SelectedChannel != null)
@@ -64,11 +66,11 @@ namespace Odyssee
                 /* plot sticky channels */
                 if (audysseyMultEQAvr.DetectedChannels != null)
                 {
-                    foreach (var ch in audysseyMultEQAvr.DetectedChannels)
+                    foreach (var SelectedChannel in audysseyMultEQAvr.DetectedChannels)
                     {
-                        if ((bool)ch.Skip)
+                        if ((bool)SelectedChannel.Stick)
                         {
-                            PlotLine(ch, true, audysseyMultEQAvr.SmoothingFactor);
+                            PlotLine(SelectedChannel, true, audysseyMultEQAvr.SmoothingFactor);
                         }
                     }
                 }
@@ -140,7 +142,6 @@ namespace Odyssee
                 }
             }
         }
-
         private void PlotCurve(double sampleRate, float[] responseData, int smoothingFactor, OxyColor oxyColor, LineStyle lineStyle, double strokeThickness)
         {
             Collection<DataPoint> dataPoint = new Collection<DataPoint>();
@@ -148,7 +149,7 @@ namespace Odyssee
             {
                 for (int j = 0; j < responseData.Length; j++)
                 {
-                    dataPoint.Add(new DataPoint(1000 * j / sampleRate, responseData[j])); // TODO why 1000?
+                    dataPoint.Add(new DataPoint(SecondsToMilliseconds * j / sampleRate, responseData[j]));
                 }
             }
             else

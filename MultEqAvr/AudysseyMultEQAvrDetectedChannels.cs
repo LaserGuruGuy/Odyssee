@@ -20,6 +20,7 @@ namespace Audyssey
             private string _Channel;
             private string _Setup;
             private bool? _Skip;
+            private bool? _Stick = false;
             private ChannelReport _ChannelReport = new();
             private Dictionary<string, float[]> _ResponseData;
             private decimal? _ChLevel = 0m;
@@ -60,6 +61,18 @@ namespace Audyssey
                 set
                 {
                     _Skip = value;
+                    RaisePropertyChanged("Skip");
+                }
+            }
+            public bool? Stick
+            {
+                get
+                {
+                    return _Stick;
+                }
+                set
+                {
+                    _Stick = value;
                     RaisePropertyChanged("Sticky");
                 }
             }
@@ -117,6 +130,7 @@ namespace Audyssey
             private void ResetChannel() { _Channel = null; }
             private void ResetSetup() { _Setup = null; }
             private void ResetSkip() { _Skip = null; }
+            private void ResetStick() { _Stick = false; }
             private void ResetChannelReport() { _ChannelReport = new(); }
             private void ResetResponseData() { _ResponseData = null; }
             #endregion

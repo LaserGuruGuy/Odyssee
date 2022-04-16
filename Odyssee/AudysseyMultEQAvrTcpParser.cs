@@ -851,7 +851,6 @@ namespace Audyssey
                 }
                 return result;
             }
-
         }
 
         class AudysseyMultEQAvrComm

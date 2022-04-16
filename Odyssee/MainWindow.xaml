@@ -145,10 +145,17 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <CheckBox IsChecked="{Binding Path=Skip}"/>
-                                                    </DataTemplate>
+                                                        </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                        </GridView>
+                                                <GridViewColumn Header="Stick" Width="auto">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox IsChecked="{Binding Path=Stick}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                            </GridView>
                                     </ListView.View>
                                 </ListView>
                                 </GroupBox>
@@ -288,7 +295,7 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Response Data" Width="auto" DisplayMemberBinding="{Binding Key}"/>
-                                <GridViewColumn Header="Sticky" Width="auto" >
+                                <GridViewColumn Header="Stick" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                                 <CheckBox Checked="ListView_CheckBox_Checked_ResponseDataSticky" Unchecked="ListView_CheckBox_Unchecked_ResponseDataSticky" Initialized="ListView_CheckBox_Initialized_ResponseDataSticky" KeyUp="ListView_CheckBox_KeyUp_ResponseDataSticky"/>
@@ -302,7 +309,7 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Reference Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
-                                <GridViewColumn Header="Sticky" Width="auto">
+                                <GridViewColumn Header="Stick" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <CheckBox IsChecked="{Binding Path=Sticky}"/>
@@ -316,7 +323,7 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
-                                <GridViewColumn Header="Sticky" Width="auto">
+                                <GridViewColumn Header="Stick" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <CheckBox IsChecked="{Binding Path=Sticky}"/>
