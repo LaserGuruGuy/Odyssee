@@ -1,7 +1,5 @@
 ﻿using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -50,7 +48,7 @@ namespace Audyssey
             private AvrStatus _AvrStatus = new();
             UniqueObservableCollection<DetectedChannel> _DetectedChannels;
             private DetectedChannel _SelectedChannel;
-            private int _NumPos = 8;
+            private int _NumPos = 3;
             private int _SmoothingFactor = 1;
             #endregion
 
@@ -404,6 +402,9 @@ namespace Audyssey
             private bool _StartChnl_IsChecked;
             private bool _SetAmp_IsChecked;
             private bool _SetAudy_IsChecked;
+            private bool _SetDisFil_IsChecked;
+            private bool _InitCoefs_IsChecked;
+            private bool _SetCoefDt_IsChecked;
             #endregion
 
             #region Properties
@@ -444,6 +445,37 @@ namespace Audyssey
             public bool SetAmp_IsChecked { get { return _SetAmp_IsChecked; } set { _SetAmp_IsChecked = value; RaisePropertyChanged("SetAmp_IsChecked"); } }
             [JsonIgnore]
             public bool SetAudy_IsChecked { get { return _SetAudy_IsChecked; } set { _SetAudy_IsChecked = value; RaisePropertyChanged("SetAudy_IsChecked"); } }
+            [JsonIgnore]
+            public bool SetDisFil_IsChecked { get { return _SetDisFil_IsChecked; } set { _SetDisFil_IsChecked = value; RaisePropertyChanged("SetDisFil_IsChecked"); } }
+            [JsonIgnore]
+            public bool InitCoefs_IsChecked { get { return _InitCoefs_IsChecked; } set { _InitCoefs_IsChecked = value; RaisePropertyChanged("InitCoefs_IsChecked"); } }
+            [JsonIgnore]
+            public bool SetCoefDt_IsChecked { get { return _SetCoefDt_IsChecked; } set { _SetCoefDt_IsChecked = value; RaisePropertyChanged("SetCoefDt_IsChecked"); } }
+            #endregion
+
+            #region Methods
+            private void ResetSerialized() { _Serialized = string.Empty; }
+            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
+            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
+            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
+            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
+            private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
+            private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
+            private void ResetStartChnl_IsChecked() { _StartChnl_IsChecked = false; }
+            private void ResetSetAmp_IsChecked() { _SetAmp_IsChecked = false; }
+            private void ResetSetAudy_IsChecked() { _SetAudy_IsChecked = false; }
+            private void ResetSetDisFil_IsChecked() { _SetDisFil_IsChecked = false; }
+            private void ResetInitCoefs_IsChecked() { _InitCoefs_IsChecked = false; }
+            private void ResetSetCoefDt_IsChecked() { _SetCoefDt_IsChecked = false; }
+            private void RaisePropertyChanged(string propertyName)
+            {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                }
+            }
             #endregion
 
             #region Methods
@@ -456,25 +488,6 @@ namespace Audyssey
                         prop.ResetValue(this);
                         RaisePropertyChanged(prop.Name);
                     }
-                }
-            }
-            private void ResetSerialized() { _Serialized = string.Empty;  }
-            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
-            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
-            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
-            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
-            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
-            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
-            private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
-            private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
-            private void ResetStartChnl_IsChecked() { _StartChnl_IsChecked = false; }
-            private void ResetSetAmp_IsChecked() { _SetAmp_IsChecked = false; }
-            private void ResetSetAudy_IsChecked() { _SetAudy_IsChecked = false; }
-            private void RaisePropertyChanged(string propertyName)
-            {
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
                 }
             }
             #endregion

@@ -57,20 +57,20 @@
                         <MenuItem Header="Get Receiver _Info" Name="MenuItem_ReceiverInfo" Click="MenuItem_AvrInfo_OnClick" IsCheckable="True" IsChecked="{Binding AvrInfo_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Get Receiver _Status" Name="MenuItemReceiverStatus" Click="MenuItem_AvrStatus_OnClick" IsCheckable="True" IsChecked="{Binding AvrStatus_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Enter _Audyssey" Name="AudysseyMode" Click="MenuItem_AudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Enter _Audyssey" Name="MenuItem_AudysseyMode" Click="MenuItem_AudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
                         <MenuItem Header="Set LvLm" Name="AvrLvLm" Click="MenuItem_AvrLvLm_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Set PosNum" Name="setAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" IsCheckable="True" IsChecked="{Binding SetPosNum_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Start Chnl" Name="setAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" IsCheckable="True" IsChecked="{Binding StartChnl_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Get Respon" Name="setAvrGetRespon" Click="MenuItem_SetAvrGetRespon_OnClick" />
+                        <MenuItem Header="Set PosNum" Name="MenuItem_SetAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" IsCheckable="True" IsChecked="{Binding SetPosNum_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Start Chnl" Name="MenuItem_SetAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" IsCheckable="True" IsChecked="{Binding StartChnl_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Get Respon" Name="MenuItem_SetAvrGetRespon" Click="MenuItem_SetAvrGetRespon_OnClick" />
                         <Separator/>
-                        <MenuItem Header="Set Amp" Name="setAvrSetAmp" Click="MenuItem_SetAvrSetAmp_OnClick" IsCheckable="True" IsChecked="{Binding SetAmp_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Set Audy" Name="setAvrSetAudy" Click="MenuItem_SetAvrSetAudy_OnClick" IsCheckable="True" IsChecked="{Binding SetAudy_IsChecked, Mode=TwoWay}"/>
-                        <MenuItem Header="Set DisFil" Name="setAvrSetDisFil" Click="MenuItem_SetAvrSetDisFil_OnClick" />
-                        <MenuItem Header="Init Coefs" Name="setAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" />
-                        <MenuItem Header="Set CoefDt" Name="setAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" />
-                        <MenuItem Header="Set AudyFinFlg" Name="AudyFinFlag" Click="MenuItem_AudyFinFlag_OnClick" IsCheckable="True" IsChecked="{Binding AudyFinFlag_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Set Amp" Name="MenuItem_SetAvrSetAmp" Click="MenuItem_SetAvrSetAmp_OnClick" IsCheckable="True" IsChecked="{Binding SetAmp_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Set Audy" Name="MenuItem_SetAvrSetAudy" Click="MenuItem_SetAvrSetAudy_OnClick" IsCheckable="True" IsChecked="{Binding SetAudy_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Set DisFil" Name="MenuItem_SetAvrSetDisFil" Click="MenuItem_SetAvrSetDisFil_OnClick" IsCheckable="True" IsChecked="{Binding SetDisFil_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Init Coefs" Name="MenuItem_SetAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" IsCheckable="True" IsChecked="{Binding InitCoefs_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Set CoefDt" Name="MenuItem_SetAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" IsCheckable="True" IsChecked="{Binding SetCoefDt_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="AudyFinFlg" Name="MenuItem_AudyFinFlag" Click="MenuItem_AudyFinFlag_OnClick" IsCheckable="True" IsChecked="{Binding AudyFinFlag_IsChecked, Mode=TwoWay}"/>
                     </MenuItem>
                 </Menu>
                 <ToggleButton Name="ToggleButton_ConnectReceiver" Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}" ToolTip="Connect to the Receiver">

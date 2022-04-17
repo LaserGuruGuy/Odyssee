@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcpClient;
-using System.Collections.Generic;
 
 namespace Audyssey
 {
@@ -19,8 +18,6 @@ namespace Audyssey
         {
             private AudysseyMultEQAvr AudysseyMultEQAvr = null;
             private AudysseyMultEQAvrTcpClient AudysseyMultEQAvrTcpClient = null;
-
-            private const string AUDYFINFLG = "{\"AudyFinFlg\":\"Fin\"}";
 
             private const string INPROGRESS = "INPROGRESS";
             private const string NACK = "NACK";
@@ -333,7 +330,7 @@ namespace Audyssey
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     // set finflag
-                    AudysseyMultEQAvr.AudyFinFlg = AUDYFINFLG;
+                    AudysseyMultEQAvr.AudyFinFlg = "Fin";
                     string CmdString = "SET_SETDAT";
                     // build JSON for class Dat on interface Iamp
                     string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
@@ -430,13 +427,13 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
-                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = true;
                                                 JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
                                                 {
                                                     ObjectCreationHandling = ObjectCreationHandling.Replace,
                                                     NullValueHandling = NullValueHandling.Ignore,
                                                     ContractResolver = new InterfaceContractResolver(typeof(ISPLValue)),
                                                 });
+                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
@@ -523,13 +520,13 @@ namespace Audyssey
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
-                                                cmdAck.Progress();
                                                 AudysseyMultEQAvr.SetPosNum_IsChecked = false;
+                                                cmdAck.Progress();
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
-                                                cmdAck.Nack();
                                                 AudysseyMultEQAvr.SetPosNum_IsChecked = false;
+                                                cmdAck.Nack();
                                             }
                                         }
                                         break;
@@ -585,7 +582,11 @@ namespace Audyssey
                                             });
                                             AudysseyMultEQAvr.Serialized += "\n";
                                         }
-                                        break;
+                                        if (TransmitReceiveChar == 'R')
+                                        {
+                                            // We did not expect to ever get here...
+                                        }
+                                            break;
                                     case "SET_SETDAT":
                                         if (TransmitReceiveChar == 'T')
                                         {

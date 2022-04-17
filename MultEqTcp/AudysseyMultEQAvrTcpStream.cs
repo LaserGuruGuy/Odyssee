@@ -146,6 +146,7 @@ namespace Audyssey
                     }
                     catch (Exception ex)
                     {
+                        Console.WriteLine(ex);
                     }
                 }
             }
