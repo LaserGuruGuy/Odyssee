@@ -8,6 +8,11 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
+        public interface IFin
+        {
+            public string AudyFinFlg { get; set; }
+        }
+
         /// <summary>
         /// Interface for SET_SETDAT partial class IAmp
         /// </summary>

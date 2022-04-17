@@ -332,8 +332,14 @@ namespace Audyssey
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
+                    // set finflag
+                    AudysseyMultEQAvr.AudyFinFlg = AUDYFINFLG;
                     string CmdString = "SET_SETDAT";
-                    string AvrString = AUDYFINFLG;
+                    // build JSON for class Dat on interface Iamp
+                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
+                    {
+                        ContractResolver = new InterfaceContractResolver(typeof(IFin))
+                    });
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit request
@@ -600,6 +606,7 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.AudyFinFlag_IsChecked = AudysseyMultEQAvr.AudyFinFlg.Equals("Fin");
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))

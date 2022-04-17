@@ -298,7 +298,7 @@
                                 <GridViewColumn Header="Stick" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                                <CheckBox Checked="ListView_CheckBox_Checked_ResponseDataSticky" Unchecked="ListView_CheckBox_Unchecked_ResponseDataSticky" Initialized="ListView_CheckBox_Initialized_ResponseDataSticky" KeyUp="ListView_CheckBox_KeyUp_ResponseDataSticky"/>
+                                                <CheckBox Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized" KeyUp="ListView_CheckBox_ResponseDataSticky_KeyUp"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

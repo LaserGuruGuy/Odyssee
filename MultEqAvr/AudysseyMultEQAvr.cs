@@ -116,6 +116,64 @@ namespace Audyssey
                     RaisePropertyChanged("SelectedChannel");
                 }
             }
+            public bool IsNextGetRespon
+            {
+                get
+                {
+                    if (DetectedChannels != null)
+                    {
+                        int? Count = null;
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (ch.Skip != null && ch.ResponseData != null)
+                            {
+                                if (ch.Skip == false)
+                                {
+                                    if (Count == null)
+                                    { 
+                                        Count = ch.ResponseData.Count;
+                                        SelectedChannel = ch;
+                                        SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
+                                    }
+                                    else if (ch.ResponseData.Count < Count)
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        SelectedChannel = ch;
+                                        SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+            public bool IsNextSetPosNum
+            {
+                get
+                {
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (ch.Skip != null && ch.ResponseData != null)
+                            {
+                                if (ch.Skip == false)
+                                {
+                                    if (ch.ResponseData.Count < NumPos)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
             public MeasuredPosition MeasuredPosition
             {
                 // SET_POSNUM {"Position":1,"ChSetup":["FL","FR"]}
@@ -288,7 +346,7 @@ namespace Audyssey
                                 break;
                             }
                         }
-                        RaisePropertyChanged("DetectedChannels");
+                        RaisePropertyChanged("ResponseData");
                     }
                 }
             }

@@ -117,6 +117,7 @@ namespace Odyssee
 
         private void MenuItem_AvrInfo_OnClick(object sender, RoutedEventArgs e)
         {
+            audysseyMultEQAvr.AvrInfo_IsChecked = false;
             if (audysseyMultEQAvrTcp != null)
             {
                 audysseyMultEQAvrTcp.GetAvrInfo(OnCmdAckAvrInfo);
@@ -125,15 +126,11 @@ namespace Odyssee
 
         public void OnCmdAckAvrInfo(bool IsAck)
         {
-            if (!IsAck)
-            {
-                audysseyMultEQAvr.AvrInfo_IsChecked = false;
-                audysseyMultEQAvr.Serialized += "Failed\n";
-            }
         }
 
         private void MenuItem_AvrStatus_OnClick(object sender, RoutedEventArgs e)
         {
+            audysseyMultEQAvr.AvrStatus_IsChecked = false;
             if (audysseyMultEQAvrTcp != null)
             {
                 audysseyMultEQAvrTcp.GetAvrStatus(OnCmdAckAvrStatus);
@@ -142,11 +139,6 @@ namespace Odyssee
 
         public void OnCmdAckAvrStatus(bool IsAck)
         {
-            if (!IsAck)
-            {
-                audysseyMultEQAvr.AvrStatus_IsChecked = false;
-                audysseyMultEQAvr.Serialized += "Failed\n";
-            }
         }
 
         private void MenuItem_AudysseyMode_OnClick(object sender, RoutedEventArgs e)
@@ -166,19 +158,10 @@ namespace Odyssee
 
         public void OnCmdAckEnterAudysseyMode(bool IsAck)
         {
-            if (!IsAck)
-            {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = false;
-                audysseyMultEQAvr.Serialized += "Failed\n";
-            }
         }
 
         public void OnCmdAckExitAudysseyMode(bool IsAck)
         {
-            if (!IsAck)
-            {
-                audysseyMultEQAvr.Serialized += "Failed\n";
-            }
         }
 
         private void MenuItem_AvrLvLm_OnClick(object sender, RoutedEventArgs e)
@@ -342,10 +325,7 @@ namespace Odyssee
 
         public void OnCmdAckAudyFinFlag(bool IsAck)
         {
-            if (IsAck)
-            {
-                audysseyMultEQAvr.AudyFinFlag_IsChecked = true;
-            }
+            if (!IsAck)
             {
                 audysseyMultEQAvr.AudyFinFlag_IsChecked = false;
                 audysseyMultEQAvr.Serialized += "Failed\n";
