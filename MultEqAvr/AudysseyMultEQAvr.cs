@@ -133,6 +133,7 @@ namespace Audyssey
                                     { 
                                         Count = ch.ResponseData.Count;
                                         SelectedChannel = ch;
+                                        //SelectedChannel.Stick = true;
                                         SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
                                     }
                                     else if (ch.ResponseData.Count < Count)
@@ -142,6 +143,7 @@ namespace Audyssey
                                     else
                                     {
                                         SelectedChannel = ch;
+                                        //SelectedChannel.Stick = true;
                                         SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
                                     }
                                 }

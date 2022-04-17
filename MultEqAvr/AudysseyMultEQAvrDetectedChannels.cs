@@ -73,7 +73,7 @@ namespace Audyssey
                 set
                 {
                     _Stick = value;
-                    RaisePropertyChanged("Sticky");
+                    RaisePropertyChanged("Stick");
                 }
             }
             public ChannelReport ChannelReport
