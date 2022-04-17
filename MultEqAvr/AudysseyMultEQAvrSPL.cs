@@ -57,7 +57,7 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            public void ResetAverage() { _Average = 0; }
+            public void ResetAverage() { _Average = 7500; }
             public void ResetCount() { _Count = 0; }
             public void Reset()
             {
@@ -88,20 +88,20 @@ namespace Audyssey
         {
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public UInt16 SPLValue { get; set; }
+            public UInt16? SPLValue { get; set; }
             #endregion
         }
 
         public partial class AudysseyMultEQAvr : ISPLValue, INotifyPropertyChanged
         {
             #region BackingField
-            private UInt16 _SPLValue;
+            private UInt16? _SPLValue = null;
             private RunningAverage _SPLAvg = new();
             #endregion
 
             #region Properties
             [JsonConverter(typeof(HexStringJsonConverter))]
-            public UInt16 SPLValue
+            public UInt16? SPLValue
             {
                 get
                 {
@@ -111,12 +111,18 @@ namespace Audyssey
                 {
                     if (value != 0xFE0C)
                     {
-                        _SPLValue = value;
-                        _SPLAvg.Value = value;
+                        _SPLAvg.Value = _SPLValue = value;
                         RaisePropertyChanged("SPLValue");
                         RaisePropertyChanged("SPLValuedB");
                         RaisePropertyChanged("SPLAvgdB");
                     }
+                }
+            }
+            public bool IsValidSPLValue
+            {
+                get
+                {
+                    return _SPLValue != null;
                 }
             }
             [JsonIgnore]
@@ -124,10 +130,10 @@ namespace Audyssey
             {
                 get
                 {
-                    return (double)_SPLValue / 100.0;
+                    return _SPLValue == null ? 7500 : (double)_SPLValue / 100.0;
                 }
             }
-            public double? SPLAvgdB
+            public double SPLAvgdB
             {
                 get
                 {
@@ -139,9 +145,9 @@ namespace Audyssey
             #region Methods
             private void ResetSPLValue()
             {
-                _SPLValue = 0;
+                _SPLValue = null;
             }
-            public void ResetSPLAvg()
+            private void ResetSPLAvg()
             {
                 _SPLAvg.Reset();
             }

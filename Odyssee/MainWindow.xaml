@@ -346,22 +346,22 @@
                         <RowDefinition Height="auto"></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="30,0,0,0">
-                        <Label VerticalAlignment="Center" Content="Smoothing"></Label>
-                        <Slider x:Name="Slider_SmoothingFactor" VerticalAlignment="Center" Width="300" Margin="10,0,0,0" Value="{Binding SmoothingFactor}" Minimum="0" Maximum="48" Orientation="Horizontal" TickPlacement="Both" LargeChange="5" SmallChange="1" AutoToolTipPlacement="BottomRight" ValueChanged="Slider_SmoothingFactor_ValueChanged"/>
+                        <Label  Name="Label_SmoothingFactor" VerticalAlignment="Center" Content="Smoothing"></Label>
+                        <Slider Name="Slider_SmoothingFactor" VerticalAlignment="Center" Width="300" Margin="10,0,0,0" Value="{Binding SmoothingFactor}" Minimum="0" Maximum="48" Orientation="Horizontal" TickPlacement="Both" LargeChange="5" SmallChange="1" AutoToolTipPlacement="BottomRight" ValueChanged="Slider_SmoothingFactor_ValueChanged"/>
                     </StackPanel>
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0">
-                        <CheckBox Content="Logarithmic Axis" x:Name="CheckBox_LogarithmicAxis" IsChecked="true"  Checked="CheckBox_LogarithmicAxis_Checked" Unchecked="CheckBox_LogarithmicAxis_Unchecked" />
+                        <CheckBox Name="CheckBox_LogarithmicAxis" Content="Logarithmic Axis" IsChecked="true"  Checked="CheckBox_LogarithmicAxis_Checked" Unchecked="CheckBox_LogarithmicAxis_Unchecked" />
                     </StackPanel>
                     <oxy:PlotView Grid.Row="1" Grid.ColumnSpan="2" x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}"/>
                     <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
-                        <RadioButton x:Name="RadioButton_RangeChirp" Content="0-350ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
-                        <RadioButton x:Name="RadioButton_RangeSubwoofer" Content="10-1000Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
-                        <RadioButton x:Name="RadioButton_RangeFull" Content="10Hz-24kHz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
+                        <RadioButton Name="RadioButton_RangeChirp" Content="0-350ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
+                        <RadioButton Name="RadioButton_RangeSubwoofer" Content="10-1000Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
+                        <RadioButton Name="RadioButton_RangeFull" Content="10Hz-24kHz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,0">
-                        <CheckBox Content="Apply Curve Filter" x:Name="CheckBox_CurveFilter" Checked="CheckBox_CurveFilter_Checked" Unchecked="CheckBox_CurveFilter_Unchecked" Margin="0,0,10,0" IsChecked="False"/>
-                        <RadioButton x:Name="RadioButton_FlatCurveFilter" Content="Flat Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0"/>
-                        <RadioButton x:Name="RadioButton_ReferenceCurveFilter" Content="Reference Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0" IsChecked="True"/>
+                        <CheckBox Name="CheckBox_CurveFilter" Content="Apply Curve Filter" Checked="CheckBox_CurveFilter_Checked" Unchecked="CheckBox_CurveFilter_Unchecked" Margin="0,0,10,0" IsChecked="False"/>
+                        <RadioButton Name="RadioButton_FlatCurveFilter" Content="Flat Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0"/>
+                        <RadioButton Name="RadioButton_ReferenceCurveFilter" Content="Reference Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0" IsChecked="True"/>
                     </StackPanel>
                 </Grid>
             </DockPanel>

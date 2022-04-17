@@ -54,10 +54,34 @@ namespace Odyssee
             {
                 if (audysseyMultEQAvr.AvrLvlm_IsChecked)
                 {
+                    Label_SmoothingFactor.Visibility = Visibility.Hidden;
+                    Slider_SmoothingFactor.Visibility = Visibility.Hidden;
+
+                    CheckBox_LogarithmicAxis.Visibility = Visibility.Hidden;
+                    RadioButton_RangeChirp.Visibility = Visibility.Hidden;
+                    RadioButton_RangeSubwoofer.Visibility = Visibility.Hidden;
+                    RadioButton_RangeFull.Visibility = Visibility.Hidden;
+
+                    CheckBox_CurveFilter.Visibility = Visibility.Hidden;
+                    RadioButton_FlatCurveFilter.Visibility = Visibility.Hidden;
+                    RadioButton_ReferenceCurveFilter.Visibility = Visibility.Hidden;
+
                     audysseyMultEQAvrTcp.StartLvLm(OnCmdAckLvLm);
                 }
                 else
                 {
+                    Label_SmoothingFactor.Visibility = Visibility.Visible;
+                    Slider_SmoothingFactor.Visibility = Visibility.Visible;
+
+                    CheckBox_LogarithmicAxis.Visibility = Visibility.Visible;
+                    RadioButton_RangeChirp.Visibility = Visibility.Visible;
+                    RadioButton_RangeSubwoofer.Visibility = Visibility.Visible;
+                    RadioButton_RangeFull.Visibility = Visibility.Visible;
+
+                    CheckBox_CurveFilter.Visibility = Visibility.Visible;
+                    RadioButton_FlatCurveFilter.Visibility = Visibility.Visible;
+                    RadioButton_ReferenceCurveFilter.Visibility = Visibility.Visible;
+
                     audysseyMultEQAvrTcp.AbortOprt(OnCmdAckAbortOprt);
                 }
             }
