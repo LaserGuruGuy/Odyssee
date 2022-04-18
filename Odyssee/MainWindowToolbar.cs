@@ -112,7 +112,7 @@ namespace Odyssee
                     audysseyMultEQAvrTcp?.StartChnl(OnCmdAckMicrophone_StartChnl);
                 }
                 else if (audysseyMultEQAvr.IsNextSetPosNum && MessageBoxResult.Yes == MessageBox.Show(
-                        "Move microphone to next position: " + audysseyMultEQAvr.DetectedChannels[0].ResponseData.Count, 
+                        "Move microphone to next position: " + audysseyMultEQAvr.DetectedChannels[0].ResponseData.Count + 1, 
                         "Proceed with callibration", MessageBoxButton.YesNo, MessageBoxImage.Question))
                 {
                     audysseyMultEQAvrTcp?.SetPosNum(OnCmdAckMicrophone_SetPosNum);
