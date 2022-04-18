@@ -30,7 +30,7 @@ namespace Audyssey
         /// <summary>
         /// Partial class IAmp
         /// </summary>
-        public partial class AudysseyMultEQAvr : IAmp, INotifyPropertyChanged
+        public partial class AudysseyMultEQAvr : IFin, IAmp, INotifyPropertyChanged
         {
             #region BackingField
             private string _AudyFinFlg = "NotFin";

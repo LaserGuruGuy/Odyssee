@@ -118,24 +118,24 @@ namespace Odyssee
         private void MenuItem_AvrInfo_OnClick(object sender, RoutedEventArgs e)
         {
             audysseyMultEQAvr.AvrInfo_IsChecked = false;
-            audysseyMultEQAvrTcp?.GetAvrInfo();
+            audysseyMultEQAvrTcp?.GetAvrInfo(OnCmdAck);
         }
 
         private void MenuItem_AvrStatus_OnClick(object sender, RoutedEventArgs e)
         {
             audysseyMultEQAvr.AvrStatus_IsChecked = false;
-            audysseyMultEQAvrTcp?.GetAvrStatus();
+            audysseyMultEQAvrTcp?.GetAvrStatus(OnCmdAck);
         }
 
         private void MenuItem_AudysseyMode_OnClick(object sender, RoutedEventArgs e)
         {
             if (audysseyMultEQAvr.AudysseyMode_IsChecked)
             {
-                audysseyMultEQAvrTcp?.EnterAudysseyMode();
+                audysseyMultEQAvrTcp?.EnterAudysseyMode(OnCmdAck);
             }
             else
             {
-                audysseyMultEQAvrTcp?.ExitAudysseyMode();
+                audysseyMultEQAvrTcp?.ExitAudysseyMode(OnCmdAck);
             }
         }
 
@@ -143,48 +143,47 @@ namespace Odyssee
         {
             if (audysseyMultEQAvr.AvrLvlm_IsChecked)
             {
-                audysseyMultEQAvrTcp?.StartLvLm();
+                audysseyMultEQAvrTcp?.StartLvLm(OnCmdAck);
             }
             else
             {
-                audysseyMultEQAvrTcp?.AbortOprt();
+                audysseyMultEQAvrTcp?.AbortOprt(OnCmdAck);
             }
         }
 
         private void MenuItem_SetAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.SetPosNum();
+            audysseyMultEQAvrTcp?.SetPosNum(OnCmdAck);
         }
 
         private void MenuItem_SetAvrStartChnl_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.StartChnl();
+            audysseyMultEQAvrTcp?.StartChnl(OnCmdAck);
         }
 
         private void MenuItem_SetAvrGetRespon_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.GetRespon();
+            audysseyMultEQAvrTcp?.GetRespon(OnCmdAck);
         }
 
         private void MenuItem_SetAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.SetAmp();
+            audysseyMultEQAvrTcp?.SetAmp(OnCmdAck);
         }
 
         private void MenuItem_SetAvrSetAudy_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.SetAudy();
+            audysseyMultEQAvrTcp?.SetAudy(OnCmdAck);
         }
 
         private void MenuItem_SetAvrSetDisFil_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.SetAvrSetDisFil();
+            audysseyMultEQAvrTcp?.SetAvrSetDisFil(OnCmdAck);
         }
 
         private void MenuItem_SetAvrInitCoefs_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            audysseyMultEQAvrTcp?.SetAvrInitCoefs(OnCmdAck);
         }
 
         private void MenuItem_SetAvrSetCoefDt_OnClick(object sender, RoutedEventArgs e)
@@ -198,11 +197,19 @@ namespace Odyssee
             audysseyMultEQAvrTcp?.AudyFinFlag(OnCmdAckAudyFinFlag);
         }
 
-        public void OnCmdAckAudyFinFlag(bool IsAck)
+        private void OnCmdAckAudyFinFlag(bool IsAck)
         {
             if (!IsAck)
             {
                 audysseyMultEQAvr.AudyFinFlag_IsChecked = false;
+                audysseyMultEQAvr.Serialized += "Failed\n";
+            }
+        }
+
+        private void OnCmdAck(bool IsAck)
+        {
+            if (!IsAck)
+            {
                 audysseyMultEQAvr.Serialized += "Failed\n";
             }
         }

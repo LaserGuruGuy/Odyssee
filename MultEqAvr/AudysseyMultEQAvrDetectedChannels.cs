@@ -278,7 +278,7 @@ namespace Audyssey
                     }
                 }
             }
-            private void ResetSelectedResponseData() { _SelectedResponseData = new();  }
+            public void ResetSelectedResponseData() { _SelectedResponseData = new();  }
             private void ResetStickyResponseData() { _StickyResponseData = new(); }
             private void ResetSelectedAudyCurveFilter() { _SelectedAudyCurveFilter = new(); }
             private void ResetStickyAudyCurveFilter() { _StickyAudyCurveFilter = new(); }

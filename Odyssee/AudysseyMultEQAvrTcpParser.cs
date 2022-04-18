@@ -360,6 +360,29 @@ namespace Audyssey
                 }
             }
 
+            public bool SetAvrInitCoefs(CmdAckCallBack CallBack = null)
+            {
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
+                {
+                    string CmdString = "INIT_COEFS";
+                    string AvrString = "";
+                    // toolbar
+                    AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
+                    // transmit request
+                    AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // callback
+                    cmdAck.Rqst(CallBack);
+                    // response may take some processing time for the receiver
+                    // return command sequence was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
+
             public bool AudyFinFlag(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
@@ -691,14 +714,17 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.InitCoefs_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
+                                                AudysseyMultEQAvr.InitCoefs_IsChecked = false;
                                                 cmdAck.Progress();
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
+                                                AudysseyMultEQAvr.InitCoefs_IsChecked = false;
                                                 cmdAck.Nack();
                                             }
                                         }
@@ -711,14 +737,17 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.SetCoefDt_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
+                                                AudysseyMultEQAvr.SetCoefDt_IsChecked = false;
                                                 cmdAck.Progress();
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
+                                                AudysseyMultEQAvr.SetCoefDt_IsChecked = false;
                                                 cmdAck.Nack();
                                             }
                                         }

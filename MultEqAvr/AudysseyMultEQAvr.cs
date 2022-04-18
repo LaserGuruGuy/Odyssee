@@ -132,7 +132,14 @@ namespace Audyssey
                                         Count = ch.ResponseData.Count;
                                         SelectedChannel = ch;
                                         //SelectedChannel.Stick = true;
-                                        SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
+                                        if (Count > 0)
+                                        {
+                                            SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
+                                        }
+                                        else
+                                        {
+                                            SelectedChannel.ResetSelectedResponseData();
+                                        }
                                     }
                                     else if (ch.ResponseData.Count < Count)
                                     {
@@ -142,7 +149,14 @@ namespace Audyssey
                                     {
                                         SelectedChannel = ch;
                                         //SelectedChannel.Stick = true;
-                                        SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
+                                        if (Count > 0)
+                                        {
+                                            SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
+                                        }
+                                        else
+                                        {
+                                            SelectedChannel.ResetSelectedResponseData();
+                                        }
                                     }
                                 }
                             }
