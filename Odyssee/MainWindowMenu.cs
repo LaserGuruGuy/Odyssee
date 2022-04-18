@@ -178,8 +178,7 @@ namespace Odyssee
 
         private void MenuItem_SetAvrSetDisFil_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            audysseyMultEQAvrTcp?.SetAvrSetDisFil();
         }
 
         private void MenuItem_SetAvrInitCoefs_OnClick(object sender, RoutedEventArgs e)

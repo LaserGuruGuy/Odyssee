@@ -63,10 +63,13 @@
     <Compile Include="AudysseyMultEQAvrAmp.cs" />
     <Compile Include="AudysseyMultEQAvrAudy.cs" />
     <Compile Include="AudysseyMultEQAvrChannelReport.cs" />
+    <Compile Include="AudysseyMultEQAvrCurveFilter.cs" />
+    <Compile Include="AudysseyMultEQAvrDisFil.cs" />
     <Compile Include="AudysseyMultEQList.cs" />
     <Compile Include="AudysseyMultEQAvr.cs" />
     <Compile Include="AudysseyMultEQAvrCoefWaitTime.cs" />
     <Compile Include="AudysseyMultEQAvrDetectedChannels.cs" />
+    <Compile Include="ClassDecimalJsonConverter.cs" />
     <Compile Include="UniqueObservableCollection.cs" />
     <Compile Include="AudysseyMultEQAvrInfo.cs" />
     <Compile Include="AudysseyMultEQAvrSPL.cs" />

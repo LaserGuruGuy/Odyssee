@@ -51,7 +51,7 @@ namespace Odyssee
 
                 CheckBox_CurveFilter.Visibility = Visibility.Hidden;
                 RadioButton_FlatCurveFilter.Visibility = Visibility.Hidden;
-                RadioButton_ReferenceCurveFilter.Visibility = Visibility.Hidden;
+                RadioButton_AudyCurveFilter.Visibility = Visibility.Hidden;
 
                 audysseyMultEQAvrTcp?.StartLvLm();
             }
@@ -67,7 +67,7 @@ namespace Odyssee
 
                 CheckBox_CurveFilter.Visibility = Visibility.Visible;
                 RadioButton_FlatCurveFilter.Visibility = Visibility.Visible;
-                RadioButton_ReferenceCurveFilter.Visibility = Visibility.Visible;
+                RadioButton_AudyCurveFilter.Visibility = Visibility.Visible;
 
                 audysseyMultEQAvrTcp?.AbortOprt();
             }
@@ -112,7 +112,7 @@ namespace Odyssee
                     audysseyMultEQAvrTcp?.StartChnl(OnCmdAckMicrophone_StartChnl);
                 }
                 else if (audysseyMultEQAvr.IsNextSetPosNum && MessageBoxResult.Yes == MessageBox.Show(
-                        "Move microphone to next position: " + audysseyMultEQAvr.DetectedChannels[0].ResponseData.Count + 1, 
+                        "Move microphone to next position: " + (audysseyMultEQAvr.DetectedChannels[0].ResponseData.Count + 1), 
                         "Proceed with callibration", MessageBoxButton.YesNo, MessageBoxImage.Question))
                 {
                     audysseyMultEQAvrTcp?.SetPosNum(OnCmdAckMicrophone_SetPosNum);

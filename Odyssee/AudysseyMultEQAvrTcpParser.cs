@@ -303,7 +303,6 @@ namespace Audyssey
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     string CmdString = "SET_SETDAT";
-                    Console.Write(CmdString);
                     // build JSON for class Dat on interface IAudy
                     string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
                     {
@@ -316,6 +315,42 @@ namespace Audyssey
                     // callback
                     cmdAck.Rqst(CallBack);
                     // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
+
+            public bool SetAvrSetDisFil(CmdAckCallBack CallBack = null)
+            {
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
+                {
+                    foreach (var eq in AudysseyMultEQAvr.AudyEqSetList)
+                    {
+                        AudysseyMultEQAvr.EqType = eq;
+                        foreach (var ch in AudysseyMultEQAvr.DetectedChannels)
+                        {
+                            AudysseyMultEQAvr.ChData = ch.Channel;
+                            if (ch.Skip == false)
+                            {
+                                string CmdString = "SET_DISFIL";
+                                // build JSON
+                                string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings { ContractResolver = new InterfaceContractResolver(typeof(IDisFil)) });
+                                // toolbar
+                                AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
+                                // transmit request
+                                AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                                // callback
+                                cmdAck.Rqst(CallBack);
+                                // wait
+                                while (cmdAck.Pending);
+                            }
+                        }
+                    }
+                    // return command sequence was issued
                     return true;
                 }
                 else
@@ -623,19 +658,27 @@ namespace Audyssey
                                     case "SET_DISFIL":
                                         if (TransmitReceiveChar == 'T')
                                         {
+                                            JsonConvert.PopulateObject(DataString, AudysseyMultEQAvr, new JsonSerializerSettings
+                                            {
+                                                ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                                ContractResolver = new InterfaceContractResolver(typeof(IDisFil))
+                                            });
                                         }
                                         if (TransmitReceiveChar == 'R')
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
+                                                AudysseyMultEQAvr.SetDisFil_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
+                                                AudysseyMultEQAvr.SetDisFil_IsChecked = false;
                                                 cmdAck.Progress();
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
+                                                AudysseyMultEQAvr.SetDisFil_IsChecked = false;
                                                 cmdAck.Nack();
                                             }
                                         }

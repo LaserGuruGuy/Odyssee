@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
@@ -22,7 +23,9 @@ namespace Audyssey
             private bool? _Skip;
             private bool? _Stick = false;
             private ChannelReport _ChannelReport = new();
-            private Dictionary<string, float[]> _ResponseData;
+            private Dictionary<string, float[]> _ResponseData = new();
+            private Dictionary<string, float[]> _AudyCurveFilter = new(); //{ { "dispSmallData", new float[9] }, { "dispLargeData", new float[61] }, { "coefficient48kHz", new float[704] }, { "coefficient441kHz", new float[704] }, { "coefficient32kHz", new float[704] } };
+            private Dictionary<string, float[]> _FlatCurveFilter = new(); //{ { "dispSmallData", new float[9] }, { "dispLargeData", new float[61] }, { "coefficient48kHz", new float[704] }, { "coefficient441kHz", new float[704] }, { "coefficient32kHz", new float[704] } };
             private decimal _ChLevel = 0m;
             private object _Crossover = "F";
             #endregion
@@ -100,6 +103,30 @@ namespace Audyssey
                     RaisePropertyChanged("ResponseData");
                 }
             }
+            public Dictionary<string, float[]> AudyCurveFilter
+            {
+                get
+                {
+                    return _AudyCurveFilter;
+                }
+                set
+                {
+                    _AudyCurveFilter = value;
+                    RaisePropertyChanged("AudyCurveFilter");
+                }
+            }
+            public Dictionary<string, float[]> FlatCurveFilter
+            {
+                get
+                {
+                    return _FlatCurveFilter;
+                }
+                set
+                {
+                    _FlatCurveFilter = value;
+                    RaisePropertyChanged("FlatCurveFilter");
+                }
+            }
             public decimal ChLevel
             {
                 get
@@ -132,20 +159,20 @@ namespace Audyssey
             private void ResetSkip() { _Skip = null; }
             private void ResetStick() { _Stick = false; }
             private void ResetChannelReport() { _ChannelReport = new(); }
-            private void ResetResponseData() { _ResponseData = null; }
+            private void ResetResponseData() { _ResponseData = new(); }
+            private void ResetAudyCurveFilter() { _AudyCurveFilter = new(); }
+            private void ResetFlatCurveFilter() { _FlatCurveFilter = new(); }
             #endregion
 
             #region BackingField
             private KeyValuePair<string, float[]> _SelectedResponseData = new();
             private List<KeyValuePair<string, float[]>> _StickyResponseData = new();
-            private KeyValuePair<string, string[]> _selectedReferenceCurveFilter = new();
-            private List<KeyValuePair<string, string[]>> _stickyReferenceCurveFilter = new();
-            private KeyValuePair<string, string[]> _selectedFlatCurveFilter = new();
-            private List<KeyValuePair<string, string[]>> _stickyFlatCurveFilter = new();
-            private static double[] _filterFrequencies =
-            { 19.6862664, 22.09708691, 24.80314144, 27.84058494, 31.25, 35.07693901, 39.37253281, 44.19417382, 49.60628287, 55.68116988, 62.5, 70.15387802, 78.74506562, 88.38834765, 99.21256575, 111.3623398, 125, 140.307756, 157.4901312, 176.7766953, 198.4251315, 222.7246795, 250, 280.6155121, 314.9802625, 353.5533906, 396.850263, 445.4493591, 500, 561.2310242, 629.9605249, 707.1067812, 793.700526, 890.8987181, 1000, 1122.462048, 1259.92105, 1414.213562, 1587.401052, 1781.797436, 2000, 2244.924097, 2519.8421, 2828.427125, 3174.802104, 3563.594873, 4000, 4489.848193, 5039.6842, 5656.854249, 6349.604208, 7127.189745, 8000, 8979.696386, 10079.3684, 11313.7085, 12699.20842, 14254.37949, 16000, 17959.39277, 20158.7368};
-            private static double[] _displayFrequencies =
-             { 62.5, 125, 250, 500, 1000, 2000, 4000, 8000, 16000};
+            private KeyValuePair<string, float[]> _SelectedAudyCurveFilter = new();
+            private List<KeyValuePair<string, float[]>> _StickyAudyCurveFilter = new();
+            private KeyValuePair<string, float[]> _SelectedFlatCurveFilter = new();
+            private List<KeyValuePair<string, float[]>> _StickyFlatCurveFilter = new();
+            private static double[] _filterFrequencies = { 19.6862664, 22.09708691, 24.80314144, 27.84058494, 31.25, 35.07693901, 39.37253281, 44.19417382, 49.60628287, 55.68116988, 62.5, 70.15387802, 78.74506562, 88.38834765, 99.21256575, 111.3623398, 125, 140.307756, 157.4901312, 176.7766953, 198.4251315, 222.7246795, 250, 280.6155121, 314.9802625, 353.5533906, 396.850263, 445.4493591, 500, 561.2310242, 629.9605249, 707.1067812, 793.700526, 890.8987181, 1000, 1122.462048, 1259.92105, 1414.213562, 1587.401052, 1781.797436, 2000, 2244.924097, 2519.8421, 2828.427125, 3174.802104, 3563.594873, 4000, 4489.848193, 5039.6842, 5656.854249, 6349.604208, 7127.189745, 8000, 8979.696386, 10079.3684, 11313.7085, 12699.20842, 14254.37949, 16000, 17959.39277, 20158.7368};
+            private static double[] _displayFrequencies = { 62.5, 125, 250, 500, 1000, 2000, 4000, 8000, 16000};
             #endregion
 
             #region Properties
@@ -174,51 +201,51 @@ namespace Audyssey
                 }
             }
             [JsonIgnore]
-            public KeyValuePair<string, string[]> SelectedReferenceCurveFilter
+            public KeyValuePair<string, float[]> SelectedAudyCurveFilter
             {
                 get
                 {
-                    return _selectedReferenceCurveFilter;
+                    return _SelectedAudyCurveFilter;
                 }
                 set
                 {
-                    _selectedReferenceCurveFilter = value;
+                    _SelectedAudyCurveFilter = value;
                 }
             }
             [JsonIgnore]
-            public List<KeyValuePair<string, string[]>> StickyReferenceCurveFilter
+            public List<KeyValuePair<string, float[]>> StickyAudyCurveFilter
             {
                 get
                 {
-                    return _stickyReferenceCurveFilter;
+                    return _StickyAudyCurveFilter;
                 }
                 set
                 {
-                    _stickyReferenceCurveFilter = value;
+                    _StickyAudyCurveFilter = value;
                 }
             }
             [JsonIgnore]
-            public KeyValuePair<string, string[]> SelectedFlatCurveFilter
+            public KeyValuePair<string, float[]> SelectedFlatCurveFilter
             {
                 get
                 {
-                    return _selectedFlatCurveFilter;
+                    return _SelectedFlatCurveFilter;
                 }
                 set
                 {
-                    _selectedFlatCurveFilter = value;
+                    _SelectedFlatCurveFilter = value;
                 }
             }
             [JsonIgnore]
-            public List<KeyValuePair<string, string[]>> StickyFlatCurveFilter
+            public List<KeyValuePair<string, float[]>> StickyFlatCurveFilter
             {
                 get
                 {
-                    return _stickyFlatCurveFilter;
+                    return _StickyFlatCurveFilter;
                 }
                 set
                 {
-                    _stickyFlatCurveFilter = value;
+                    _StickyFlatCurveFilter = value;
                 }
             }
             [JsonIgnore]
@@ -251,7 +278,12 @@ namespace Audyssey
                     }
                 }
             }
+            private void ResetSelectedResponseData() { _SelectedResponseData = new();  }
             private void ResetStickyResponseData() { _StickyResponseData = new(); }
+            private void ResetSelectedAudyCurveFilter() { _SelectedAudyCurveFilter = new(); }
+            private void ResetStickyAudyCurveFilter() { _StickyAudyCurveFilter = new(); }
+            private void ResetSelectedFlatCurveFilter() { _SelectedFlatCurveFilter = new(); }
+            private void ResetStickyFlatCurveFilter() { _StickyFlatCurveFilter = new(); }
             protected void RaisePropertyChanged(string propertyName)
             {
                 if (this.PropertyChanged != null)
