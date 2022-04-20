@@ -176,8 +176,8 @@ namespace Odyssee
         bool LogarithmicAxis = false;
 
         private Dictionary<string, Brush> ResponseDataTraceColor = new Dictionary<string, Brush> { { "0", Brushes.Black }, { "1", Brushes.Blue }, { "2", Brushes.Violet }, { "3", Brushes.Green }, { "4", Brushes.Orange }, { "5", Brushes.Red }, { "6", Brushes.Cyan }, { "7", Brushes.DeepPink } };
-        private Dictionary<string, Brush> FlatCurveFilterTraceColor = new Dictionary<string, Brush> { { "0", Brushes.BlueViolet }, { "1", Brushes.BlueViolet }, { "2", Brushes.BlueViolet }, { "dispLargeData", Brushes.BlueViolet }, { "dispSmallData", Brushes.BlueViolet } };
-        private Dictionary<string, Brush> ReferenceCurveFilterTraceColor = new Dictionary<string, Brush> { { "0", Brushes.Maroon }, { "1", Brushes.Maroon }, { "2", Brushes.Maroon }, { "dispLargeData", Brushes.Maroon }, { "dispSmallData", Brushes.Maroon } };
+        private Dictionary<string, Brush> FlatCurveFilterTraceColor = new Dictionary<string, Brush> { { "coefficient32kHz", Brushes.BlueViolet }, { "coefficien441kHz", Brushes.BlueViolet }, { "coefficient48kHz", Brushes.BlueViolet }, { "dispLargeData", Brushes.BlueViolet }, { "dispSmallData", Brushes.BlueViolet } };
+        private Dictionary<string, Brush> ReferenceCurveFilterTraceColor = new Dictionary<string, Brush> { { "coefficient32kHz", Brushes.Maroon }, { "coefficien441kHz", Brushes.Maroon }, { "coefficient48kHz", Brushes.Maroon }, { "dispLargeData", Brushes.Maroon }, { "dispSmallData", Brushes.Maroon } };
 
         private string selectedAxisLimits = "RadioButton_RangeChirp";
         private Dictionary<string, AxisLimit> AxisLimits = new Dictionary<string, AxisLimit>()
@@ -278,9 +278,6 @@ namespace Odyssee
                     }
                 }
 
-
-
-
                 /* Plot selected channel: curve filter coefficients and response data */
                 KeyValuePair<string, double[]> CurveFilter = new();
                 /* Select curve based on GUI radiobutton */
@@ -303,26 +300,23 @@ namespace Odyssee
                     }
                 }
 
-
-
-
                 /* Reference filter key and value are null if there is no filter selected in the GUI */
                 if ((CurveFilter.Key != null) && (CurveFilter.Value != null))
                 {
-                    if (CurveFilter.Key.Equals("0"))
+                    if (CurveFilter.Key.Equals("coefficient32kHz"))
                     {
                         /* 1024 filter coefficients (704 for subwoofer) */
-                        PlotCurve(CurveFilter.Value.Length == 1024 ? 32000d : 8000d, CurveFilter.Value, 0, CurveColor, LineStyle.Solid, 2);
+                        PlotCurve(CurveFilter.Value.Length == 1024 ? 32000d : 8000d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
                     }
-                    else if (CurveFilter.Key.Equals("1"))
+                    else if (CurveFilter.Key.Equals("coefficien441kHz"))
                     {
                         /* 1024 filter coefficients (704 for subwoofer)*/
-                        PlotCurve(CurveFilter.Value.Length == 1024 ? 44100d : 11024d, CurveFilter.Value, 0, CurveColor, LineStyle.Solid, 2);
+                        PlotCurve(CurveFilter.Value.Length == 1024 ? 44100d : 11024d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
                     }
-                    else if (CurveFilter.Key.Equals("2"))
+                    else if (CurveFilter.Key.Equals("coefficient48kHz"))
                     {
                         /* 1024 filter coefficients (704 for subwoofer) */
-                        PlotCurve(CurveFilter.Value.Length == 1024 ? 48000d : 12000d, CurveFilter.Value, 0, CurveColor, LineStyle.Solid, 2);
+                        PlotCurve(CurveFilter.Value.Length == 1024 ? 48000d : 12000d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
                     }
                     else if (CurveFilter.Key.Equals("dispLargeData"))
                     {

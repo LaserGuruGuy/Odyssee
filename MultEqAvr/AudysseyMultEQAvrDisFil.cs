@@ -1,3 +1,4 @@
+using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
@@ -19,7 +20,7 @@ namespace Audyssey
             [JsonConverter(typeof(DecimalJsonConverter))]
             double[] DispData { get; set; }
         }
-        public partial class AudysseyMultEQAvr :IDisFil, INotifyPropertyChanged
+        public partial class AudysseyMultEQAvr : MultEQList, IDisFil, INotifyPropertyChanged
         {
             #region Properties
             [JsonIgnore]
@@ -42,18 +43,18 @@ namespace Audyssey
                                 {
                                     if (ch.Channel.Equals(ChData))
                                     {
-                                        if (EqType.Equals("Audy"))
+                                        if (EqType.Equals(AudyEqSetList[0]))
                                         {
                                             if (ch.AudyCurveFilter.Count > 0)
                                             {
-                                                FilData = ch.AudyCurveFilter["dispLargeData"];
+                                                FilData = ch.AudyCurveFilter[DispDataList[0]];
                                             }
                                         }
-                                        else if(EqType.Equals("Flat"))
+                                        else if(EqType.Equals(AudyEqSetList[1]))
                                         {
                                             if (ch.FlatCurveFilter.Count > 0)
                                             {
-                                                FilData = ch.FlatCurveFilter["dispLargeData"];
+                                                FilData = ch.FlatCurveFilter[DispDataList[0]];
                                             }
                                         }
                                         break;
@@ -76,23 +77,23 @@ namespace Audyssey
                                 {
                                     if (ch.Channel.Equals(ChData))
                                     {
-                                        if (EqType.Equals("Audy"))
+                                        if (EqType.Equals(AudyEqSetList[0]))
                                         {
                                             if (ch.AudyCurveFilter == null)
                                             {
                                                 ch.AudyCurveFilter = new();
                                             }
-                                            ch.AudyCurveFilter.Remove("dispLargeData");
-                                            ch.AudyCurveFilter.Add("dispLargeData", value);
+                                            ch.AudyCurveFilter.Remove(DispDataList[0]);
+                                            ch.AudyCurveFilter.Add(DispDataList[0], value);
                                         }
-                                        else if (EqType.Equals("Flat"))
+                                        else if (EqType.Equals(AudyEqSetList[1]))
                                         {
                                             if (ch.FlatCurveFilter == null)
                                             {
                                                 ch.FlatCurveFilter = new();
                                             }
-                                            ch.FlatCurveFilter.Remove("dispLargeData");
-                                            ch.FlatCurveFilter.Add("dispLargeData", value);
+                                            ch.FlatCurveFilter.Remove(DispDataList[0]);
+                                            ch.FlatCurveFilter.Add(DispDataList[0], value);
                                         }
                                         break;
                                     }
@@ -118,18 +119,18 @@ namespace Audyssey
                                 {
                                     if (ch.Channel.Equals(ChData))
                                     {
-                                        if (EqType.Equals("Audy"))
+                                        if (EqType.Equals(AudyEqSetList[0]))
                                         {
                                             if (ch.AudyCurveFilter.Count > 0)
                                             {
-                                                DispData = ch.AudyCurveFilter["dispSmallData"];
+                                                DispData = ch.AudyCurveFilter[DispDataList[1]];
                                             }
                                         }
-                                        else if (EqType.Equals("Flat"))
+                                        else if (EqType.Equals(AudyEqSetList[1]))
                                         {
                                             if (ch.FlatCurveFilter.Count > 0)
                                             {
-                                                DispData = ch.FlatCurveFilter["dispSmallData"];
+                                                DispData = ch.FlatCurveFilter[DispDataList[1]];
                                             }
                                         }
                                         break;
@@ -152,23 +153,23 @@ namespace Audyssey
                                 {
                                     if (ch.Channel.Equals(ChData))
                                     {
-                                        if (EqType.Equals("Audy"))
+                                        if (EqType.Equals(AudyEqSetList[0]))
                                         {
                                             if (ch.AudyCurveFilter == null)
                                             {
                                                 ch.AudyCurveFilter = new();
                                             }
-                                            ch.AudyCurveFilter.Remove("dispSmallData");
-                                            ch.AudyCurveFilter.Add("dispSmallData", value);
+                                            ch.AudyCurveFilter.Remove(DispDataList[1]);
+                                            ch.AudyCurveFilter.Add(DispDataList[1], value);
                                         }
-                                        else if (EqType.Equals("Flat"))
+                                        else if (EqType.Equals(AudyEqSetList[1]))
                                         {
                                             if (ch.FlatCurveFilter == null)
                                             {
                                                 ch.FlatCurveFilter = new();
                                             }
-                                            ch.FlatCurveFilter.Remove("dispSmallData");
-                                            ch.FlatCurveFilter.Add("dispSmallData", value);
+                                            ch.FlatCurveFilter.Remove(DispDataList[1]);
+                                            ch.FlatCurveFilter.Add(DispDataList[1], value);
                                         }
                                         break;
                                     }

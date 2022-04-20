@@ -7,7 +7,7 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public partial class AudysseyMultEQAvr : INotifyPropertyChanged
+        public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region Properties
             [JsonIgnore]
@@ -42,14 +42,14 @@ namespace Audyssey
                                     {
                                         if (ch.AudyCurveFilter != null)
                                         {
-                                            Coef = ch.AudyCurveFilter[CoefSampleRate.ToString()];
+                                            Coef = ch.AudyCurveFilter[SampleRateList[CoefSampleRate]];
                                         }
                                     }
                                     else if (CoefCurve == 0x01)
                                     {
                                         if (ch.FlatCurveFilter != null)
                                         {
-                                            Coef = ch.FlatCurveFilter[CoefSampleRate.ToString()];
+                                            Coef = ch.FlatCurveFilter[SampleRateList[CoefSampleRate]];
                                         }
                                     }
                                     _CoefData = new byte[4 * (Coef.Length + 1)];
@@ -109,7 +109,7 @@ namespace Audyssey
                                         {
                                             ch.AudyCurveFilter = new();
                                         }
-                                        ch.AudyCurveFilter.Add(CoefSampleRate.ToString(), Coef);
+                                        ch.AudyCurveFilter.Add(SampleRateList[CoefSampleRate], Coef);
                                         RaisePropertyChanged("AudyCurveFilter");
                                         break;
                                     }
@@ -119,7 +119,7 @@ namespace Audyssey
                                         {
                                             ch.FlatCurveFilter = new();
                                         }
-                                        ch.FlatCurveFilter.Add(CoefSampleRate.ToString(), Coef);
+                                        ch.FlatCurveFilter.Add(SampleRateList[CoefSampleRate], Coef);
                                         RaisePropertyChanged("FlatCurveFilter");
                                         break;
                                     }
