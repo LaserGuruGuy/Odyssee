@@ -277,8 +277,99 @@ namespace Odyssee
                         }
                     }
                 }
+
+
+
+
+                /* Plot selected channel: curve filter coefficients and response data */
+                KeyValuePair<string, double[]> CurveFilter = new();
+                /* Select curve based on GUI radiobutton */
+                if (selectedCurveFilter.Contains("Audy"))
+                {
+                    /* Reference curve filter */
+                    CurveFilter = selectedChannel.SelectedAudyCurveFilter;
+                    if ((CurveFilter.Key != null) && (CurveFilter.Value != null))
+                    {
+                        CurveColor = OxyColor.Parse(ReferenceCurveFilterTraceColor[CurveFilter.Key].ToString());
+                    }
+                }
+                else if (selectedCurveFilter.Contains("Flat"))
+                {
+                    /* Flat curve filter */
+                    CurveFilter = selectedChannel.SelectedFlatCurveFilter;
+                    if ((CurveFilter.Key != null) && (CurveFilter.Value != null))
+                    {
+                        CurveColor = OxyColor.Parse(FlatCurveFilterTraceColor[CurveFilter.Key].ToString());
+                    }
+                }
+
+
+
+
+                /* Reference filter key and value are null if there is no filter selected in the GUI */
+                if ((CurveFilter.Key != null) && (CurveFilter.Value != null))
+                {
+                    if (CurveFilter.Key.Equals("0"))
+                    {
+                        /* 1024 filter coefficients (704 for subwoofer) */
+                        PlotCurve(CurveFilter.Value.Length == 1024 ? 32000d : 8000d, CurveFilter.Value, 0, CurveColor, LineStyle.Solid, 2);
+                    }
+                    else if (CurveFilter.Key.Equals("1"))
+                    {
+                        /* 1024 filter coefficients (704 for subwoofer)*/
+                        PlotCurve(CurveFilter.Value.Length == 1024 ? 44100d : 11024d, CurveFilter.Value, 0, CurveColor, LineStyle.Solid, 2);
+                    }
+                    else if (CurveFilter.Key.Equals("2"))
+                    {
+                        /* 1024 filter coefficients (704 for subwoofer) */
+                        PlotCurve(CurveFilter.Value.Length == 1024 ? 48000d : 12000d, CurveFilter.Value, 0, CurveColor, LineStyle.Solid, 2);
+                    }
+                    else if (CurveFilter.Key.Equals("dispLargeData"))
+                    {
+                        /* 61 equalizer bands */
+                        if (CurveFilter.Value.Length == selectedChannel.FilterFrequencies.Length)
+                        {
+                            Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+                            for (int j = 0; j < CurveFilter.Value.Length; j++)
+                            {
+                                dataPoint.Add(new DataPoint(selectedChannel.FilterFrequencies[j], CurveFilter.Value[j]));
+                            }
+                            var sinStemSeries = new StemSeries
+                            {
+                                Color = CurveColor,
+                                MarkerStroke = CurveColor,
+                                MarkerType = MarkerType.Circle
+                            };
+                            sinStemSeries.Points.AddRange(dataPoint);
+                            PlotModel.Series.Add(sinStemSeries);
+                        }
+                    }
+                    else if (CurveFilter.Key.Equals("dispSmallData"))
+                    {
+                        /* 9 equalizer bands */
+                        if (CurveFilter.Value.Length == selectedChannel.DisplayFrequencies.Length)
+                        {
+                            Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+                            for (int j = 0; j < CurveFilter.Value.Length; j++)
+                            {
+                                dataPoint.Add(new DataPoint(selectedChannel.DisplayFrequencies[j], CurveFilter.Value[j]));
+                            }
+                            var sinStemSeries = new StemSeries
+                            {
+                                Color = CurveColor,
+                                StrokeThickness = 2,
+                                MarkerType = MarkerType.Circle,
+                                MarkerStroke = CurveColor,
+                                MarkerStrokeThickness = 2
+                            };
+                            sinStemSeries.Points.AddRange(dataPoint);
+                            PlotModel.Series.Add(sinStemSeries);
+                        }
+                    }
+                }
             }
         }
+
         private void PlotCurve(double sampleRate, double[] responseData, int smoothingFactor, OxyColor oxyColor, LineStyle lineStyle, double strokeThickness)
         {
             Collection<DataPoint> dataPoint = new Collection<DataPoint>();
