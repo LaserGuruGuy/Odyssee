@@ -65,6 +65,98 @@ namespace Odyssee
             }
         }
 
+        private void ListView_FlatCurveFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DrawChart();
+        }
+
+        private void ListView_FlatCurveFilter_CheckBox_Sticky_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            if (!audysseyMultEQAvr.SelectedChannel.StickyFlatCurveFilter.Contains(keyValuePair))
+            {
+                audysseyMultEQAvr.SelectedChannel.StickyFlatCurveFilter.Add(keyValuePair);
+                DrawChart();
+            }
+        }
+
+        private void ListView_FlatCurveFilter_CheckBox_Sticky_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            audysseyMultEQAvr.SelectedChannel.StickyFlatCurveFilter.Remove(keyValuePair);
+            DrawChart();
+        }
+
+        private void ListView_FlatCurveFilter_CheckBox_Sticky_Initialized(object sender, System.EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            if (audysseyMultEQAvr.SelectedChannel.StickyFlatCurveFilter.Contains(keyValuePair))
+            {
+                checkBox.IsChecked = true;
+            }
+            checkBox.Background = FlatCurveFilterTraceColor[keyValuePair.Key];
+        }
+
+        private void ListView_FlatCurveFilter_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+            if (e.Key.Equals(Key.Escape))
+            {
+                listBox.SelectedIndex = -1;
+                listBox.SelectedItem = new KeyValuePair<string, double[]>();
+                DrawChart();
+            }
+        }
+
+        private void ListView_AudyCurveFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DrawChart();
+        }
+
+        private void ListView_AudyCurveFilter_CheckBox_Sticky_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            if (!audysseyMultEQAvr.SelectedChannel.StickyAudyCurveFilter.Contains(keyValuePair))
+            {
+                audysseyMultEQAvr.SelectedChannel.StickyAudyCurveFilter.Add(keyValuePair);
+                DrawChart();
+            }
+        }
+
+        private void ListView_AudyCurveFilter_CheckBox_Sticky_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            audysseyMultEQAvr.SelectedChannel.StickyAudyCurveFilter.Remove(keyValuePair);
+            DrawChart();
+        }
+
+        private void ListView_AudyCurveFilter_CheckBox_Sticky_Initialized(object sender, System.EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            if (audysseyMultEQAvr.SelectedChannel.StickyAudyCurveFilter.Contains(keyValuePair))
+            {
+                checkBox.IsChecked = true;
+            }
+            checkBox.Background = ReferenceCurveFilterTraceColor[keyValuePair.Key];
+        }
+
+        private void ListView_AudyCurveFilter_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+            if (e.Key.Equals(Key.Escape))
+            {
+                listBox.SelectedIndex = -1;
+                listBox.SelectedItem = new KeyValuePair<string, double[]>();
+                DrawChart();
+            }
+        }
+
         private void RadioButton_Range_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;

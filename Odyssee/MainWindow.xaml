@@ -305,28 +305,28 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <ListView ItemsSource="{Binding AudyCurveFilter}" SelectedItem="{Binding SelectedAudyCurveFilter}">
+                        <ListView ItemsSource="{Binding AudyCurveFilter}" SelectedItem="{Binding SelectedAudyCurveFilter}" SelectionChanged="ListView_AudyCurveFilter_SelectionChanged" KeyUp="ListView_AudyCurveFilter_KeyUp">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Audy Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
                                 <GridViewColumn Header="Stick" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Path=Stick}"/>
+                                            <CheckBox Checked="ListView_AudyCurveFilter_CheckBox_Sticky_Checked" Unchecked="ListView_AudyCurveFilter_CheckBox_Sticky_Unchecked" Initialized="ListView_AudyCurveFilter_CheckBox_Sticky_Initialized"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
-                    <ListView ItemsSource="{Binding FlatCurveFilter}" SelectedItem="{Binding SelectedFlatCurveFilter}">
+                        <ListView ItemsSource="{Binding FlatCurveFilter}" SelectedItem="{Binding SelectedFlatCurveFilter}" SelectionChanged="ListView_FlatCurveFilter_SelectionChanged" KeyUp="ListView_FlatCurveFilter_KeyUp">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
                                 <GridViewColumn Header="Stick" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox IsChecked="{Binding Path=Stick}"/>
+                                            <CheckBox Checked="ListView_FlatCurveFilter_CheckBox_Sticky_Checked" Unchecked="ListView_FlatCurveFilter_CheckBox_Sticky_Unchecked"  Initialized="ListView_FlatCurveFilter_CheckBox_Sticky_Initialized"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
