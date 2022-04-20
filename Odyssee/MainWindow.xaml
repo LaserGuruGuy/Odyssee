@@ -20,14 +20,14 @@
     <Window.Resources>
     </Window.Resources>
     <Window.InputBindings>
+        <KeyBinding Key="N" Modifiers="Control" Command="New"/>
         <KeyBinding Key="O" Modifiers="Control" Command="Open"/>
-        <KeyBinding Key="S" Modifiers="Control" Command="Save"/>
-        <KeyBinding Key="A" Modifiers="Control" Command="SaveAs"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="SaveAs"/>
         <KeyBinding Key="E" Modifiers="Control" Command="Close"/>
     </Window.InputBindings>
     <Window.CommandBindings>
+        <CommandBinding Command="New" Executed="NewCommandBinding_Executed"/>
         <CommandBinding Command="Open" Executed="OpenCommandBinding_Executed"/>
-        <CommandBinding Command="Save" Executed="SaveCommandBinding_Executed"/>
         <CommandBinding Command="SaveAs" Executed="SaveAsCommandBinding_Executed"/>
         <CommandBinding Command="Close" Executed="CloseCommandBinding_Executed"/>
     </Window.CommandBindings>
@@ -43,11 +43,11 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
                 <Menu Name="Menu" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Left" VerticalAlignment="Stretch" Background="Transparent" FontSize="13">
                     <MenuItem Header="_File" Height="30" Width="50" BorderThickness="0">
+                        <MenuItem Name="menuNew" Header="_New" Command="New" InputGestureText="Ctrl+N"/>
                         <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
-                        <MenuItem Name="menuSave" Header="_Save..." Command="SaveAs" InputGestureText="Ctrl+S"/>
-                        <MenuItem Name="menuSaveAs" Header="Save _as..." Command="SaveAs" InputGestureText="Ctrl+A"/>
+                        <MenuItem Name="menuSaveAs" Header="_Save as..." Command="SaveAs" InputGestureText="Ctrl+S"/>
                         <Separator/>
-                        <MenuItem Name ="menuClose" Header="_Close" Command="Close"  InputGestureText="Alt+F4"/>
+                        <MenuItem Name ="menuClose" Header="_Close" Command="Close" InputGestureText="Alt+F4"/>
                     </MenuItem>
                     <MenuItem Header="_Receiver"  Height="30" Width="70">
                         <MenuItem Header="_Detect Receiver" Name="detectReceiver" Click="MenuItem_DetectReceiver_OnClick"/>

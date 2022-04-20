@@ -100,6 +100,7 @@ namespace Audyssey
             #endregion
 
             #region Properties
+            [JsonIgnore]
             [JsonConverter(typeof(HexStringJsonConverter))]
             public UInt16? SPLValue
             {
@@ -118,6 +119,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public bool IsValidSPLValue
             {
                 get
@@ -133,6 +135,7 @@ namespace Audyssey
                     return _SPLValue == null ? 7500 : (double)_SPLValue / 100.0;
                 }
             }
+            [JsonIgnore]
             public double SPLAvgdB
             {
                 get

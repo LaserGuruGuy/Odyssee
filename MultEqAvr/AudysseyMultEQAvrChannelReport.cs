@@ -1,6 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Audyssey.MultEQ.List;
+using Newtonsoft.Json;
 
 namespace Audyssey
 {
@@ -10,8 +10,8 @@ namespace Audyssey
         {
             public string SpConnect { get; set; }
             public string Polarity { get; set; }
-            public int? Distance { get; set; }
-            public decimal? ResponseCoef { get; set; }
+            public int Distance { get; set; }
+            public double ResponseCoef { get; set; }
         }
 
         public class ChannelReport : ChannelReportList, INotifyPropertyChanged
@@ -19,8 +19,9 @@ namespace Audyssey
             #region BackingField
             private string _SpConnect = string.Empty;
             private string _Polarity = string.Empty;
-            private int? _Distance;
-            private decimal? _ResponseCoef;
+            private int _Distance;
+            [JsonIgnore]
+            private double _ResponseCoef;
             #endregion
 
             #region Properties
@@ -48,7 +49,7 @@ namespace Audyssey
                     RaisePropertyChanged("Polarity");
                 }
             }
-            public int? Distance
+            public int Distance
             {
                 get
                 {
@@ -60,7 +61,7 @@ namespace Audyssey
                     RaisePropertyChanged("Distance");
                 }
             }
-            public decimal? ResponseCoef
+            public double ResponseCoef
             {
                 get
                 {

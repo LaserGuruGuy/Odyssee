@@ -75,7 +75,6 @@ namespace Odyssee
 
         private void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.DetectedChannels = null;
             audysseyMultEQAvrTcp?.EnterAudysseyMode(OnCmdAckMicrophone_EnterAudysseyMode);
         }
 

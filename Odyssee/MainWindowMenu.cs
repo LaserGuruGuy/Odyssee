@@ -22,40 +22,34 @@ namespace Odyssee
 
         private void ConnectReceiver()
         {
-            if (audysseyMultEQAvr.AvrConnect_IsChecked)
+            // uncheck the menu item
+            audysseyMultEQAvr.AvrConnect_IsChecked = false;
+            // receiver object does not exist
+            if (audysseyMultEQAvrTcp == null)
             {
                 // if there is no IP address text
                 if (string.IsNullOrEmpty(cmbInterfaceReceiver.Text))
                 {
-                    // uncheck the menu item
-                    audysseyMultEQAvr.AvrConnect_IsChecked = false;
                     // display message to report error to user
                     MessageBox.Show("Enter select a valid receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
-                    // receiver object does not exist
-                    if (audysseyMultEQAvrTcp == null)
-                    {
-                        // create receiver tcp instance and strip receiver name and keep receiver IP Address
-                        audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text);
-                        // open connection to receiver
-                        audysseyMultEQAvrTcp.Open();
-                    }
+                    // create receiver tcp instance and strip receiver name and keep receiver IP Address
+                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text);
+                    // open connection to receiver
+                    audysseyMultEQAvrTcp.Open();
                 }
             }
             else
             {
-                if (audysseyMultEQAvrTcp != null)
-                {
-                    audysseyMultEQAvr.Reset();
-                    // close the connection
-                    audysseyMultEQAvrTcp.Close();
-                    // immediately clean up the object
-                    audysseyMultEQAvrTcp = null;
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
+                audysseyMultEQAvr.Reset();
+                // close the connection
+                audysseyMultEQAvrTcp.Close();
+                // immediately clean up the object
+                audysseyMultEQAvrTcp = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
         }
 
@@ -66,53 +60,50 @@ namespace Odyssee
 
         private void ConnectSniffer()
         {
-            if (audysseyMultEQAvr.SnifferAttach_IsChecked)
-            {
+            // uncheck the menu item
+            audysseyMultEQAvr.SnifferAttach_IsChecked = false;
+            // sniffer object does not exist
+            if (audysseyMultEQTcpSniffer == null)
+            { 
                 // sniffer must be elevated to capture raw packets
                 if (!IsElevated())
                 {
-                    // we cannot create the sniffer...
-                    audysseyMultEQAvr.SnifferAttach_IsChecked = false;
                     // but we can ask the user to elevate the program!
                     RunAsAdmin();
                 }
                 else
                 {
-                    // sniffer object does not exist
-                    if (audysseyMultEQTcpSniffer == null)
+                    if (audysseyMultEQAvrTcp == null)
                     {
-                        //
-                        if (audysseyMultEQAvrTcp != null)
-                        {
-                            // create sniffer attached to receiver and tcp
-                            // strip computer ethernet adapter name and keep computer IP Address
-                            // strip receiver name and keep receiver IP Address
-                            audysseyMultEQTcpSniffer = new AudysseyMultEQTcpSniffer(
-                                cmbInterfaceComputer.Text.IndexOf(' ') > -1 ? cmbInterfaceComputer.Text.Substring(0, cmbInterfaceComputer.Text.IndexOf(' ')) : cmbInterfaceComputer.Text,
-                                cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text,
-                                0, 1256, 0, 0, audysseyMultEQAvrTcp.AvrSnifferCallback, null, null, audysseyMultEQAvrTcp.Populate);
-                            // open connection to receiver
-                            audysseyMultEQTcpSniffer.Open();
-                        }
-                        else
-                        {
-                            // or we cannot connect because the receiver was not connected to begin with
-                            MessageBox.Show("Connnect to receiver IP address prior to attaching sniffer.", "Could not attach sniffer to receiver.", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr);
                     }
+                    // create sniffer attached to receiver and tcp
+                    // strip computer ethernet adapter name and keep computer IP Address
+                    // strip receiver name and keep receiver IP Address
+                    audysseyMultEQTcpSniffer = new AudysseyMultEQTcpSniffer(
+                        cmbInterfaceComputer.Text.IndexOf(' ') > -1 ? cmbInterfaceComputer.Text.Substring(0, cmbInterfaceComputer.Text.IndexOf(' ')) : cmbInterfaceComputer.Text,
+                        cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text,
+                        0, 1256, 0, 0, AvrSnifferCallback, null, null, audysseyMultEQAvrTcp.Populate);
+                    // open sniffer connection to receiver
+                    audysseyMultEQTcpSniffer.Open();
+                    // close TCP traffic
+                    audysseyMultEQAvrTcp.Close();
                 }
             }
             else
             {
-                if (audysseyMultEQTcpSniffer != null)
-                {
-                    audysseyMultEQTcpSniffer.Close();
-                    // immediately clean up the object
-                    audysseyMultEQTcpSniffer = null;
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
+                audysseyMultEQTcpSniffer.Close();
+                // immediately clean up the object
+                audysseyMultEQTcpSniffer = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
             }
+        }
+
+        public void AvrSnifferCallback(bool IsConnected, string Result)
+        {
+            audysseyMultEQAvr.SnifferAttach_IsChecked = IsConnected;
+            audysseyMultEQAvr.Serialized += Result;
         }
 
         private void MenuItem_AvrInfo_OnClick(object sender, RoutedEventArgs e)

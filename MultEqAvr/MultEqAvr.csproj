@@ -63,6 +63,7 @@
     <Compile Include="AudysseyMultEQAvrAmp.cs" />
     <Compile Include="AudysseyMultEQAvrAudy.cs" />
     <Compile Include="AudysseyMultEQAvrChannelReport.cs" />
+    <Compile Include="AudysseyMultEqAvrCoefData.cs" />
     <Compile Include="AudysseyMultEQAvrCurveFilter.cs" />
     <Compile Include="AudysseyMultEQAvrDisFil.cs" />
     <Compile Include="AudysseyMultEQList.cs" />

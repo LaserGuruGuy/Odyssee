@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -19,6 +20,7 @@ using System.Windows.Shapes;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcp;
 using Audyssey.MultEQTcpSniffer;
+using Newtonsoft.Json;
 
 namespace Odyssee
 {
@@ -76,19 +78,6 @@ namespace Odyssee
             var principal = new System.Security.Principal.WindowsPrincipal(identity);
 
             return principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
-        }
-
-        private void HandleDroppedFile(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                foreach (var file in files)
-                {
-                    // TODO: Implementation of Open
-                }
-            }
         }
 
         private void ComboBox_InterfaceComputer_SelectionChanged(object sender, SelectionChangedEventArgs e)

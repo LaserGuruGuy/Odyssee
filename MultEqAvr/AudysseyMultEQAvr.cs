@@ -1,5 +1,6 @@
 ﻿using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -32,13 +33,13 @@ namespace Audyssey
         public interface IResponseData
         {
             public string ChData { get; set; }
-            public float[] RspData { get; set; }
+            public byte[] RspData { get; set; }
         }
 
         public class ResponseData : IResponseData
         {
             public string ChData { get; set; }
-            public float[] RspData { get; set; }
+            public byte[] RspData { get; set; }
         }
 
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
@@ -46,9 +47,9 @@ namespace Audyssey
             #region BackingField
             private AvrInfo _AvrInfo = new();
             private AvrStatus _AvrStatus = new();
-            UniqueObservableCollection<DetectedChannel> _DetectedChannels;
+            private UniqueObservableCollection<DetectedChannel> _DetectedChannels = new();
             private DetectedChannel _SelectedChannel;
-            private int _NumPos = 3;
+            private int _NumPos = 8;
             private int _SmoothingFactor = 1;
             #endregion
 
@@ -97,11 +98,16 @@ namespace Audyssey
                                     _DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
                                 }
                             }
-                            RaisePropertyChanged("DetectedChannels");
                         }
+                        else
+                        {
+                            _DetectedChannels = value;
+                        }
+                        RaisePropertyChanged("DetectedChannels");
                     }
                 }
             }
+            [JsonIgnore]
             public DetectedChannel SelectedChannel
             {
                 get
@@ -114,6 +120,7 @@ namespace Audyssey
                     RaisePropertyChanged("SelectedChannel");
                 }
             }
+            [JsonIgnore]
             public bool IsNextGetRespon
             {
                 get
@@ -165,6 +172,7 @@ namespace Audyssey
                     return false;
                 }
             }
+            [JsonIgnore]
             public bool IsNextSetPosNum
             {
                 get
@@ -188,6 +196,7 @@ namespace Audyssey
                     return false;
                 }
             }
+            [JsonIgnore]
             public MeasuredPosition MeasuredPosition
             {
                 // SET_POSNUM {"Position":1,"ChSetup":["FL","FR"]}
@@ -237,6 +246,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public MeasuredChannel MeasuredChannel
             {
                 // START_CHNL {"SpConnect":"S","Polarity":"N","Distance":237,"ResponseCoef":1}
@@ -295,6 +305,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public ResponseData ResponseData
             {
                 // GET_RESPON {"ChData":"FL"}
@@ -346,7 +357,7 @@ namespace Audyssey
                                     {
                                         ch.ResponseData = new();
                                     }
-                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), value.RspData);
+                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, ch.ChannelReport.ResponseCoef));
                                     break;
                                 }
                             }
@@ -356,7 +367,7 @@ namespace Audyssey
                                 {
                                     ch.ResponseData = new();
                                 }
-                                ch.ResponseData.Add(ch.ResponseData.Count.ToString(), value.RspData);
+                                ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, ch.ChannelReport.ResponseCoef));
                                 break;
                             }
                         }
@@ -364,6 +375,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public int NumPos
             {
                 get
@@ -392,15 +404,25 @@ namespace Audyssey
             #endregion
 
             #region Methods
+            private double[] ByteToDoubleArray(byte[] Bytes, double ResponseCoef)
+            {
+                if (Bytes.Length % 4 != 0) throw new ArgumentException();
+
+                double[] result = new double[Bytes.Length / 4];
+                for (int i = 0; i < Bytes.Length / 4; i++)
+                {
+                    result[i] = ResponseCoef * (double)BitConverter.ToInt32(Bytes, i * 4) / (double)Int32.MaxValue;
+                }
+                return result;
+            }
             private void ResetAvrInfo() { _AvrInfo?.Reset(); }
             private void ResetAvrStatus() { _AvrStatus?.Reset(); }
-            private void ResetDetectedChannels() { _DetectedChannels = null; }
-            private void ResetSelectedChannel() { _SelectedChannel?.Reset(); }
+            private void ResetDetectedChannels() { _DetectedChannels = new(); }
+            private void ResetSelectedChannel() { _SelectedChannel = null; }
             private void ResetMeasuredPosition() { /* property has no backingfield */ }
             private void ResetMeasuredChannel() { /* property has no backingfield */ }
             private void ResetNumPos() { _NumPos = 8; }
-            public void ResetSmoothingFactor() { _SmoothingFactor = 1; }
-
+            private void ResetSmoothingFactor() { _SmoothingFactor = 1; }
             #endregion
 
             #region BackingField
@@ -472,8 +494,8 @@ namespace Audyssey
             private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
             private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
             private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
-            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
-            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; RaisePropertyChanged("Inspector_IsChecked"); }
+            private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }
+            private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; }
             private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
             private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
             private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
@@ -503,6 +525,7 @@ namespace Audyssey
                         RaisePropertyChanged(prop.Name);
                     }
                 }
+                RaisePropertyChanged("Inspector_IsChecked");
             }
             #endregion
 

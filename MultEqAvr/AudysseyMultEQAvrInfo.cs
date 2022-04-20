@@ -18,6 +18,7 @@ namespace Audyssey
             private bool? _LFC;
             private bool? _Auro;
             private string _Upgrade;
+            private string _DolbyVersion;
             #endregion
 
             #region Properties
@@ -139,6 +140,18 @@ namespace Audyssey
                 {
                     _Upgrade = value;
                     RaisePropertyChanged("Upgrade");
+                }
+            }
+            public string DolbyVersion
+            {
+                get
+                {
+                    return _DolbyVersion;
+                }
+                set
+                {
+                    _DolbyVersion = value;
+                    RaisePropertyChanged("DolbyVersion");
                 }
             }
             #endregion

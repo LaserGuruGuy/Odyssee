@@ -14,10 +14,10 @@ namespace Audyssey
             string ChData { get; set; }
             [JsonProperty(Order = 3)]
             [JsonConverter(typeof(DecimalJsonConverter))]
-            float[] FilData { get; set; }
+            double[] FilData { get; set; }
             [JsonProperty(Order = 4)]
             [JsonConverter(typeof(DecimalJsonConverter))]
-            float[] DispData { get; set; }
+            double[] DispData { get; set; }
         }
         public partial class AudysseyMultEQAvr :IDisFil, INotifyPropertyChanged
         {
@@ -27,16 +27,16 @@ namespace Audyssey
             [JsonIgnore]
             public string ChData { get; set; }
             [JsonIgnore]
-            public float[] FilData
+            public double[] FilData
             {
                 get
                 {
-                    float[] FilData = null;
+                    double[] FilData = null;
                     if (DetectedChannels != null)
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Channel != null && ch.Skip != null)
+                            if (ch.Channel != null && ch.Skip != null && ch.AudyCurveFilter != null && ch.FlatCurveFilter != null)
                             {
                                 if (ch.Skip == false)
                                 {
@@ -44,12 +44,19 @@ namespace Audyssey
                                     {
                                         if (EqType.Equals("Audy"))
                                         {
-                                            FilData = ch.AudyCurveFilter["dispLargeData"];
+                                            if (ch.AudyCurveFilter.Count > 0)
+                                            {
+                                                FilData = ch.AudyCurveFilter["dispLargeData"];
+                                            }
                                         }
                                         else if(EqType.Equals("Flat"))
                                         {
-                                            FilData = ch.FlatCurveFilter["dispLargeData"];
+                                            if (ch.FlatCurveFilter.Count > 0)
+                                            {
+                                                FilData = ch.FlatCurveFilter["dispLargeData"];
+                                            }
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -71,16 +78,23 @@ namespace Audyssey
                                     {
                                         if (EqType.Equals("Audy"))
                                         {
+                                            if (ch.AudyCurveFilter == null)
+                                            {
+                                                ch.AudyCurveFilter = new();
+                                            }
                                             ch.AudyCurveFilter.Remove("dispLargeData");
                                             ch.AudyCurveFilter.Add("dispLargeData", value);
-                                            break;
                                         }
                                         else if (EqType.Equals("Flat"))
                                         {
+                                            if (ch.FlatCurveFilter == null)
+                                            {
+                                                ch.FlatCurveFilter = new();
+                                            }
                                             ch.FlatCurveFilter.Remove("dispLargeData");
                                             ch.FlatCurveFilter.Add("dispLargeData", value);
-                                            break;
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -89,16 +103,16 @@ namespace Audyssey
                 }
             }
             [JsonIgnore]
-            public float[] DispData
+            public double[] DispData
             {
                 get
                 {
-                    float[] DispData = null;
+                    double[] DispData = null;
                     if (DetectedChannels != null)
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Channel != null && ch.Skip != null)
+                            if (ch.Channel != null && ch.Skip != null && ch.AudyCurveFilter != null && ch.FlatCurveFilter != null)
                             {
                                 if (ch.Skip == false)
                                 {
@@ -106,12 +120,19 @@ namespace Audyssey
                                     {
                                         if (EqType.Equals("Audy"))
                                         {
-                                            DispData = ch.AudyCurveFilter["dispSmallData"];
+                                            if (ch.AudyCurveFilter.Count > 0)
+                                            {
+                                                DispData = ch.AudyCurveFilter["dispSmallData"];
+                                            }
                                         }
                                         else if (EqType.Equals("Flat"))
                                         {
-                                            DispData = ch.FlatCurveFilter["dispSmallData"];
+                                            if (ch.FlatCurveFilter.Count > 0)
+                                            {
+                                                DispData = ch.FlatCurveFilter["dispSmallData"];
+                                            }
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -133,16 +154,23 @@ namespace Audyssey
                                     {
                                         if (EqType.Equals("Audy"))
                                         {
+                                            if (ch.AudyCurveFilter == null)
+                                            {
+                                                ch.AudyCurveFilter = new();
+                                            }
                                             ch.AudyCurveFilter.Remove("dispSmallData");
                                             ch.AudyCurveFilter.Add("dispSmallData", value);
-                                            break;
                                         }
                                         else if (EqType.Equals("Flat"))
                                         {
+                                            if (ch.FlatCurveFilter == null)
+                                            {
+                                                ch.FlatCurveFilter = new();
+                                            }
                                             ch.FlatCurveFilter.Remove("dispSmallData");
                                             ch.FlatCurveFilter.Add("dispSmallData", value);
-                                            break;
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -150,26 +178,6 @@ namespace Audyssey
                     }
                 }
             }
-            #endregion
-
-            #region Methods
-            public float[] ByteToFloatArray(sbyte[] Bytes)
-            {
-                if (Bytes.Length % 4 != 0) throw new ArgumentException();
-                float[] Floats = new float[Bytes.Length / 4];
-                Buffer.BlockCopy(Bytes, 0, Floats, 0, Bytes.Length);
-                return Floats;
-            }
-            public sbyte[] FloatToByteArray(float[] Floats)
-            {
-                sbyte[] Bytes = new sbyte[Floats.Length * 4];
-                Buffer.BlockCopy(Floats, 0, Bytes, 0, Bytes.Length);
-                return Bytes;
-            }
-            public bool ShouldSerializeEqType() { return false; }
-            public bool ShouldSerializeChData() { return false; }
-            public bool ShouldSerializeFilData() { return false; }
-            public bool ShouldSerializeDispData() { return false; }
             #endregion
         }
     }

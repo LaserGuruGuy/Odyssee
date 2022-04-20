@@ -209,6 +209,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem xcopy /E /Y /R $(TargetDir) \\HTPC\Odyssee\</PostBuildEvent>
+    <PostBuildEvent>xcopy /E /Y /R $(TargetDir) \\HTPC\Odyssee\</PostBuildEvent>
   </PropertyGroup>
 </Project>

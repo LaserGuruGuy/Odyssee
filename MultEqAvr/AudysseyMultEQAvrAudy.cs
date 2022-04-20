@@ -23,12 +23,12 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : IAudy, INotifyPropertyChanged
         {
             #region BackingField
-            private bool? _AudyDynVol = false;
-            private string _AudyDynSet = "H";
-            private bool? _AudyMultEq = true;
-            private string _AudyEqSet = "Flat";
-            private bool? _AudyLfc = false;
-            private int? _AudyLfcLev = 7;
+            private bool? _AudyDynVol;
+            private string _AudyDynSet;
+            private bool? _AudyMultEq;
+            private string _AudyEqSet;
+            private bool? _AudyLfc;
+            private int? _AudyLfcLev;
             #endregion
 
             #region Properties
@@ -109,27 +109,27 @@ namespace Audyssey
             #region ResetMethods
             public void ResetAudyDynVol()
             {
-                _AudyDynVol = false;
+                _AudyDynVol = null;
             }
             public void ResetAudyDynSet()
             {
-                _AudyDynSet = "H";
+                _AudyDynSet = string.Empty;
             }
             public void ResetAudyMultEq()
             {
-                _AudyMultEq = true;
+                _AudyMultEq = null;
             }
             public void ResetAudyEqSet()
             {
-                _AudyEqSet = "Flat";
+                _AudyEqSet = string.Empty;
             }
             public void ResetAudyLfc()
             {
-                _AudyLfc = false;
+                _AudyLfc = null;
             }
             public void ResetAudyLfcLev()
             {
-                _AudyLfcLev = 7;
+                _AudyLfcLev = null;
             }
             #endregion
         }

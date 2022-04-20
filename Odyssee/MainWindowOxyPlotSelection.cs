@@ -30,7 +30,7 @@ namespace Odyssee
         private void ListView_CheckBox_ResponseDataSticky_Initialized(object sender, EventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;
-            KeyValuePair<string, float[]> keyValuePair = (KeyValuePair<string, float[]>)checkBox.DataContext;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
             checkBox.IsChecked = audysseyMultEQAvr.SelectedChannel.StickyResponseData.Contains(keyValuePair);
             checkBox.Background = ResponseDataTraceColor[keyValuePair.Key];
         }
@@ -38,7 +38,7 @@ namespace Odyssee
         private void ListView_CheckBox_ResponseDataSticky_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;
-            KeyValuePair<string, float[]> keyValuePair = (KeyValuePair<string, float[]>)checkBox.DataContext;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
             if (!audysseyMultEQAvr.SelectedChannel.StickyResponseData.Contains(keyValuePair))
             {
                 audysseyMultEQAvr.SelectedChannel.StickyResponseData.Add(keyValuePair);
@@ -49,7 +49,7 @@ namespace Odyssee
         private void ListView_CheckBox_ResponseDataSticky_Unchecked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;
-            KeyValuePair<string, float[]> keyValuePair = (KeyValuePair<string, float[]>)checkBox.DataContext;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
             audysseyMultEQAvr.SelectedChannel.StickyResponseData.Remove(keyValuePair);
             DrawChart();
         }

@@ -33,12 +33,13 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : IFin, IAmp, INotifyPropertyChanged
         {
             #region BackingField
-            private string _AudyFinFlg = "NotFin";
-            private bool? _AudyDynEq = true;
-            private int? _AudyEqRef = 0;
+            private string _AudyFinFlg;// = "NotFin";
+            private bool? _AudyDynEq;// = true;
+            private int? _AudyEqRef;// = 0;
             #endregion
 
             #region Properties
+            [JsonIgnore]
             public UniqueObservableCollection<Dictionary<string, decimal>> ChLevel
             {
                 get
@@ -79,6 +80,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public UniqueObservableCollection<Dictionary<string, object>> Crossover
             {
                 get
@@ -122,6 +124,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public UniqueObservableCollection<Dictionary<string, string>> SpConfig
             {
                 get
@@ -174,6 +177,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public UniqueObservableCollection<Dictionary<string, int>> Distance
             {
                 get
@@ -223,6 +227,7 @@ namespace Audyssey
                     }
                 }
             }
+            [JsonIgnore]
             public string AudyFinFlg
             {
                 get
@@ -264,15 +269,15 @@ namespace Audyssey
             #region ResetMethods
             public void ResetAudyFinFlg()
             {
-                _AudyFinFlg = "NotFin";
+                _AudyFinFlg = null;
             }
             public void ResetAudyDynEq()
             {
-                _AudyDynEq = true;
+                _AudyDynEq = null;
             }
             public void ResetAudyEqRef()
             {
-                _AudyEqRef = 0;
+                _AudyEqRef = null;
             }
             #endregion
         }

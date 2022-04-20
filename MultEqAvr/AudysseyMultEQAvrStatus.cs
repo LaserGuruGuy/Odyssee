@@ -1,4 +1,5 @@
 using Audyssey.MultEQ.List;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,7 +15,7 @@ namespace Audyssey
             private bool? _Mic;
             private string _AmpAssign;
             private string _AssignBin;
-            public ObservableCollection<Dictionary<string, string>> _ChSetup;
+            private ObservableCollection<Dictionary<string, string>> _ChSetup;
             private bool? _BTTXStatus;
             private bool? _SpPreset;
             #endregion
@@ -68,6 +69,7 @@ namespace Audyssey
                     RaisePropertyChanged("AssignBin");
                 }
             }
+            [JsonIgnore]
             public ObservableCollection<Dictionary<string,string>> ChSetup
             {
                 get
