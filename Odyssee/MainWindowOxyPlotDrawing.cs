@@ -176,8 +176,8 @@ namespace Odyssee
         bool LogarithmicAxis = false;
 
         private Dictionary<string, Brush> ResponseDataTraceColor = new Dictionary<string, Brush> { { "0", Brushes.Black }, { "1", Brushes.Blue }, { "2", Brushes.Violet }, { "3", Brushes.Green }, { "4", Brushes.Orange }, { "5", Brushes.Red }, { "6", Brushes.Cyan }, { "7", Brushes.DeepPink } };
-        private Dictionary<string, Brush> FlatCurveFilterTraceColor = new Dictionary<string, Brush> { { "coefficient32kHz", Brushes.BlueViolet }, { "coefficien441kHz", Brushes.BlueViolet }, { "coefficient48kHz", Brushes.BlueViolet }, { "dispLargeData", Brushes.BlueViolet }, { "dispSmallData", Brushes.BlueViolet } };
-        private Dictionary<string, Brush> ReferenceCurveFilterTraceColor = new Dictionary<string, Brush> { { "coefficient32kHz", Brushes.Maroon }, { "coefficien441kHz", Brushes.Maroon }, { "coefficient48kHz", Brushes.Maroon }, { "dispLargeData", Brushes.Maroon }, { "dispSmallData", Brushes.Maroon } };
+        private Dictionary<string, Brush> FlatCurveFilterTraceColor = new Dictionary<string, Brush> { { "coefficient32kHz", Brushes.BlueViolet }, { "coefficient441kHz", Brushes.BlueViolet }, { "coefficient48kHz", Brushes.BlueViolet }, { "dispLargeData", Brushes.BlueViolet }, { "dispSmallData", Brushes.BlueViolet } };
+        private Dictionary<string, Brush> ReferenceCurveFilterTraceColor = new Dictionary<string, Brush> { { "coefficient32kHz", Brushes.Maroon }, { "coefficient441kHz", Brushes.Maroon }, { "coefficient48kHz", Brushes.Maroon }, { "dispLargeData", Brushes.Maroon }, { "dispSmallData", Brushes.Maroon } };
 
         private string selectedAxisLimits = "RadioButton_RangeChirp";
         private Dictionary<string, AxisLimit> AxisLimits = new Dictionary<string, AxisLimit>()

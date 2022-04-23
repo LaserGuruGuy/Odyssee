@@ -358,6 +358,7 @@ namespace Audyssey
                                         ch.ResponseData = new();
                                     }
                                     ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, ch.ChannelReport.ResponseCoef));
+                                    RaisePropertyChanged("ResponseData");
                                     break;
                                 }
                             }
@@ -368,10 +369,10 @@ namespace Audyssey
                                     ch.ResponseData = new();
                                 }
                                 ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, ch.ChannelReport.ResponseCoef));
+                                RaisePropertyChanged("ResponseData");
                                 break;
                             }
                         }
-                        RaisePropertyChanged("ResponseData");
                     }
                 }
             }

@@ -42,14 +42,14 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
                 <Menu Name="Menu" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Left" VerticalAlignment="Stretch" Background="Transparent" FontSize="13">
-                    <MenuItem Header="_File" Height="30" Width="50" BorderThickness="0">
+                    <MenuItem Header="_File" Height="30">
                         <MenuItem Name="menuNew" Header="_New" Command="New" InputGestureText="Ctrl+N"/>
                         <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
                         <MenuItem Name="menuSaveAs" Header="_Save as..." Command="SaveAs" InputGestureText="Ctrl+S"/>
                         <Separator/>
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close" InputGestureText="Alt+F4"/>
                     </MenuItem>
-                    <MenuItem Header="_Receiver"  Height="30" Width="70">
+                    <MenuItem Header="_Receiver">
                         <MenuItem Header="_Detect Receiver" Name="detectReceiver" Click="MenuItem_DetectReceiver_OnClick"/>
                         <MenuItem Header="Connect _Receiver" Name="MenuItem_ConnectReceiver" Click="MenuItem_ConnectReceiver_OnClick" IsCheckable="True" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Connect S_niffer" Name="connectSniffer" Click="MenuItem_ConnectSniffer_OnClick" IsCheckable="True" IsChecked="{Binding SnifferAttach_IsChecked, Mode=TwoWay}"/>
@@ -71,6 +71,13 @@
                         <MenuItem Header="Init Coefs" Name="MenuItem_SetAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" IsCheckable="True" IsChecked="{Binding InitCoefs_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Set CoefDt" Name="MenuItem_SetAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" IsCheckable="True" IsChecked="{Binding SetCoefDt_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="AudyFinFlg" Name="MenuItem_AudyFinFlag" Click="MenuItem_AudyFinFlag_OnClick" IsCheckable="True" IsChecked="{Binding AudyFinFlag_IsChecked, Mode=TwoWay}"/>
+                    </MenuItem>
+                    <MenuItem Header="_Export">
+                        <MenuItem Header="Export Impulse Response to Wave File" Name="MenuItem_Export_ChannelResponseData_WaveFile" Click="MenuItem_Export_ChannelResponseData_WaveFile_OnClick"/>
+                        <MenuItem Header="Export Impulse Response to Frd File" Name="MenuItem_Export_ChannelResponseData_FrdFile" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick"/>
+                    </MenuItem>
+                    <MenuItem Header="_Import" Margin="0,0,10,0">
+                        <MenuItem Header="Import Curve Filter Coefficients from Wave File" Name="MenuItem_Import_CurveFilterCoeff_WaveFile" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick"/>
                     </MenuItem>
                 </Menu>
                 <ToggleButton Name="ToggleButton_ConnectReceiver" Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}" ToolTip="Connect to the Receiver">

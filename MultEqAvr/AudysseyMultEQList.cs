@@ -106,6 +106,12 @@ namespace Audyssey
             private static ObservableCollection<string> _SampleRateList = new()
             { "coefficient32kHz", "coefficient441kHz", "coefficient48kHz" };
 
+            private static ObservableCollection<int> _SampleFrequencyList = new()
+            { 32000, 44100, 48000 };
+
+            private static ObservableCollection<string> _CurveFilterList = new()
+            { "referenceCurveFilter", "flatCurveFilter" };
+
             private static ObservableCollection<string> _AudyDynSetList = new()
             { "H", "M", "L" };
 
@@ -136,6 +142,24 @@ namespace Audyssey
                 get
                 {
                     return _SampleRateList;
+                }
+            }
+
+            [JsonIgnore]
+            public static ObservableCollection<int> SampleFrequencyList
+            {
+                get
+                {
+                    return _SampleFrequencyList;
+                }
+            }
+
+            [JsonIgnore]
+            public static ObservableCollection<string> CurveFilterList
+            {
+                get
+                {
+                    return _CurveFilterList;
                 }
             }
 
