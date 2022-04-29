@@ -15,7 +15,7 @@ namespace Audyssey
             private bool? _Mic;
             private string _AmpAssign;
             private string _AssignBin;
-            private ObservableCollection<Dictionary<string, string>> _ChSetup;
+            private UniqueObservableCollection<Dictionary<string, string>> _ChSetup;
             private bool? _BTTXStatus;
             private bool? _SpPreset;
             #endregion
@@ -70,7 +70,7 @@ namespace Audyssey
                 }
             }
             [JsonIgnore]
-            public ObservableCollection<Dictionary<string,string>> ChSetup
+            public UniqueObservableCollection<Dictionary<string,string>> ChSetup
             {
                 get
                 {
@@ -79,6 +79,7 @@ namespace Audyssey
                 set
                 {
                     _ChSetup = value;
+                    _ChSetup.Sort();
                     RaisePropertyChanged("ChSetup");
                 }
             }

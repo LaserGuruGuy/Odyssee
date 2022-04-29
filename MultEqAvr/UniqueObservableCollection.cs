@@ -1,11 +1,42 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace Audyssey
 {
     namespace MultEQAvr
     {
+        static class Extensions
+        {
+            static readonly StringCollection SpeakerOrder = new() { "FL", "C", "FR", "SRA", "SWMIX1", "SLA", "SWMIX2" };
+            public static void Sort<T>(this UniqueObservableCollection<T> source)
+            {
+                if (source.GetType() == typeof(UniqueObservableCollection<Dictionary<string, string>>))
+                {
+                    UniqueObservableCollection<Dictionary<string, string>> collection = source as UniqueObservableCollection<Dictionary<string, string>>;
+                    for (var i = source.Count() - 1; i > 0; i--)
+                    {
+                        for (var j = 1; j <= i; j++)
+                        {
+                            Dictionary<string, string> o1 = collection[j - 1];
+                            Dictionary<string, string> o2 = collection[j];
+
+                            var t1 = (o1 as Dictionary<string, string>).ElementAt(0);
+                            var t2 = (o2 as Dictionary<string, string>).ElementAt(0);
+
+                            if (SpeakerOrder.IndexOf(t1.Key) > SpeakerOrder.IndexOf(t2.Key))
+                            {
+                                collection.Remove(o1);
+                                collection.Insert(j, o1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public class UniqueObservableCollection<T> : ObservableCollection<T>
         {
             protected override void InsertItem(int index, T item)
