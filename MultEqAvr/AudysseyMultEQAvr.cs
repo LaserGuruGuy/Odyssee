@@ -357,7 +357,14 @@ namespace Audyssey
                                     {
                                         ch.ResponseData = new();
                                     }
-                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, ch.ChannelReport.ResponseCoef));
+                                    if (ch.ChannelReport.ResponseCoef == null)
+                                    {
+                                        ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData));
+                                    }
+                                    else
+                                    {
+                                        ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, (double)ch.ChannelReport.ResponseCoef));
+                                    }
                                     RaisePropertyChanged("ResponseData");
                                     break;
                                 }
@@ -368,7 +375,14 @@ namespace Audyssey
                                 {
                                     ch.ResponseData = new();
                                 }
-                                ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, ch.ChannelReport.ResponseCoef));
+                                if (ch.ChannelReport.ResponseCoef == null)
+                                {
+                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData));
+                                }
+                                else
+                                {
+                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, (double)ch.ChannelReport.ResponseCoef));
+                                }
                                 RaisePropertyChanged("ResponseData");
                                 break;
                             }
@@ -405,7 +419,7 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            private double[] ByteToDoubleArray(byte[] Bytes, double ResponseCoef)
+            private double[] ByteToDoubleArray(byte[] Bytes, double ResponseCoef = 1.0d)
             {
                 if (Bytes.Length % 4 != 0) throw new ArgumentException();
 

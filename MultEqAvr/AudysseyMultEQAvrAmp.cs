@@ -72,6 +72,10 @@ namespace Audyssey
                                 {
                                     if (ch.Channel.Equals(el.Key))
                                     {
+                                        if (ch.ChLevel == null)
+                                        {
+                                            ch.ChLevel = new();
+                                        }
                                         ch.ChLevel = el.Value / 10m;
                                     }
                                 }
@@ -115,6 +119,10 @@ namespace Audyssey
                                     {
                                         if (ch.Channel.Equals(el.Key))
                                         {
+                                            if (ch.Crossover == null)
+                                            {
+                                                ch.Crossover = new();
+                                            }
                                             ch.Crossover = el.Value;
                                         }
                                     }

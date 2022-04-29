@@ -7,7 +7,7 @@
         xmlns:CustomControls="clr-namespace:CustomControls;assembly=CustomControls"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1280" Height="1024" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
+        Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1600" Height="768" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
         Icon=".\Icons\Odyssee.ico">
     <!-- DataContext="{Binding RelativeSource={RelativeSource Self}}" -->
     <WindowChrome.WindowChrome>
@@ -185,9 +185,9 @@
                                             <Label Grid.Row="1" Grid.Column="0" Content="Speaker Polarity"></Label>
                                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Polarity}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
                                             <Label Grid.Row="2" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
-                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5" ToolTip="For sound travelling through air at 343 m/s at 20 °C"></TextBox>
                                             <Label Grid.Row="3" Grid.Column="0" Content="Response Coefficient"></Label>
-                                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ResponseCoef}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ResponseCoef}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5" ToolTip="Chirp volume is adapted to speaker sensitivity and environmental background noise. Scales ResponseData for each Position"></TextBox>
                                         </Grid>
                                     </GroupBox>
                                     <GroupBox Header="Channel Data" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">

@@ -10,22 +10,22 @@ namespace Audyssey
         {
             public string SpConnect { get; set; }
             public string Polarity { get; set; }
-            public int Distance { get; set; }
-            public double ResponseCoef { get; set; }
+            public int? Distance { get; set; }
+            public double? ResponseCoef { get; set; }
         }
 
         public class ChannelReport : ChannelReportList, INotifyPropertyChanged
         {
             #region BackingField
-            private string _SpConnect = string.Empty;
-            private string _Polarity = string.Empty;
-            private int _Distance;
+            private string _SpConnect;
+            private string _Polarity;
+            private int? _Distance;
             [JsonIgnore]
-            private double _ResponseCoef;
+            private double? _ResponseCoef;
             #endregion
 
             #region Properties
-            public string SpConnect
+            public string? SpConnect
             {
                 get
                 {
@@ -37,7 +37,7 @@ namespace Audyssey
                     RaisePropertyChanged("SpConnect");
                 }
             }
-            public string Polarity
+            public string? Polarity
             {
                 get
                 {
@@ -49,7 +49,7 @@ namespace Audyssey
                     RaisePropertyChanged("Polarity");
                 }
             }
-            public int Distance
+            public int? Distance
             {
                 get
                 {
@@ -61,7 +61,7 @@ namespace Audyssey
                     RaisePropertyChanged("Distance");
                 }
             }
-            public double ResponseCoef
+            public double? ResponseCoef
             {
                 get
                 {
@@ -76,10 +76,10 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            private void ResetSpConnect() { _SpConnect = string.Empty; }
-            private void ResetPolarity() { _Polarity = string.Empty; }
-            private void ResetDistance() { _Distance = 0; }
-            private void ResetResponseCoef() { _ResponseCoef = 0; }
+            private void ResetSpConnect() { _SpConnect = null; }
+            private void ResetPolarity() { _Polarity = null; }
+            private void ResetDistance() { _Distance = null; }
+            private void ResetResponseCoef() { _ResponseCoef = null; }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))
