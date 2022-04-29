@@ -252,9 +252,9 @@ namespace Odyssee
             return result;
         }
 
-        private void WriteWaveFile(string FileName, float[] WaveData, int SampleRate)
+        private void WriteWaveFile(string FileName, float[] WaveData, int SampleRate, int Channels = 1)
         {
-            WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, 1);
+            WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, Channels);
             using (WaveFileWriter writer = new WaveFileWriter(FileName, WaveFormat))
             {
                 try
@@ -321,9 +321,9 @@ namespace Odyssee
             return result;
         }
 
-        private float[] ReadWaveFile(string FileName, int SampleRate)
+        private float[] ReadWaveFile(string FileName, int SampleRate, int Channels = 1)
         {
-            WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, 1);
+            WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, Channels);
 
             var readback = new List<float>();
             try
@@ -346,7 +346,7 @@ namespace Odyssee
             {
                 MessageBox.Show(ex.Message, FileName, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            return new float[2048];
+            return new float[1024];
         }
 
         private void MenuItem_Export_ChannelResponseData_FrdFile_OnClick(object sender, RoutedEventArgs e)
