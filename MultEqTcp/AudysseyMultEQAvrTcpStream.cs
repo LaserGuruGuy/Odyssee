@@ -14,12 +14,9 @@ namespace Audyssey
         {
             private char _TransmitReceive;
             private UInt16 _TotalLength;
-            private byte[] _Command;
             private byte _CurrentPacket;
             private byte _TotalPackets;
-            private UInt16 _CommandLength;
             private UInt16 _DataLength;
-            private const UInt16 _HeaderLength = 9;
 
             private byte[][] DataByteJaggedArray = null;
             private int DataByteJaggedArrayTotalLength;

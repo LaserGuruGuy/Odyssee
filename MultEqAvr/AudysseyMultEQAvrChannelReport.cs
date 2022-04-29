@@ -25,7 +25,7 @@ namespace Audyssey
             #endregion
 
             #region Properties
-            public string? SpConnect
+            public string SpConnect
             {
                 get
                 {
@@ -37,7 +37,7 @@ namespace Audyssey
                     RaisePropertyChanged("SpConnect");
                 }
             }
-            public string? Polarity
+            public string Polarity
             {
                 get
                 {

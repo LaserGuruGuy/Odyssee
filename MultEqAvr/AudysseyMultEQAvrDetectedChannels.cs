@@ -20,7 +20,7 @@ namespace Audyssey
             private Dictionary<string, double[]> _AudyCurveFilter = new(); //{ { "dispSmallData", new float[9] }, { "dispLargeData", new float[61] }, { "coefficient48kHz", new float[704] }, { "coefficient441kHz", new float[704] }, { "coefficient32kHz", new float[704] } };
             private Dictionary<string, double[]> _FlatCurveFilter = new(); //{ { "dispSmallData", new float[9] }, { "dispLargeData", new float[61] }, { "coefficient48kHz", new float[704] }, { "coefficient441kHz", new float[704] }, { "coefficient32kHz", new float[704] } };
             private decimal? _ChLevel;// = 0m;
-            private object? _Crossover;// = "F";
+            private object _Crossover;// = "F";
             #endregion
 
             #region Properties
@@ -132,7 +132,7 @@ namespace Audyssey
                     RaisePropertyChanged("ChLevel");
                 }
             }
-            public object? Crossover
+            public object Crossover
             {
                 get
                 {

@@ -10,12 +10,13 @@ namespace Audyssey
     {
         static class Extensions
         {
-            static readonly StringCollection SpeakerOrder = new() { "FL", "C", "FR", "SRA", "SWMIX1", "SLA", "SWMIX2" };
+            static readonly StringCollection SpeakerOrder = new() { "FL", "C", "FR", "SRA", "SBR", "SBL", "SLA", "FHR", "TFR", "TMR", "TRR", "RHR", "TRR", "TRL", "RHL", "TRL", "TML", "TFL", "FHL", "SWMIX1", "SWMIX2"};
             public static void Sort<T>(this UniqueObservableCollection<T> source)
             {
                 if (source.GetType() == typeof(UniqueObservableCollection<Dictionary<string, string>>))
                 {
                     UniqueObservableCollection<Dictionary<string, string>> collection = source as UniqueObservableCollection<Dictionary<string, string>>;
+
                     for (var i = source.Count() - 1; i > 0; i--)
                     {
                         for (var j = 1; j <= i; j++)

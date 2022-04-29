@@ -133,6 +133,13 @@ namespace Odyssee
                     audysseyMultEQAvrTcp?.ExitAudysseyMode();
                 }
             }
+            else if (Response.Equals("TIMEOUT") && MessageBoxResult.OK == MessageBox.Show(
+                        "Error during receiving responsedata: " + Response,
+                        "Continue with last position ", MessageBoxButton.OKCancel, MessageBoxImage.Question))
+            {
+                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvrTcp?.GetRespon(OnCmdAckMicrophone_GetRespon);
+            }
             else
             {
                 audysseyMultEQAvr.Serialized += Response + "\n";
