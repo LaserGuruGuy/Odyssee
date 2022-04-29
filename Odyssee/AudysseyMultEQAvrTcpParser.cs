@@ -12,7 +12,7 @@ namespace Audyssey
 {
     namespace MultEQTcp
     {
-        public delegate void CmdAckCallBack(bool IsAck);
+        public delegate void CmdAckCallBack(string Response);
 
         public class AudysseyMultEQAvrTcp : INotifyPropertyChanged
         {
@@ -767,6 +767,7 @@ namespace Audyssey
                                                 {
                                                     byte[] Data = new byte[] { ESC };
                                                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(Data, null, null);
+                                                    AudysseyMultEQAvr.AudysseyMode_IsChecked = false;
                                                     cmdAck.Progress();
                                                 }
                                                 else if (Response.Comm.Equals(NACK) && cmdAck.Pending)
@@ -775,6 +776,10 @@ namespace Audyssey
                                                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(Data, null, null);
                                                     cmdAck.Ack();
                                                 }
+                                            }
+                                            else
+                                            {
+                                                AudysseyMultEQAvr.AudysseyMode_IsChecked = false;
                                             }
                                         }
                                         break;
@@ -844,12 +849,14 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.ResponseData = new() { RspData = DataByte };
-                                        AudysseyMultEQAvr.Serialized += "Success\n";
+                                        AudysseyMultEQAvr.Serialized += "SUCCESS\n";
+                                        AudysseyMultEQAvr.GetRespon_IsChecked = true;
                                         cmdAck.Ack();
                                     }
                                     else
                                     {
                                         AudysseyMultEQAvr.Serialized += CmdString + " segment " + CurrentPacket.ToString() + " of " + TotalPackets.ToString() + " with " + Encoding.ASCII.GetString(DataByte) + " bytes" + "\n";
+                                        AudysseyMultEQAvr.GetRespon_IsChecked = false;
                                         cmdAck.Progress();
                                     }
                                 }
@@ -997,7 +1004,7 @@ namespace Audyssey
             {
                 Timer.Stop();
                 Pending = false;
-                Callback?.Invoke(true);
+                Callback?.Invoke("ACK");
             }
 
             /// <summary>
@@ -1010,6 +1017,7 @@ namespace Audyssey
                 {
                     Timer.Stop();
                     Timer.Start();
+                    Callback?.Invoke("INPROGRESS");
                 }
             }
 
@@ -1020,7 +1028,7 @@ namespace Audyssey
             {
                 Timer.Stop();
                 Pending = false;
-                Callback?.Invoke(false);
+                Callback?.Invoke("NACK");
             }
 
             /// <summary>
@@ -1029,7 +1037,7 @@ namespace Audyssey
             private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
             {
                 Pending = false;
-                Callback?.Invoke(false);
+                Callback?.Invoke("TIMEOUT");
             }
         }
     }

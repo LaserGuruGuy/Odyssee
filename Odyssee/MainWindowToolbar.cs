@@ -14,12 +14,12 @@ namespace Odyssee
 
         private void OnButtonClick_Inspector(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.GetAvrInfo(OnInspectorCmdAckAvrInfo);
+            audysseyMultEQAvrTcp?.GetAvrInfo(OnInspectorCmdResponseAvrInfo);
         }
 
-        private void OnInspectorCmdAckAvrInfo(bool IsAck)
+        private void OnInspectorCmdResponseAvrInfo(string Response)
         {
-            if (IsAck)
+            if (Response.Equals("ACK"))
             {
                 audysseyMultEQAvrTcp?.GetAvrStatus();
             }
@@ -75,51 +75,67 @@ namespace Odyssee
 
         private void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.EnterAudysseyMode(OnCmdAckMicrophone_EnterAudysseyMode);
+            audysseyMultEQAvrTcp?.EnterAudysseyMode(OnCmdResponseMicrophone_EnterAudysseyMode);
         }
 
-        private void OnCmdAckMicrophone_EnterAudysseyMode(bool IsAck)
+        private void OnCmdResponseMicrophone_EnterAudysseyMode(string Response)
         {
-            if (IsAck)
+            if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvrTcp?.SetPosNum(OnCmdAckMicrophone_SetPosNum);
+                audysseyMultEQAvrTcp?.SetPosNum(OnCmdResponseMicrophone_SetPosNum);
+            }
+            else
+            {
+                audysseyMultEQAvr.Serialized += Response + "\n";
             }
         }
 
-        private void OnCmdAckMicrophone_SetPosNum(bool IsAck)
+        private void OnCmdResponseMicrophone_SetPosNum(string Response)
         {
-            if (IsAck)
+            if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvrTcp?.StartChnl(OnCmdAckMicrophone_StartChnl);
+                audysseyMultEQAvrTcp?.StartChnl(OnCmdResponseMicrophone_StartChnl);
+            }
+            else
+            {
+                audysseyMultEQAvr.Serialized += Response + "\n";
             }
         }
 
-        private void OnCmdAckMicrophone_StartChnl(bool IsAck)
+        private void OnCmdResponseMicrophone_StartChnl(string Response)
         {
-            if (IsAck)
+            if (Response.Equals("ACK"))
             {
                 audysseyMultEQAvrTcp?.GetRespon(OnCmdAckMicrophone_GetRespon);
             }
+            else
+            {
+                audysseyMultEQAvr.Serialized += Response + "\n";
+            }
         }
 
-        private void OnCmdAckMicrophone_GetRespon(bool IsAck)
+        private void OnCmdAckMicrophone_GetRespon(string Response)
         {
-            if (IsAck)
+            if (Response.Equals("ACK"))
             {
                 if (audysseyMultEQAvr.IsNextGetRespon)
                 {
-                    audysseyMultEQAvrTcp?.StartChnl(OnCmdAckMicrophone_StartChnl);
+                    audysseyMultEQAvrTcp?.StartChnl(OnCmdResponseMicrophone_StartChnl);
                 }
                 else if (audysseyMultEQAvr.IsNextSetPosNum && MessageBoxResult.Yes == MessageBox.Show(
                         "Move microphone to next position: " + (audysseyMultEQAvr.DetectedChannels[0].ResponseData.Count + 1), 
                         "Proceed with callibration", MessageBoxButton.YesNo, MessageBoxImage.Question))
                 {
-                    audysseyMultEQAvrTcp?.SetPosNum(OnCmdAckMicrophone_SetPosNum);
+                    audysseyMultEQAvrTcp?.SetPosNum(OnCmdResponseMicrophone_SetPosNum);
                 }
                 else
                 {
                     audysseyMultEQAvrTcp?.ExitAudysseyMode();
                 }
+            }
+            else
+            {
+                audysseyMultEQAvr.Serialized += Response + "\n";
             }
         }
 

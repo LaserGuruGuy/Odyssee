@@ -451,6 +451,7 @@ namespace Audyssey
             private bool _AudyFinFlag_IsChecked;
             private bool _SetPosNum_IsChecked;
             private bool _StartChnl_IsChecked;
+            private bool _GetRespon_IsChecked;
             private bool _SetAmp_IsChecked;
             private bool _SetAudy_IsChecked;
             private bool _SetDisFil_IsChecked;
@@ -492,6 +493,9 @@ namespace Audyssey
             public bool SetPosNum_IsChecked { get { return _SetPosNum_IsChecked; } set { _SetPosNum_IsChecked = value; RaisePropertyChanged("SetPosNum_IsChecked"); } }
             [JsonIgnore]
             public bool StartChnl_IsChecked { get { return _StartChnl_IsChecked; } set { _StartChnl_IsChecked = value; RaisePropertyChanged("StartChnl_IsChecked"); } }
+
+            [JsonIgnore]
+            public bool GetRespon_IsChecked { get { return _GetRespon_IsChecked; } set { _GetRespon_IsChecked = value; RaisePropertyChanged("GetRespon_IsChecked"); } }
             [JsonIgnore]
             public bool SetAmp_IsChecked { get { return _SetAmp_IsChecked; } set { _SetAmp_IsChecked = value; RaisePropertyChanged("SetAmp_IsChecked"); } }
             [JsonIgnore]
