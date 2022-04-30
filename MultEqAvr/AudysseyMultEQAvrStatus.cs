@@ -8,7 +8,7 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        public class AvrStatus : INotifyPropertyChanged
+        public class AvrStatus : StatusList, INotifyPropertyChanged
         {
             #region BackingField
             private bool? _HPPlug;
@@ -79,7 +79,7 @@ namespace Audyssey
                 set
                 {
                     _ChSetup = value;
-                    _ChSetup.Sort();
+                    _ChSetup.Sort(ChSetupList);
                     RaisePropertyChanged("ChSetup");
                 }
             }

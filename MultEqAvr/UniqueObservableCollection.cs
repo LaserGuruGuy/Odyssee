@@ -10,12 +10,12 @@ namespace Audyssey
     {
         static class Extensions
         {
-            static readonly StringCollection SpeakerOrder = new() { "FL", "C", "FR", "SRA", "SBR", "SBL", "SLA", "FHR", "TFR", "TMR", "RHR", "TRR", "TRL", "RHL", "TML", "TFL", "FHL", "SWMIX1", "SWMIX2"};
-            public static void Sort<T>(this UniqueObservableCollection<T> source)
+            public static void Sort<T, K>(this UniqueObservableCollection<T> source, K Order)
             {
                 if (source.GetType() == typeof(UniqueObservableCollection<Dictionary<string, string>>))
                 {
                     UniqueObservableCollection<Dictionary<string, string>> collection = source as UniqueObservableCollection<Dictionary<string, string>>;
+                    StringCollection SpeakerOrder = Order as StringCollection;
 
                     for (var i = source.Count() - 1; i > 0; i--)
                     {
@@ -36,7 +36,50 @@ namespace Audyssey
                     }
                 }
             }
+
+            public static TKey SmartReverseLookup<TKey, TValue>(this Dictionary<TKey, TValue> me, TValue value, TKey DefaultIfEmpty)
+            {
+                try
+                {
+                    if (me.ContainsValue(value))
+                        return me.First(a => a.Value.Equals(value)).Key;
+
+                    return DefaultIfEmpty;
+                }
+                catch
+                {
+                    return DefaultIfEmpty;
+                }
+            }
+
+            public static TKey[] ReverseLookup<TKey, TValue>(this Dictionary<TKey, TValue> me, TValue value)
+            {
+                try
+                {
+                    if (me.ContainsValue(value))
+                        return me.Where(a => a.Value.Equals(value)).Select(b => b.Key).ToArray();
+                    else
+                        return null;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
         }
+
+        //Dictionary<string, int> numsList = new Dictionary<string, int>()
+        //{
+        //    {"Test One", 1}
+        //    {"Test Two", 2}
+        //    {"Test Three", 3}
+        //    {"Test Four", 3}
+        //}
+        //
+        //string[] foundKeys;
+        //foundKeys = numsList.ReverseLookup(3);
+        //
+        //Console.WriteLine(numsList.SmartReverseLookup(2, "NOT FOUND"));
 
         public class UniqueObservableCollection<T> : ObservableCollection<T>
         {

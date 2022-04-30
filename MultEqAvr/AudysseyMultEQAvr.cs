@@ -138,7 +138,6 @@ namespace Audyssey
                                     { 
                                         Count = ch.ResponseData.Count;
                                         SelectedChannel = ch;
-                                        //SelectedChannel.Stick = true;
                                         if (Count > 0)
                                         {
                                             SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
@@ -155,7 +154,6 @@ namespace Audyssey
                                     else
                                     {
                                         SelectedChannel = ch;
-                                        //SelectedChannel.Stick = true;
                                         if (Count > 0)
                                         {
                                             SelectedChannel.SelectedResponseData = new((ch.ResponseData.Count - 1).ToString(), ch.ResponseData[(ch.ResponseData.Count - 1).ToString()]);
@@ -432,7 +430,8 @@ namespace Audyssey
             private string _Serialized;
             private bool _AvrConnect_IsChecked;
             private bool _SnifferAttach_IsChecked;
-            private bool _AvrLvlm_IsChecked;
+            private bool _AvrLvlm_SW1_IsChecked;
+            private bool _AvrLvlm_SW2_IsChecked;
             private bool _AvrInfo_IsChecked;
             private bool _AvrStatus_IsChecked;
             private bool _AudysseyMode_IsChecked;
@@ -466,7 +465,9 @@ namespace Audyssey
             [JsonIgnore]
             public bool SnifferAttach_IsChecked { get { return _SnifferAttach_IsChecked; } set { _SnifferAttach_IsChecked = value; RaisePropertyChanged("SnifferAttach_IsChecked"); } }
             [JsonIgnore]
-            public bool AvrLvlm_IsChecked { get { return _AvrLvlm_IsChecked; } set { _AvrLvlm_IsChecked = value; RaisePropertyChanged("AvrLvlm_IsChecked"); } }
+            public bool AvrLvlm_SW1_IsChecked { get { return _AvrLvlm_SW1_IsChecked; } set { _AvrLvlm_SW1_IsChecked = value; RaisePropertyChanged("AvrLvlm_SW1_IsChecked"); } }
+            [JsonIgnore]
+            public bool AvrLvlm_SW2_IsChecked { get { return _AvrLvlm_SW2_IsChecked; } set { _AvrLvlm_SW2_IsChecked = value; RaisePropertyChanged("AvrLvlm_SW2_IsChecked"); } }
             [JsonIgnore]
             public bool AvrInfo_IsChecked { get { return _AvrInfo_IsChecked; } set { _AvrInfo_IsChecked = value; RaisePropertyChanged("AvrInfo_IsChecked"); RaisePropertyChanged("Inspector_IsChecked"); } }
             [JsonIgnore]
@@ -500,7 +501,7 @@ namespace Audyssey
             private void ResetSerialized() { _Serialized = string.Empty; }
             private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
             private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
-            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_IsChecked = false; }
+            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_SW1_IsChecked = false; }
             private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }
             private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; }
             private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }

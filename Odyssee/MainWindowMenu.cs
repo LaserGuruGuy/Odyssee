@@ -136,16 +136,19 @@ namespace Odyssee
             }
         }
 
-        private void MenuItem_AvrLvLm_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_AvrLvLm_SW1_OnClick(object sender, RoutedEventArgs e)
         {
-            if (audysseyMultEQAvr.AvrLvlm_IsChecked)
-            {
-                audysseyMultEQAvr.AvrLvlm_IsChecked = (bool)audysseyMultEQAvrTcp?.StartLvLm(OnCmdResponse);
-            }
-            else
-            {
-                audysseyMultEQAvr.AvrLvlm_IsChecked = (bool)audysseyMultEQAvrTcp?.AbortOprt(OnCmdResponse);
-            }
+            audysseyMultEQAvr.AvrLvlm_SW1_IsChecked = (bool)audysseyMultEQAvrTcp?.StartLvLmSw1(OnCmdResponse);
+        }
+
+        private void MenuItem_AvrLvLm_SW2_OnClick(object sender, RoutedEventArgs e)
+        {
+            audysseyMultEQAvr.AvrLvlm_SW2_IsChecked = (bool)audysseyMultEQAvrTcp?.StartLvLmSw2(OnCmdResponse);
+        }
+
+        private void MenuItem_Abort_Oprt_OnClick(object sender, RoutedEventArgs e)
+        {
+            audysseyMultEQAvrTcp?.AbortOprt(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)

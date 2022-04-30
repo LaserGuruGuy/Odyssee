@@ -30,12 +30,7 @@ namespace Audyssey
                         {
                             if (ch.Channel != null)
                             {
-                                if ((ch.Channel.Equals("FL") && (CoefChannel == 0x00)) ||
-                                    (ch.Channel.Equals("C") && (CoefChannel == 0x01)) ||
-                                    (ch.Channel.Equals("FR") && (CoefChannel == 0x02)) ||
-                                    (ch.Channel.Equals("SLA") && (CoefChannel == 0x03)) ||
-                                    (ch.Channel.Equals("SRA") && (CoefChannel == 0x0C)) ||
-                                    (ch.Channel.Equals("SW1") && (CoefChannel == 0x0D)))
+                                if (CoefChannelList[ch.Channel] == CoefChannel)
                                 {
                                     double[] Coef = null;
                                     if (CoefCurve == 0x00)
@@ -96,12 +91,7 @@ namespace Audyssey
                         {
                             if (ch.Channel != null)
                             {
-                                if ((ch.Channel.Equals("FL") && (CoefChannel == 0x00)) ||
-                                    (ch.Channel.Equals("C") && (CoefChannel == 0x01)) ||
-                                    (ch.Channel.Equals("FR") && (CoefChannel == 0x02)) ||
-                                    (ch.Channel.Equals("SLA") && (CoefChannel == 0x03)) ||
-                                    (ch.Channel.Equals("SRA") && (CoefChannel == 0x0C)) ||
-                                    (ch.Channel.Equals("SW1") && (CoefChannel == 0x0D)))
+                                if (CoefChannelList[ch.Channel] == CoefChannel)
                                 {
                                     if (CoefCurve == 0x00)
                                     {

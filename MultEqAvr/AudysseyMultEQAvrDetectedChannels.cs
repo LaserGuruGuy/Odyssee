@@ -25,7 +25,7 @@ namespace Audyssey
 
             #region Properties
             [JsonIgnore]
-            public string ChannelName
+            public string Name
             {
                 get
                 {

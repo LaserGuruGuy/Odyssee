@@ -7,7 +7,7 @@
         xmlns:CustomControls="clr-namespace:CustomControls;assembly=CustomControls"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1600" Height="768" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
+        Title="Odyssee" WindowStartupLocation="CenterScreen" Width="1600" Height="800" MinHeight="32" Background="White" WindowStyle="None" AllowsTransparency="True" Drop="HandleDroppedFile" AllowDrop="true" BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" StateChanged="Window_StateChanged"
         Icon=".\Icons\Odyssee.ico">
     <!-- DataContext="{Binding RelativeSource={RelativeSource Self}}" -->
     <WindowChrome.WindowChrome>
@@ -59,7 +59,9 @@
                         <Separator/>
                         <MenuItem Header="Enter _Audyssey" Name="MenuItem_AudysseyMode" Click="MenuItem_AudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Set LvLm" Name="AvrLvLm" Click="MenuItem_AvrLvLm_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Set LvLm SW1" Name="MenuItem_AvrLvLm_SW1" Click="MenuItem_AvrLvLm_SW1_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_SW1_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Set LvLm SW2" Name="MenuItem_AvrLvLm_SW2" Click="MenuItem_AvrLvLm_SW2_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_SW2_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Abort Oprt" Name="MenuItem_Abort_Oprt" Click="MenuItem_Abort_Oprt_OnClick"/>
                         <Separator/>
                         <MenuItem Header="Set PosNum" Name="MenuItem_SetAvrSetPosNum" Click="MenuItem_SetAvrSetPosNum_OnClick" IsCheckable="True" IsChecked="{Binding SetPosNum_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Start Chnl" Name="MenuItem_SetAvrStartChnl" Click="MenuItem_SetAvrStartChnl_OnClick" IsCheckable="True" IsChecked="{Binding StartChnl_IsChecked, Mode=TwoWay}"/>
@@ -119,7 +121,6 @@
                     <Path Width="46" Height="30" Data="M 18,11 27,20 M 18,20 27,11" Stroke="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}" StrokeThickness="1"/>
                 </Button>
             </StackPanel>
-            <GridSplitter Grid.Row="1" Height="1" HorizontalAlignment="Stretch" />
             <DockPanel Grid.Row="2" LastChildFill="True">
                 <Grid DockPanel.Dock="Left">
                     <Grid.RowDefinitions>
@@ -144,31 +145,31 @@
                                 </Grid.ColumnDefinitions>
                                 <GroupBox Grid.Column="0" Header="Channel Setup">
                                     <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, AsyncState=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="False">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="Channel" Width="auto" DisplayMemberBinding="{Binding Channel}" />
-                                            <GridViewColumn Header="Setup" Width="auto" DisplayMemberBinding="{Binding Setup}" />
-                                            <GridViewColumn Header="Skip" Width="auto">
-                                                <GridViewColumn.CellTemplate>
-                                                    <DataTemplate>
-                                                        <CheckBox IsChecked="{Binding Path=Skip}"/>
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="Channel" Width="auto" DisplayMemberBinding="{Binding Channel}"/>
+                                                <GridViewColumn Header="Setup" Width="auto" DisplayMemberBinding="{Binding Setup}"/>
+                                                <GridViewColumn Header="Skip" Width="auto">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <CheckBox IsChecked="{Binding Path=Skip}" ToolTip="Check to skip channel calibration"/>
                                                         </DataTemplate>
-                                                </GridViewColumn.CellTemplate>
-                                            </GridViewColumn>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
                                                 <GridViewColumn Header="Stick" Width="auto">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
-                                                            <CheckBox IsChecked="{Binding Path=Stick}"/>
+                                                            <CheckBox IsChecked="{Binding Path=Stick}" ToolTip="Check to stick channel plot"/>
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
                                             </GridView>
-                                    </ListView.View>
-                                </ListView>
+                                        </ListView.View>
+                                    </ListView>
                                 </GroupBox>
                                 <StackPanel Grid.Column="2" Orientation="Vertical">
                                     <GroupBox Header="Channel Name" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
-                                        <Label Content="{Binding ChannelName}"></Label>
+                                        <Label Content="{Binding Name}"></Label>
                                     </GroupBox>
                                     <GroupBox Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
                                         <Grid DataContext="{Binding ChannelReport}">
@@ -184,13 +185,13 @@
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Row="0" Grid.Column="0" Content="Speaker Connect"></Label>
-                                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SpConnect}" ItemsSource="{Binding SetupList}" VerticalAlignment="Center"/>
+                                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SpConnect}" ItemsSource="{Binding SetupList}" VerticalAlignment="Center" ToolTip="Large (L), Small (S), None (N) or Ext (E)"/>
                                             <Label Grid.Row="1" Grid.Column="0" Content="Speaker Polarity"></Label>
-                                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Polarity}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5"></TextBox>
+                                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding Polarity}" ItemsSource="{Binding PolarityList}" VerticalAlignment="Center" ToolTip="Normal (N) or Reverse (R)"/>
                                             <Label Grid.Row="2" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
-                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5" ToolTip="For sound travelling through air at 343 m/s at 20 °C"></TextBox>
+                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" ToolTip="For sound travelling through air at 343 m/s at 20 °C (subtract 5 ms dsp delay)"></TextBox>
                                             <Label Grid.Row="3" Grid.Column="0" Content="Response Coefficient"></Label>
-                                            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ResponseCoef}" VerticalAlignment="Center" Height="17" Margin="0,4,0,5" ToolTip="Chirp volume is adapted to speaker sensitivity and environmental background noise. Scales ResponseData for each Position"></TextBox>
+                                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding ResponseCoef}" VerticalAlignment="Center" ToolTip="Chirp volume is adapted to speaker sensitivity and environmental background noise"></Label>
                                         </Grid>
                                     </GroupBox>
                                     <GroupBox Header="Channel Data" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">

@@ -39,7 +39,7 @@ namespace Odyssee
 
         private void OnButtonClick_SubwooferLevel(object sender, RoutedEventArgs e)
         {
-            if (audysseyMultEQAvr.AvrLvlm_IsChecked)
+            if (audysseyMultEQAvr.AvrLvlm_SW1_IsChecked)
             {
                 Label_SmoothingFactor.Visibility = Visibility.Hidden;
                 Slider_SmoothingFactor.Visibility = Visibility.Hidden;
@@ -53,7 +53,7 @@ namespace Odyssee
                 RadioButton_FlatCurveFilter.Visibility = Visibility.Hidden;
                 RadioButton_AudyCurveFilter.Visibility = Visibility.Hidden;
 
-                audysseyMultEQAvrTcp?.StartLvLm();
+                audysseyMultEQAvrTcp?.StartLvLmSw1();
             }
             else
             {

@@ -143,7 +143,7 @@ namespace Audyssey
                 }
             }
 
-            public bool StartLvLm(CmdAckCallBack CallBack = null)
+            public bool StartLvLmSw1(CmdAckCallBack CallBack = null)
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
@@ -151,6 +151,30 @@ namespace Audyssey
                     string CmdString = "START_LVLM";
                     // build JSON
                     string AvrString = "{\"SWNum\":\"SW1\"}";
+                    // toolbar
+                    AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
+                    // transmit
+                    AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
+                    // command ack request pending, clear ack request after timeout
+                    cmdAck.Rqst(CallBack);
+                    // return command was issued
+                    return true;
+                }
+                else
+                {
+                    // return command was not issued
+                    return false;
+                }
+            }
+
+            public bool StartLvLmSw2(CmdAckCallBack CallBack = null)
+            {
+                if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
+                {
+                    // abort operation
+                    string CmdString = "START_LVLM";
+                    // build JSON
+                    string AvrString = "{\"SWNum\":\"SW2\"}";
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                     // transmit
@@ -467,7 +491,8 @@ namespace Audyssey
                                         {
                                             if (Response.Comm.Equals(ACK))
                                             {
-                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = false;
+                                                AudysseyMultEQAvr.AvrLvlm_SW1_IsChecked = false;
+                                                AudysseyMultEQAvr.AvrLvlm_SW2_IsChecked = false;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
@@ -494,17 +519,20 @@ namespace Audyssey
                                                     NullValueHandling = NullValueHandling.Ignore,
                                                     ContractResolver = new InterfaceContractResolver(typeof(ISPLValue)),
                                                 });
-                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = true;
+                                                AudysseyMultEQAvr.AvrLvlm_SW1_IsChecked = true;
+                                                AudysseyMultEQAvr.AvrLvlm_SW2_IsChecked = true;
                                                 cmdAck.Ack();
                                             }
                                             if (Response.Comm.Equals(INPROGRESS))
                                             {
-                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = false;
+                                                AudysseyMultEQAvr.AvrLvlm_SW1_IsChecked = false;
+                                                AudysseyMultEQAvr.AvrLvlm_SW2_IsChecked = false;
                                                 cmdAck.Progress();
                                             }
                                             if (Response.Comm.Equals(NACK))
                                             {
-                                                AudysseyMultEQAvr.AvrLvlm_IsChecked = false;
+                                                AudysseyMultEQAvr.AvrLvlm_SW1_IsChecked = false;
+                                                AudysseyMultEQAvr.AvrLvlm_SW2_IsChecked = false;
                                                 cmdAck.Nack();
                                             }
                                         }
@@ -827,7 +855,8 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.CoefData = DataByte;
-                                        AudysseyMultEQAvr.Serialized += "Success: Channel " + AudysseyMultEQAvr.CoefChannel + ", Curve " + AudysseyMultEQAvr.CoefCurve + ", SampleRate " + AudysseyMultEQAvr.CoefSampleRate + ", Spare " + AudysseyMultEQAvr.CoefSpare + ", Coefs " + (DataByte.Length - 4)/4 + "\n";
+                                        //AudysseyMultEQAvr.Serialized += "Success: Channel " + AudysseyMultEQAvr.CoefChannel + ", Curve " + AudysseyMultEQAvr.CoefCurve + ", SampleRate " + AudysseyMultEQAvr.CoefSampleRate + ", Spare " + AudysseyMultEQAvr.CoefSpare + ", Coefs " + (DataByte.Length - 4)/4 + "\n";
+                                        AudysseyMultEQAvr.Serialized += "Success: Channel " + DataByte[2] + ", Curve " + DataByte[0] + ", SampleRate " + DataByte[1] + ", Spare " + DataByte[3] + ", Coefs " + (DataByte.Length - 4) / 4 + "\n";
                                         cmdAck.Ack();
                                     }
                                     else

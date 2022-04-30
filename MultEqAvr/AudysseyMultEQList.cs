@@ -1,12 +1,38 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Newtonsoft.Json;
 
 namespace Audyssey
 {
     namespace MultEQ.List
     {
+        public class StatusList
+        {
+            public static readonly StringCollection ChSetupList = new()
+            { 
+                "FL",
+                "C",
+                "FR",
+                "SRA",
+                "SBR",
+                "SBL",
+                "SLA",
+                "FHR",
+                "TFR",
+                "TMR",
+                "RHR",
+                "TRR",
+                "TRL", 
+                "RHL",
+                "TML",
+                "TFL",
+                "FHL",
+                "SWMIX1",
+                "SWMIX2"
+            };
+        }
         public class ChannelList
         {
             private static readonly Dictionary<string, string> _ChannelNameList = new()
@@ -121,6 +147,9 @@ namespace Audyssey
             private static readonly ObservableCollection<string> _SetupList = new()
             { "L", "N", "S", "E" };
 
+            private static readonly ObservableCollection<string> _PolarityList = new()
+            { "N", "R" };
+
             [JsonIgnore]
             public static ObservableCollection<string> SetupList
             {
@@ -129,10 +158,28 @@ namespace Audyssey
                     return _SetupList;
                 }
             }
+
+            [JsonIgnore]
+            public static ObservableCollection<string> PolarityList
+            {
+                get
+                {
+                    return _PolarityList;
+                }
+            }
         }
 
         public class MultEQList
         {
+            private static readonly Dictionary<string, byte> _CoefChannelList = new()
+            {
+                { "FL", 0x00 },
+                { "C", 0x01 },
+                { "FR", 0x02 },
+                { "SLA", 0x03 },
+                { "SRA", 0x0C },
+                { "SW1", 0x0D }
+            };
             
             private static readonly ObservableCollection<string> _DispDataList = new()
             { "dispLargeData", "dispSmallData" };
@@ -160,6 +207,15 @@ namespace Audyssey
 
             private static readonly ObservableCollection<string> _AudyFinFlgList = new()
             { "Fin", "NotFin" };
+
+            [JsonIgnore]
+            public static Dictionary<string, byte> CoefChannelList
+            {
+                get
+                {
+                    return _CoefChannelList;
+                }
+            }
 
             [JsonIgnore]
             public static ObservableCollection<string> DispDataList
