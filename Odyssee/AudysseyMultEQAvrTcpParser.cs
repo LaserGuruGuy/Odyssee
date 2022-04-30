@@ -25,6 +25,8 @@ namespace Audyssey
             private const byte EOT = 0x04;
             private const byte ESC = 0x1B;
 
+            private ResponseData _ResponseData = new();
+
             CmdAck cmdAck = new();
 
             public AudysseyMultEQAvrTcp(ref AudysseyMultEQAvr audysseyMultEQAvr, string ClientAddress = "127.0.0.1", int ClientPort = 1256, int ClientTimeout = 5000)
@@ -205,7 +207,7 @@ namespace Audyssey
                     // transmit
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(CallBack);
+                    cmdAck.Rqst(CallBack, 3000);
                     // return command was issued
                     return true;
                 }
@@ -247,10 +249,11 @@ namespace Audyssey
             {
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
+                    _ResponseData = AudysseyMultEQAvr.ResponseData;
                     // get 128 * 512 bytes channel response
                     string CmdString = "GET_RESPON";
                     // build JSON {"ChData":"FL"}
-                    string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr.ResponseData, new JsonSerializerSettings
+                    string AvrString = JsonConvert.SerializeObject(_ResponseData, new JsonSerializerSettings
                     {
                         ContractResolver = new InterfaceContractResolver(typeof(IResponseData)),
                         NullValueHandling = NullValueHandling.Ignore
@@ -633,12 +636,19 @@ namespace Audyssey
                                     case "GET_RESPON":
                                         if (TransmitReceiveChar == 'T')
                                         {
-                                            AudysseyMultEQAvr.ResponseData = JsonConvert.DeserializeObject<ResponseData>(DataString, new JsonSerializerSettings
+                                            _ResponseData = JsonConvert.DeserializeObject<ResponseData>(DataString, new JsonSerializerSettings
                                             {
                                                 NullValueHandling = NullValueHandling.Ignore,
                                                 ObjectCreationHandling = ObjectCreationHandling.Replace,
                                             });
-                                            AudysseyMultEQAvr.Serialized += "\n";
+                                            foreach (var ch in AudysseyMultEQAvr.DetectedChannels)
+                                            {
+                                                if (ch.Channel.Equals(_ResponseData.ChData))
+                                                {
+                                                    AudysseyMultEQAvr.SelectedChannel = ch;
+                                                    break;
+                                                }
+                                            }
                                         }
                                         else if (TransmitReceiveChar == 'R')
                                         {
@@ -848,7 +858,8 @@ namespace Audyssey
                                 {
                                     if (TransferComplete)
                                     {
-                                        AudysseyMultEQAvr.ResponseData = new() { RspData = DataByte };
+                                        _ResponseData.RspData = DataByte;
+                                        AudysseyMultEQAvr.ResponseData = _ResponseData;
                                         AudysseyMultEQAvr.Serialized += "SUCCESS\n";
                                         AudysseyMultEQAvr.GetRespon_IsChecked = true;
                                         cmdAck.Ack();

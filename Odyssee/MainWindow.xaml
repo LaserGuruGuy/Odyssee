@@ -101,9 +101,9 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                 <Label Content="Receiver" VerticalAlignment="Center" ></Label>
-                <ComboBox x:Name="cmbInterfaceReceiver"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto"/>
+                <ComboBox Name="cmbInterfaceReceiver"  WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto"/>
                 <Label Content="Computer" VerticalAlignment="Center" ></Label>
-                <ComboBox x:Name="cmbInterfaceComputer" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto" SelectionChanged="ComboBox_InterfaceComputer_SelectionChanged"/>
+                <ComboBox Name="cmbInterfaceComputer" WindowChrome.IsHitTestVisibleInChrome="True" VerticalAlignment="Center" Width="auto" SelectionChanged="ComboBox_InterfaceComputer_SelectionChanged"/>
             </StackPanel>
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Stretch">
                 <Button Click="OnButtonClick_Minimize" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">

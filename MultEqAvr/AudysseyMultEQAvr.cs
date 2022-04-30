@@ -311,47 +311,52 @@ namespace Audyssey
                 // GET_RESPON {"ChData":"FL"}
                 get
                 {
-                    ResponseData ResponseData = null;
                     //find the first or default channel with the lowest responsedata count
                     if (DetectedChannels != null)
                     {
-                        DetectedChannel DetectedChannel = DetectedChannels[0];
-                        foreach (var ch in DetectedChannels)
+                        DetectedChannel _DetectedChannel = DetectedChannels[0];
+                        foreach (var ch in _DetectedChannels)
                         {
                             if (ch.Skip != null)
                             {
                                 if (ch.Skip == false)
                                 {
-                                    if (ch.ResponseData == null)
+                                    if (ch.ChannelReport != null)
                                     {
-                                        DetectedChannel = ch;
-                                        break;
-                                    }
-                                    else if (ch.ResponseData.Count == 0)
-                                    {
-                                        DetectedChannel = ch;
-                                        break;
-                                    }
-                                    else if (ch.ResponseData.Count < DetectedChannel.ResponseData.Count)
-                                    {
-                                        DetectedChannel = ch;
+                                        if (ch.ChannelReport.SpConnect != null)
+                                        {
+                                            if (ch.ChannelReport.SpConnect.Equals("L") || ch.ChannelReport.SpConnect.Equals("S") || ch.ChannelReport.SpConnect.Equals("E"))
+                                            {
+                                                if (ch.ResponseData == null)
+                                                {
+                                                    return new() { ChData = ch.Channel };
+                                                }
+                                                else if (ch.ResponseData.Count == 0)
+                                                {
+                                                    return new() { ChData = ch.Channel };
+                                                }
+                                                else if (ch.ResponseData.Count < _DetectedChannel.ResponseData.Count)
+                                                {
+                                                    return new() { ChData = ch.Channel };
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                        ResponseData = new() { ChData = DetectedChannel.Channel };
                     }
-                    return ResponseData;
+                    return new() { ChData = string.Empty };
                 }
                 set
                 {
-                    if (DetectedChannels != null)
+                    if ((string.IsNullOrEmpty(value.ChData) == false) && value.RspData != null)
                     {
-                        foreach (var ch in DetectedChannels)
+                        if (DetectedChannels != null)
                         {
-                            if (string.IsNullOrEmpty(value.ChData))
+                            foreach (var ch in DetectedChannels)
                             {
-                                if (ch.Channel.Equals(ResponseData.ChData))
+                                if (ch.Channel.Equals(value.ChData))
                                 {
                                     if (ch.ResponseData == null)
                                     {
@@ -368,23 +373,6 @@ namespace Audyssey
                                     RaisePropertyChanged("ResponseData");
                                     break;
                                 }
-                            }
-                            else if (ch.Channel.Equals(value.ChData))
-                            {
-                                if (ch.ResponseData == null)
-                                {
-                                    ch.ResponseData = new();
-                                }
-                                if (ch.ChannelReport.ResponseCoef == null)
-                                {
-                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData));
-                                }
-                                else
-                                {
-                                    ch.ResponseData.Add(ch.ResponseData.Count.ToString(), ByteToDoubleArray(value.RspData, (double)ch.ChannelReport.ResponseCoef));
-                                }
-                                RaisePropertyChanged("ResponseData");
-                                break;
                             }
                         }
                     }
