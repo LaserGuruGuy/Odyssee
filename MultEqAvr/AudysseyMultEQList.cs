@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 
@@ -8,7 +9,30 @@ namespace Audyssey
     {
         public class ChannelList
         {
-            private static ObservableCollection<decimal> _ChLevelList = new()
+            private static readonly Dictionary<string, string> _ChannelNameList = new()
+            {
+                { "FL", "Front Left" },
+                { "C", "Center" },
+                { "FR", "Front Right" },
+                { "SRA", "Surround Right" },
+                { "SBR", "Surround Back Right" },
+                { "SBL", "Surround Back Left" },
+                { "SLA", "Surround Left" },
+                { "FHR", "Front High Right" },
+                { "TFR", "Top Front Right" },
+                { "TMR", "Top Middle Right" },
+                { "TRR", "Top Rear Right" },
+                { "RHR", "Rear High Right" },
+                { "RHL", "Rear High Left" },
+                { "TRL", "Top Rear Left" },
+                { "TML", "Top Middle Left" },
+                { "TFL", "Top Front Left" },
+                { "FHL", "Front High Left" },
+                { "SW1", "Subwoofer Mix 1" },
+                { "SW2", "Subwoofer Mix 2" }
+            };
+
+            private static readonly ObservableCollection<decimal> _ChLevelList = new()
             {
                 -12m,
                 -11.5m,
@@ -61,8 +85,17 @@ namespace Audyssey
                 12m
             };
 
-            private static ObservableCollection<string> _CrossoverList = new()
+            private static readonly ObservableCollection<string> _CrossoverList = new()
             { "40", "60", "80", "90", "100", "110", "120", "150", "180", "200", "250", "F" };
+
+            [JsonIgnore]
+            public static Dictionary<string, string> ChannelNameList
+            {
+                get
+                {
+                    return _ChannelNameList;
+                }
+            }
 
             [JsonIgnore]
             public static ObservableCollection<decimal> ChLevelList
@@ -85,7 +118,7 @@ namespace Audyssey
 
         public class ChannelReportList
         {
-            private static ObservableCollection<string> _SetupList = new()
+            private static readonly ObservableCollection<string> _SetupList = new()
             { "L", "N", "S", "E" };
 
             [JsonIgnore]
@@ -100,31 +133,32 @@ namespace Audyssey
 
         public class MultEQList
         {
-            private static ObservableCollection<string> _DispDataList = new()
+            
+            private static readonly ObservableCollection<string> _DispDataList = new()
             { "dispLargeData", "dispSmallData" };
 
-            private static ObservableCollection<string> _SampleRateList = new()
+            private static readonly ObservableCollection<string> _SampleRateList = new()
             { "coefficient32kHz", "coefficient441kHz", "coefficient48kHz" };
 
-            private static ObservableCollection<int> _SampleFrequencyList = new()
+            private static readonly ObservableCollection<int> _SampleFrequencyList = new()
             { 32000, 44100, 48000 };
 
-            private static ObservableCollection<string> _CurveFilterList = new()
+            private static readonly ObservableCollection<string> _CurveFilterList = new()
             { "referenceCurveFilter", "flatCurveFilter" };
 
-            private static ObservableCollection<string> _AudyDynSetList = new()
+            private static readonly ObservableCollection<string> _AudyDynSetList = new()
             { "H", "M", "L" };
 
-            private static ObservableCollection<string> _AudyEqSetList = new()
+            private static readonly ObservableCollection<string> _AudyEqSetList = new()
             { "Audy", "Flat" };
 
-            private static ObservableCollection<int> _AudyEqRefList = new()
+            private static readonly ObservableCollection<int> _AudyEqRefList = new()
             { 0, 5, 10, 15 };
 
-            private static ObservableCollection<int> _AudyLfcLevList = new()
+            private static readonly ObservableCollection<int> _AudyLfcLevList = new()
             { 1, 2, 3, 4, 5, 6, 7 };
 
-            private static ObservableCollection<string> _AudyFinFlgList = new()
+            private static readonly ObservableCollection<string> _AudyFinFlgList = new()
             { "Fin", "NotFin" };
 
             [JsonIgnore]

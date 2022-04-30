@@ -167,6 +167,9 @@
                                 </ListView>
                                 </GroupBox>
                                 <StackPanel Grid.Column="2" Orientation="Vertical">
+                                    <GroupBox Header="Channel Name" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
+                                        <Label Content="{Binding ChannelName}"></Label>
+                                    </GroupBox>
                                     <GroupBox Header="Channel Report" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
                                         <Grid DataContext="{Binding ChannelReport}">
                                             <Grid.RowDefinitions>

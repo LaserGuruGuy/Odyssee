@@ -10,7 +10,7 @@ namespace Audyssey
     {
         static class Extensions
         {
-            static readonly StringCollection SpeakerOrder = new() { "FL", "C", "FR", "SRA", "SBR", "SBL", "SLA", "FHR", "TFR", "TMR", "TRR", "RHR", "TRR", "TRL", "RHL", "TRL", "TML", "TFL", "FHL", "SWMIX1", "SWMIX2"};
+            static readonly StringCollection SpeakerOrder = new() { "FL", "C", "FR", "SRA", "SBR", "SBL", "SLA", "FHR", "TFR", "TMR", "RHR", "TRR", "TRL", "RHL", "TML", "TFL", "FHL", "SWMIX1", "SWMIX2"};
             public static void Sort<T>(this UniqueObservableCollection<T> source)
             {
                 if (source.GetType() == typeof(UniqueObservableCollection<Dictionary<string, string>>))
