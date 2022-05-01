@@ -75,6 +75,7 @@ namespace Audyssey
                     RaisePropertyChanged("Skip");
                 }
             }
+            [JsonIgnore]
             public bool? Stick
             {
                 get
