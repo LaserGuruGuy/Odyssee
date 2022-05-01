@@ -44,6 +44,8 @@ namespace Odyssee
             audysseyMultEQAvr.AvrStatus.PropertyChanged += PropertyChanged;
             audysseyMultEQAvr.AvrInfo.PropertyChanged += PropertyChanged;
 
+            audysseyMultEQAvrTcp = new(ref audysseyMultEQAvr);
+
             this.DataContext = audysseyMultEQAvr;
         }
 

@@ -18,7 +18,7 @@ namespace Audyssey
         /// </summary>
         public interface IAmp
         {
-            public UniqueObservableCollection<Dictionary<string, decimal>> ChLevel { get; set; }
+            public UniqueObservableCollection<Dictionary<string, int>> ChLevel { get; set; }
             public UniqueObservableCollection<Dictionary<string, object>> Crossover { get; set; }
             public UniqueObservableCollection<Dictionary<string, string>> SpConfig { get; set; }
             public UniqueObservableCollection<Dictionary<string, int>> Distance { get; set; }
@@ -40,11 +40,11 @@ namespace Audyssey
 
             #region Properties
             [JsonIgnore]
-            public UniqueObservableCollection<Dictionary<string, decimal>> ChLevel
+            public UniqueObservableCollection<Dictionary<string, int>> ChLevel
             {
                 get
                 {
-                    UniqueObservableCollection<Dictionary<string, decimal>> ChLevel = new();
+                    UniqueObservableCollection<Dictionary<string, int>> ChLevel = new();
                     if (DetectedChannels != null)
                     {
                         foreach (var ch in DetectedChannels)
@@ -53,7 +53,7 @@ namespace Audyssey
                             {
                                 if (ch.Skip == false)
                                 {
-                                    ChLevel.Add(new Dictionary<string, decimal>() { { (string)ch.Channel, (decimal)ch.ChLevel * 10m } });
+                                    ChLevel.Add(new Dictionary<string, int>() { { (string)ch.Channel, (int)((decimal)ch.ChLevel * 10m) } });
                                 }
                             }
                         }
@@ -76,7 +76,7 @@ namespace Audyssey
                                         {
                                             try
                                             {
-                                                ch.ChLevel = el.Value / 10m;
+                                                ch.ChLevel = (decimal)el.Value / 10m;
                                             }
                                             catch (Exception ex)
                                             {

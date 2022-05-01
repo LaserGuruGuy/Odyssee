@@ -307,7 +307,7 @@ namespace Audyssey
                     // build JSON for class Dat on interface Iamp
                     string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
                     {
-                        ContractResolver = new InterfaceContractResolver(typeof(IAmp))
+                        ContractResolver = new InterfaceContractResolver(typeof(IAmp)),
                     });
                     // toolbar
                     AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
@@ -454,7 +454,11 @@ namespace Audyssey
 #endif
                                 AudysseyMultEQAvrComm Response = new();
                                 // populate the datastring response so we can check for: NACK, ACK, ...
-                                JsonConvert.PopulateObject(DataString, Response, new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace, NullValueHandling = NullValueHandling.Ignore });
+                                JsonConvert.PopulateObject(DataString, Response, new JsonSerializerSettings
+                                {
+                                    ObjectCreationHandling = ObjectCreationHandling.Replace,
+                                    NullValueHandling = NullValueHandling.Ignore
+                                });
                                 // echo the datastring received from the AVR on screen
                                 AudysseyMultEQAvr.Serialized += CmdString + DataString + "\n";
                                 // parse the response

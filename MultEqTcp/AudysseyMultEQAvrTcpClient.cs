@@ -124,7 +124,14 @@ namespace Audyssey
                 if (DataLength > 0) binaryWriter.Write(Data);
                 binaryWriter.Write(CalculateChecksum(memoryStream.GetBuffer()));
 
-                _NetworkStream.BeginWrite(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, WriteCallback, null);
+                try
+                {
+                    _NetworkStream.BeginWrite(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, WriteCallback, null);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
             
             public void Open()
