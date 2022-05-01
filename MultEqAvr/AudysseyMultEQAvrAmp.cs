@@ -66,17 +66,23 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            foreach (var sp in value)
+                            if (string.IsNullOrEmpty(ch.Channel) == false)
                             {
-                                foreach (var el in sp)
+                                foreach (var sp in value)
                                 {
-                                    if (ch.Channel.Equals(el.Key))
+                                    foreach (var el in sp)
                                     {
-                                        if (ch.ChLevel == null)
+                                        if (ch.Channel.Equals(el.Key))
                                         {
-                                            ch.ChLevel = new();
+                                            try
+                                            {
+                                                ch.ChLevel = el.Value / 10m;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Serialized += ex.Message;
+                                            }
                                         }
-                                        ch.ChLevel = el.Value / 10m;
                                     }
                                 }
                             }
@@ -111,7 +117,7 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Crossover != null)
+                            if (string.IsNullOrEmpty(ch.Channel) == false)
                             {
                                 foreach (var sp in value)
                                 {
@@ -119,11 +125,14 @@ namespace Audyssey
                                     {
                                         if (ch.Channel.Equals(el.Key))
                                         {
-                                            if (ch.Crossover == null)
+                                            try
                                             {
-                                                ch.Crossover = new();
+                                                ch.Crossover = el.Value;
                                             }
-                                            ch.Crossover = el.Value;
+                                            catch (Exception ex)
+                                            {
+                                                Serialized += ex.Message;
+                                            }
                                         }
                                     }
                                 }
@@ -165,17 +174,21 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Channel != null && ch.ChannelReport != null)
+                            if (string.IsNullOrEmpty(ch.Channel) == false && ch.ChannelReport != null)
                             {
-                                if (ch.ChannelReport.SpConnect != null)
+                                foreach (var sp in value)
                                 {
-                                    foreach (var sp in value)
+                                    foreach (var el in sp)
                                     {
-                                        foreach (var el in sp)
+                                        if (ch.Channel.Equals(el.Key))
                                         {
-                                            if (ch.Channel.Equals(el.Key))
+                                            try
                                             {
                                                 ch.ChannelReport.SpConnect = el.Value;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Serialized += ex.Message;
                                             }
                                         }
                                     }
@@ -217,15 +230,19 @@ namespace Audyssey
                         {
                             if (ch.Channel != null && ch.ChannelReport != null)
                             {
-                                if (ch.ChannelReport.Distance != null)
+                                foreach (var sp in value)
                                 {
-                                    foreach (var sp in value)
+                                    foreach (var el in sp)
                                     {
-                                        foreach (var el in sp)
+                                        if (ch.Channel.Equals(el.Key))
                                         {
-                                            if (ch.Channel.Equals(el.Key))
+                                            try
                                             {
                                                 ch.ChannelReport.Distance = el.Value;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Serialized += ex.Message;
                                             }
                                         }
                                     }

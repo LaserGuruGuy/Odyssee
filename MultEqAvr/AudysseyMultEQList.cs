@@ -44,16 +44,16 @@ namespace Audyssey
                 { "SBR", "Surround Back Right" },
                 { "SBL", "Surround Back Left" },
                 { "SLA", "Surround Left" },
-                { "FHR", "Front High Right" },
+                { "FHR", "Front Height Right" },
                 { "TFR", "Top Front Right" },
                 { "TMR", "Top Middle Right" },
                 { "TRR", "Top Rear Right" },
-                { "RHR", "Rear High Right" },
-                { "RHL", "Rear High Left" },
+                { "RHR", "Rear Height Right" },
+                { "RHL", "Rear Height Left" },
                 { "TRL", "Top Rear Left" },
                 { "TML", "Top Middle Left" },
                 { "TFL", "Top Front Left" },
-                { "FHL", "Front High Left" },
+                { "FHL", "Front Height Left" },
                 { "SW1", "Subwoofer Mix 1" },
                 { "SW2", "Subwoofer Mix 2" }
             };
@@ -111,8 +111,8 @@ namespace Audyssey
                 12m
             };
 
-            private static readonly ObservableCollection<string> _CrossoverList = new()
-            { "40", "60", "80", "90", "100", "110", "120", "150", "180", "200", "250", "F" };
+            private static readonly ObservableCollection<object> _CrossoverList = new()
+            { (long)40, (long)60, (long)80, (long)90, (long)100, (long)110, (long)120, (long)150, (long)180, (long)200, (long)250, "F" };
 
             [JsonIgnore]
             public static Dictionary<string, string> ChannelNameList
@@ -133,7 +133,7 @@ namespace Audyssey
             }
 
             [JsonIgnore]
-            public static ObservableCollection<string> CrossoverList
+            public static ObservableCollection<object> CrossoverList
             {
                 get
                 {

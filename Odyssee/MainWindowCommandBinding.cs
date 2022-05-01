@@ -14,9 +14,13 @@ namespace Odyssee
         private void OpenCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.FileName = "Odyssee.aud";
-            dlg.DefaultExt = ".aud";
-            dlg.Filter = "Odyssee (*.aud)|*.aud";
+
+            // Set filter for file extension and default file extension 
+            dlg.FileName = "Odyssee.ody";
+            dlg.DefaultExt = ".ody";
+            dlg.Filter = "Odyssee (*.ody)|*.ody";
+
+            // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
 
             if (result == true)
@@ -30,9 +34,9 @@ namespace Odyssee
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
 
             // Set filter for file extension and default file extension 
-            dlg.FileName = "Odyssee.aud";
-            dlg.DefaultExt = ".aud";
-            dlg.Filter = "Odyssee (.aud)|*.aud";
+            dlg.FileName = "Odyssee.ody";
+            dlg.DefaultExt = ".ody";
+            dlg.Filter = "Odyssee (*.ody)|*.ody";
 
             // Show save file dialog box
             Nullable<bool> result = dlg.ShowDialog();
@@ -47,6 +51,7 @@ namespace Odyssee
         private void NewCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             audysseyMultEQAvr.Reset();
+            PlotModel.ResetAllAxes();
         }
 
         private void CloseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)

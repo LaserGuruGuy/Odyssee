@@ -79,7 +79,7 @@
                         <MenuItem Header="Export Impulse Response to Frd File" Name="MenuItem_Export_ChannelResponseData_FrdFile" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick"/>
                     </MenuItem>
                     <MenuItem Header="_Import" Margin="0,0,10,0">
-                        <MenuItem Header="Import Curve Filter Coefficients from Wave File" Name="MenuItem_Import_CurveFilterCoeff_WaveFile" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick"/>
+                        <MenuItem Header="Import Curve Filter Coefficients from Wave File" Name="MenuItem_Import_CurveFilterCoeff_WaveFile" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="Select folder holding 1024-tap (704-tap) FIR curvefilter coefficient files (a.o. coefficient48kHz_FlatCurveFilter_FL.wav)"/>
                     </MenuItem>
                 </Menu>
                 <ToggleButton Name="ToggleButton_ConnectReceiver" Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}" ToolTip="Connect to the Receiver">
@@ -178,6 +178,7 @@
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="*"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
@@ -189,9 +190,11 @@
                                             <Label Grid.Row="1" Grid.Column="0" Content="Speaker Polarity"></Label>
                                             <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding Polarity}" ItemsSource="{Binding PolarityList}" VerticalAlignment="Center" ToolTip="Normal (N) or Reverse (R)"/>
                                             <Label Grid.Row="2" Grid.Column="0" Content="Speaker Distance (cm)"></Label>
-                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" ToolTip="For sound travelling through air at 343 m/s at 20 °C (subtract 5 ms dsp delay)"></TextBox>
-                                            <Label Grid.Row="3" Grid.Column="0" Content="Response Coefficient"></Label>
-                                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding ResponseCoef}" VerticalAlignment="Center" ToolTip="Chirp volume is adapted to speaker sensitivity and environmental background noise"></Label>
+                                            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Distance}" VerticalAlignment="Center" ToolTip="For sound travelling through air at 343 m/s at 20 °C"></TextBox>
+                                            <Label Grid.Row="3" Grid.Column="0" Content="Speaker Delay (ms)"></Label>
+                                            <Label Grid.Row="3" Grid.Column="1" Content="{Binding Delay}" VerticalAlignment="Center" ToolTip="Add 5 ms for dsp when comparing with channel response"></Label>
+                                            <Label Grid.Row="4" Grid.Column="0" Content="Response Coefficient"></Label>
+                                            <Label Grid.Row="4" Grid.Column="1" Content="{Binding ResponseCoef}" VerticalAlignment="Center" ToolTip="Chirp volume is adapted to speaker sensitivity and environmental background noise"></Label>
                                         </Grid>
                                     </GroupBox>
                                     <GroupBox Header="Channel Data" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
@@ -379,7 +382,7 @@
             <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
             <ScrollViewer Grid.Row="4" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_Serialized_SizeChanged">
                 <StackPanel>
-                    <TextBlock Text="{Binding Serialized}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent" AllowDrop="False" />
+                    <TextBlock Text="{Binding Serialized}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

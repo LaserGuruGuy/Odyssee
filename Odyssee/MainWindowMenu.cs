@@ -236,14 +236,22 @@ namespace Odyssee
 
         private void Write_ChannelResponseData_WaveFile(string SelectedPath)
         {
+            const int SampleRate = 48000;
             foreach (var ch in audysseyMultEQAvr.DetectedChannels)
             {
+                int ChannelDelay = 5;
+                try
+                {
+                    ChannelDelay += (int)Math.Round((double)ch.ChannelReport.Distance * 10d / 343d);
+                }
+                catch
+                {
+                }
                 if (ch.Skip == false)
                 {
                     foreach (var rspd in ch.ResponseData)
                     {
-                        int SampleRate = 48000;
-                        string FileName = SelectedPath + "\\" + rspd.Value.Length / 1024 + "k_MeasChirp_" + SampleRate + "Hz_" + ch.Channel + "_" + rspd.Key + ".wav";
+                        string FileName = SelectedPath + "\\" + rspd.Value.Length / 1024 + "k_MeasChirp_" + SampleRate + "Hz_" + ch.Channel + "_" + rspd.Key + "_" + ChannelDelay + "ms.wav";
                         WriteWaveFile(FileName, DoubleToFloatArray(rspd.Value), SampleRate);
                     }
                 }
@@ -278,7 +286,7 @@ namespace Odyssee
         private void MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
-            folderBrowserDialog.Description = "Select the directory to import the .wav files from.\ncoefficient48kHz_FL_FlatCurveFilter.wav";
+            folderBrowserDialog.Description = "Select directory to import .wav files";
             folderBrowserDialog.ShowNewFolderButton = true;
 
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
@@ -304,7 +312,7 @@ namespace Odyssee
                         for (var CurveFilterIndex = 0; CurveFilterIndex < MultEQList.CurveFilterList.Count; CurveFilterIndex++)
                         {
                             CurveFilter = MultEQList.CurveFilterList[CurveFilterIndex];
-                            string FileName = SelectedPath + "\\" + SampleRate + "_" + ch.Channel + "_" + CurveFilter + ".wav";
+                            string FileName = SelectedPath + "\\" + SampleRate + "_" + CurveFilter + "_" + ch.Channel + ".wav";
                             if (CurveFilterIndex == 0)
                             {
                                 ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[SampleRateIndex])));

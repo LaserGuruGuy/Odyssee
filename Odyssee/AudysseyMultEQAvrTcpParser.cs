@@ -855,8 +855,34 @@ namespace Audyssey
                                     if (TransferComplete)
                                     {
                                         AudysseyMultEQAvr.CoefData = DataByte;
-                                        //AudysseyMultEQAvr.Serialized += "Success: Channel " + AudysseyMultEQAvr.CoefChannel + ", Curve " + AudysseyMultEQAvr.CoefCurve + ", SampleRate " + AudysseyMultEQAvr.CoefSampleRate + ", Spare " + AudysseyMultEQAvr.CoefSpare + ", Coefs " + (DataByte.Length - 4)/4 + "\n";
-                                        AudysseyMultEQAvr.Serialized += "Success: Channel " + DataByte[2] + ", Curve " + DataByte[0] + ", SampleRate " + DataByte[1] + ", Spare " + DataByte[3] + ", Coefs " + (DataByte.Length - 4) / 4 + "\n";
+                                        string Channel;
+                                        string Curve;
+                                        string SampleRate;
+                                        try
+                                        {
+                                            Channel = AudysseyMultEQAvr.CoefChannelList.SmartReverseLookup(DataByte[2], "Unknown");
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Channel = ex.Message;
+                                        }
+                                        try
+                                        {
+                                            Curve = AudysseyMultEQAvr.CurveFilterList[DataByte[0]];
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Curve = ex.Message;
+                                        }
+                                        try
+                                        {
+                                            SampleRate = AudysseyMultEQAvr.SampleRateList[DataByte[1]];
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            SampleRate = ex.Message;
+                                        }
+                                        AudysseyMultEQAvr.Serialized += "SUCCESS: Channel " + Channel + " (" + DataByte[2] + "), Curve " + Curve + " (" + DataByte[0] + "), SampleRate " + SampleRate + " (" +  DataByte[1] + "), Spare " + DataByte[3] + ", Coefs " + (DataByte.Length - 4) / 4 + "\n";
                                         cmdAck.Ack();
                                     }
                                     else

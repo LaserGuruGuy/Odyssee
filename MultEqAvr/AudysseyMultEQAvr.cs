@@ -499,12 +499,13 @@ namespace Audyssey
 
             #region Methods
             private void ResetSerialized() { _Serialized = string.Empty; }
-            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
-            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
-            private void ResetAvrLvlm_IsChecked() { _AvrLvlm_SW1_IsChecked = false; }
+            //private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
+            //private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
+            //private void ResetAvrLvlm_SW1_IsChecked() { _AvrLvlm_SW1_IsChecked = false; }
+            //private void ResetAvrLvlm_SW2_IsChecked() { _AvrLvlm_SW2_IsChecked = false; }
             private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }
             private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; }
-            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
+            //private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
             private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
             private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
             private void ResetStartChnl_IsChecked() { _StartChnl_IsChecked = false; }

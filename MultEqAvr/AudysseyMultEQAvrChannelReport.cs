@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
 
@@ -59,8 +60,26 @@ namespace Audyssey
                 {
                     _Distance = value;
                     RaisePropertyChanged("Distance");
+                    RaisePropertyChanged("Delay");
                 }
             }
+
+            [JsonIgnore]
+            public decimal? Delay
+            {
+                get
+                {
+                    try
+                    {
+                        return (decimal)Math.Round((double)_Distance * 100d / 343d) / 10m;
+                    }
+                    catch
+                    {
+                        return 0;
+                    }
+                }
+            }
+
             public double? ResponseCoef
             {
                 get

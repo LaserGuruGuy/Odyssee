@@ -8,7 +8,7 @@ namespace Audyssey
 {
     namespace MultEQAvr
     {
-        static class Extensions
+        public static class Extensions
         {
             public static void Sort<T, K>(this UniqueObservableCollection<T> source, K Order)
             {
