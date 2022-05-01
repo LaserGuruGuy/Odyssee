@@ -224,7 +224,7 @@ namespace Odyssee
         private void MenuItem_Export_ChannelResponseData_WaveFile_OnClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
-            folderBrowserDialog.Description = "Select the directory to export the .wav files to.";
+            folderBrowserDialog.Description = "Select folder to export .wav files";
             folderBrowserDialog.ShowNewFolderButton = true;
 
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
@@ -234,10 +234,27 @@ namespace Odyssee
             }
         }
 
+        private void MenuItem_Import_ChannelResponseData_WaveFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
+            folderBrowserDialog.Description = "Select folder to import .wav files";
+            folderBrowserDialog.ShowNewFolderButton = true;
+
+            System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                string[] FileNames = Directory.GetFiles(folderBrowserDialog.SelectedPath, "*.wav");
+                foreach(var FileName in FileNames)
+                {
+                    ParseWaveFileToResponseData(FileName);
+                }
+            }
+        }
+
         private void MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
-            folderBrowserDialog.Description = "Select directory to import .wav files";
+            folderBrowserDialog.Description = "Select folder to import .wav files";
             folderBrowserDialog.ShowNewFolderButton = true;
 
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
@@ -250,7 +267,7 @@ namespace Odyssee
         private void MenuItem_Export_ChannelResponseData_FrdFile_OnClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
-            folderBrowserDialog.Description = "Select the directory to export the .frd files to.";
+            folderBrowserDialog.Description = "Select folder to export .frd files";
             folderBrowserDialog.ShowNewFolderButton = true;
 
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();

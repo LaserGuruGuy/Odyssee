@@ -79,6 +79,7 @@
                         <MenuItem Header="Export Impulse Response to Frd File" Name="MenuItem_Export_ChannelResponseData_FrdFile" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick"/>
                     </MenuItem>
                     <MenuItem Header="_Import" Margin="0,0,10,0">
+                        <MenuItem Header="Import Impulse Response from Wave File" Name="MenuItem_Import_ChannelResponseData_WaveFile" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick"/>
                         <MenuItem Header="Import Curve Filter Coefficients from Wave File" Name="MenuItem_Import_CurveFilterCoeff_WaveFile" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="Select folder holding 1024-tap (704-tap) FIR curvefilter coefficient files (a.o. coefficient48kHz_FlatCurveFilter_FL.wav)"/>
                     </MenuItem>
                 </Menu>
