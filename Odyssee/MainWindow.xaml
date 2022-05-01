@@ -47,6 +47,15 @@
                         <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
                         <MenuItem Name="menuSaveAs" Header="_Save as..." Command="SaveAs" InputGestureText="Ctrl+S"/>
                         <Separator/>
+                        <MenuItem Header="_Import">
+                            <MenuItem Header="Impulse Response from Wave File" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick" ToolTip="16384-sample 32-bit float 1-channel impulse response wav files (16384_MeasChirp_48000_FL_0_10,2.wav)"/>
+                            <MenuItem Header="FIR Coefficients from Wave File" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="1024-tap (704-tap for subwoofer) 32-bit float 1-channel FIR curvefilter coefficient wav files (coefficient48kHz_FlatCurveFilter_FL.wav)"/>
+                        </MenuItem>
+                        <MenuItem Header="_Export" ToolTip="Export 16384-sample 32-bit float 1-channel impulse response">
+                            <MenuItem Header="Impulse Response to Wave File" Click="MenuItem_Export_ChannelResponseData_WaveFile_OnClick" ToolTip="Export all channels, all positions to wav files"/>
+                            <MenuItem Header="Impulse Response to Frd File" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick" ToolTip="Export all channels, all positions to FRD files"/>
+                        </MenuItem>
+                        <Separator/>
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close" InputGestureText="Alt+F4"/>
                     </MenuItem>
                     <MenuItem Header="_Receiver">
@@ -73,14 +82,6 @@
                         <MenuItem Header="Init Coefs" Name="MenuItem_SetAvrInitCoefs" Click="MenuItem_SetAvrInitCoefs_OnClick" IsCheckable="True" IsChecked="{Binding InitCoefs_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Set CoefDt" Name="MenuItem_SetAvrSetCoefDt" Click="MenuItem_SetAvrSetCoefDt_OnClick" IsCheckable="True" IsChecked="{Binding SetCoefDt_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="AudyFinFlg" Name="MenuItem_AudyFinFlag" Click="MenuItem_AudyFinFlag_OnClick" IsCheckable="True" IsChecked="{Binding AudyFinFlag_IsChecked, Mode=TwoWay}"/>
-                    </MenuItem>
-                    <MenuItem Header="_Export">
-                        <MenuItem Header="Export Impulse Response to Wave File" Name="MenuItem_Export_ChannelResponseData_WaveFile" Click="MenuItem_Export_ChannelResponseData_WaveFile_OnClick"/>
-                        <MenuItem Header="Export Impulse Response to Frd File" Name="MenuItem_Export_ChannelResponseData_FrdFile" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick"/>
-                    </MenuItem>
-                    <MenuItem Header="_Import" Margin="0,0,10,0">
-                        <MenuItem Header="Import Impulse Response from Wave File" Name="MenuItem_Import_ChannelResponseData_WaveFile" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick"/>
-                        <MenuItem Header="Import Curve Filter Coefficients from Wave File" Name="MenuItem_Import_CurveFilterCoeff_WaveFile" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="Select folder holding 1024-tap (704-tap) FIR curvefilter coefficient files (a.o. coefficient48kHz_FlatCurveFilter_FL.wav)"/>
                     </MenuItem>
                 </Menu>
                 <ToggleButton Name="ToggleButton_ConnectReceiver" Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}" ToolTip="Connect to the Receiver">
@@ -313,7 +314,7 @@
                                 <GridViewColumn Header="Stick" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                                <CheckBox Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized" KeyUp="ListView_CheckBox_ResponseDataSticky_KeyUp"/>
+                                                <CheckBox Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -327,7 +328,7 @@
                                 <GridViewColumn Header="Stick" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox Checked="ListView_AudyCurveFilter_CheckBox_Sticky_Checked" Unchecked="ListView_AudyCurveFilter_CheckBox_Sticky_Unchecked" Initialized="ListView_AudyCurveFilter_CheckBox_Sticky_Initialized"/>
+                                            <CheckBox IsEnabled="False"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -341,7 +342,7 @@
                                 <GridViewColumn Header="Stick" Width="auto">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox Checked="ListView_FlatCurveFilter_CheckBox_Sticky_Checked" Unchecked="ListView_FlatCurveFilter_CheckBox_Sticky_Unchecked"  Initialized="ListView_FlatCurveFilter_CheckBox_Sticky_Initialized"/>
+                                                <CheckBox IsEnabled="False"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
