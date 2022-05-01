@@ -67,7 +67,14 @@ namespace Odyssee
 
                 foreach (var file in files)
                 {
-                    ParseFileToAudysseyMultEQAvr(file);
+                    if (file.EndsWith(".ody"))
+                    {
+                        ParseFileToAudysseyMultEQAvr(file);
+                    }
+                    else if (file.EndsWith(".wav"))
+                    {
+                        ParseWaveFileToResponseData(file);
+                    }
                 }
             }
         }
@@ -78,11 +85,13 @@ namespace Odyssee
             {
                 string Serialized = File.ReadAllText(FileName);
 
-                JsonConvert.PopulateObject(Serialized, audysseyMultEQAvr, new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace });
-
-                ConnectReceiver();
+                JsonConvert.PopulateObject(Serialized, audysseyMultEQAvr, new JsonSerializerSettings
+                {
+                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                });
             }
         }
+
         private void ParseAudysseyMultEQAvrToFile(string FileName)
         {
             if (audysseyMultEQAvr != null)

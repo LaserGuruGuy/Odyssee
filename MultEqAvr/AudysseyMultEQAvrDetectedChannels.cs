@@ -96,7 +96,7 @@ namespace Audyssey
                 }
                 set
                 {
-                    _ChannelReport = ChannelReport;
+                    _ChannelReport = value;
                     RaisePropertyChanged("ChannelReport");
                 }
             }

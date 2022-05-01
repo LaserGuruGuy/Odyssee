@@ -1,15 +1,15 @@
-﻿using System;
+﻿using Audyssey.MultEQ.List;
+using Audyssey.MultEQTcp;
+using Audyssey.MultEQTcpSniffer;
+using MathNet.Numerics.IntegralTransforms;
+using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Numerics;
 using System.Text;
 using System.Windows;
-using Audyssey.MultEQ.List;
-using Audyssey.MultEQTcp;
-using Audyssey.MultEQTcpSniffer;
-using MathNet.Numerics.IntegralTransforms;
-using NAudio.Wave;
 
 namespace Odyssee
 {
@@ -230,29 +230,148 @@ namespace Odyssee
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                Write_ChannelResponseData_WaveFile(folderBrowserDialog.SelectedPath);
+                ParseResponseDataToWaveFile(folderBrowserDialog.SelectedPath);
             }
         }
 
-        private void Write_ChannelResponseData_WaveFile(string SelectedPath)
+        private void MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
+            folderBrowserDialog.Description = "Select directory to import .wav files";
+            folderBrowserDialog.ShowNewFolderButton = true;
+
+            System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                ParseWaveFileToFilterCoeff(folderBrowserDialog.SelectedPath);
+            }
+        }
+
+        private void MenuItem_Export_ChannelResponseData_FrdFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
+            folderBrowserDialog.Description = "Select the directory to export the .frd files to.";
+            folderBrowserDialog.ShowNewFolderButton = true;
+
+            System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                ParseResponseDataToFrdFile(folderBrowserDialog.SelectedPath);
+            }
+        }
+
+        private void ParseResponseDataToFrdFile(string FilePath)
+        {
+            foreach (var ch in audysseyMultEQAvr.DetectedChannels)
+            {
+                foreach (var rspd in ch.ResponseData)
+                {
+                    int SampleRate = 48000;
+                    string FileName = FilePath + "\\" + rspd.Value.Length / 1024 + "k_MeasChirp_" + SampleRate + "Hz_" + ch.Channel + "_" + rspd.Key + ".frd";
+                    WriteFrdFile(FileName, rspd.Value, SampleRate);
+                }
+            }
+        }
+
+        private void ParseResponseDataToWaveFile(string FilePath)
         {
             const int SampleRate = 48000;
             foreach (var ch in audysseyMultEQAvr.DetectedChannels)
             {
-                int ChannelDelay = 5;
-                try
-                {
-                    ChannelDelay += (int)Math.Round((double)ch.ChannelReport.Distance * 10d / 343d);
-                }
-                catch
-                {
-                }
                 if (ch.Skip == false)
                 {
                     foreach (var rspd in ch.ResponseData)
                     {
-                        string FileName = SelectedPath + "\\" + rspd.Value.Length / 1024 + "k_MeasChirp_" + SampleRate + "Hz_" + ch.Channel + "_" + rspd.Key + "_" + ChannelDelay + "ms.wav";
+                        string FileName = FilePath + "\\" + rspd.Value.Length + "_MeasChirp_" + SampleRate + "_" + ch.Channel + "_" + rspd.Key + "_" + ch.ChannelReport.Delay + ".wav";
                         WriteWaveFile(FileName, DoubleToFloatArray(rspd.Value), SampleRate);
+                    }
+                }
+            }
+        }
+
+        private void ParseWaveFileToResponseData(string FileName)
+        {
+            if (File.Exists(FileName))
+            {
+                string[] keywords = System.IO.Path.GetFileNameWithoutExtension(FileName).Split('_');
+                if ((keywords.Length == 6 || keywords.Length == 5) && keywords[1] == "MeasChirp")
+                {
+                    int SampleSize = 0;
+                    int SampleRate = 0;
+                    string Channel = string.Empty;
+                    string Position = string.Empty;
+                    decimal? Delay = null;
+
+                    try
+                    {
+                        SampleSize = int.Parse(keywords[0]);
+                        SampleRate = int.Parse(keywords[2]);
+                        Channel = keywords[3];
+                        Position = keywords[4];
+                        Delay = decimal.Parse(keywords[5]);
+                    }
+                    catch
+                    {
+
+                    }
+
+                    double[] Data = FloatToDoubleArray(ReadWaveFile(FileName, SampleRate, 1));
+                    
+                    try
+                    {
+                        if (Data.Length == SampleSize)
+                        {
+                            if (audysseyMultEQAvr.DetectedChannels != null)
+                            {
+                                foreach (var ch in audysseyMultEQAvr.DetectedChannels)
+                                {
+                                    if (ch.Channel.Equals(Channel))
+                                    {
+                                        ch.ChannelReport.Delay = Delay;
+                                        if (ch.ResponseData.ContainsKey(Position))
+                                        {
+                                            ch.ResponseData.Remove(Position);
+                                        }
+                                        ch.ResponseData.Add(Position, Data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+        }
+
+        private void ParseWaveFileToFilterCoeff(string FilePath)
+        {
+            foreach (var ch in audysseyMultEQAvr.DetectedChannels)
+            {
+                if (ch.Skip == false)
+                {
+                    ch.AudyCurveFilter = new();
+                    ch.FlatCurveFilter = new();
+                    string SampleRate = string.Empty;
+                    string CurveFilter = string.Empty;
+                    for (var SampleRateIndex = 0; SampleRateIndex < MultEQList.SampleRateList.Count; SampleRateIndex++)
+                    {
+                        SampleRate = MultEQList.SampleRateList[SampleRateIndex];
+                        for (var CurveFilterIndex = 0; CurveFilterIndex < MultEQList.CurveFilterList.Count; CurveFilterIndex++)
+                        {
+                            CurveFilter = MultEQList.CurveFilterList[CurveFilterIndex];
+                            string FileName = FilePath + "\\" + SampleRate + "_" + CurveFilter + "_" + ch.Channel + ".wav";
+                            if (CurveFilterIndex == 0)
+                            {
+                                ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[SampleRateIndex])));
+                            }
+                            else if (CurveFilterIndex == 1)
+                            {
+                                ch.FlatCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, 48000)));
+                            }
+                        }
                     }
                 }
             }
@@ -264,6 +383,16 @@ namespace Odyssee
             for (int i = 0; i < response.Length / 4; i++)
             {
                 result[i] = (float)response[i];
+            }
+            return result;
+        }
+
+        private double[] FloatToDoubleArray(float[] response)
+        {
+            double[] result = new double[response.Length];
+            for (int i = 0; i < response.Length / 4; i++)
+            {
+                result[i] = (double)response[i];
             }
             return result;
         }
@@ -281,60 +410,6 @@ namespace Odyssee
                 {
                 }
             }
-        }
-
-        private void MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
-            folderBrowserDialog.Description = "Select directory to import .wav files";
-            folderBrowserDialog.ShowNewFolderButton = true;
-
-            System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                Read_CurveFilterCoeff_WaveFile(folderBrowserDialog.SelectedPath);
-            }
-        }
-
-        private void Read_CurveFilterCoeff_WaveFile(string SelectedPath)
-        {
-            foreach (var ch in audysseyMultEQAvr.DetectedChannels)
-            {
-                if (ch.Skip == false)
-                {
-                    ch.AudyCurveFilter = new();
-                    ch.FlatCurveFilter = new();
-                    string SampleRate = string.Empty;
-                    string CurveFilter = string.Empty;
-                    for (var SampleRateIndex = 0; SampleRateIndex < MultEQList.SampleRateList.Count; SampleRateIndex++)
-                    {
-                        SampleRate = MultEQList.SampleRateList[SampleRateIndex];
-                        for (var CurveFilterIndex = 0; CurveFilterIndex < MultEQList.CurveFilterList.Count; CurveFilterIndex++)
-                        {
-                            CurveFilter = MultEQList.CurveFilterList[CurveFilterIndex];
-                            string FileName = SelectedPath + "\\" + SampleRate + "_" + CurveFilter + "_" + ch.Channel + ".wav";
-                            if (CurveFilterIndex == 0)
-                            {
-                                ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[SampleRateIndex])));
-                            }
-                            else if (CurveFilterIndex == 1)
-                            {
-                                ch.FlatCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, 48000)));
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private double[] FloatToDoubleArray(float[] response)
-        {
-            double[] result = new double[response.Length];
-            for (int i = 0; i < response.Length / 4; i++)
-            {
-                result[i] = (double)response[i];
-            }
-            return result;
         }
 
         private float[] ReadWaveFile(string FileName, int SampleRate, int Channels = 1)
@@ -363,32 +438,6 @@ namespace Odyssee
                 MessageBox.Show(ex.Message, FileName, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             return new float[1024];
-        }
-
-        private void MenuItem_Export_ChannelResponseData_FrdFile_OnClick(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
-            folderBrowserDialog.Description = "Select the directory to export the .frd files to.";
-            folderBrowserDialog.ShowNewFolderButton = true;
-
-            System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                Write_ChannelResponseData_FrdFile(folderBrowserDialog.SelectedPath);
-            }
-        }
-
-        private void Write_ChannelResponseData_FrdFile(string SelectedPath)
-        {
-            foreach (var ch in audysseyMultEQAvr.DetectedChannels)
-            {
-                foreach (var rspd in ch.ResponseData)
-                {
-                    int SampleRate = 48000;
-                    string FileName = SelectedPath + "\\" + rspd.Value.Length / 1024 + "k_MeasChirp_" + SampleRate + "Hz_" + ch.Channel + "_" + rspd.Key + ".frd";
-                    WriteFrdFile(FileName, rspd.Value, SampleRate);
-                }
-            }
         }
 
         private void WriteFrdFile(string FileName, double[] WaveData, int SampleRate)

@@ -78,6 +78,10 @@ namespace Audyssey
                         return 0;
                     }
                 }
+                set
+                {
+                    Distance = (int)(value * 34.30m);
+                }
             }
 
             public double? ResponseCoef
