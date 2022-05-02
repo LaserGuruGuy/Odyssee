@@ -133,6 +133,7 @@
     <Compile Include="MainWindowOxyPlotDrawing.cs" />
     <Compile Include="MainWindowOxyPlotSelection.cs" />
     <Compile Include="MainWindowToolbar.cs" />
+    <Compile Include="OnLineFirFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Windows;
 using System.Windows.Media;
 using Audyssey.MultEQAvr;
+using MathNet.Filtering.FIR;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -171,6 +172,8 @@ namespace Odyssee
         const double SampleRate48KHz = 48000;
         const double SampleSize = 16384;
 
+        OnlineFirFilter onlineCurveFirFilter = null;
+
         private string selectedCurveFilter = string.Empty;
         bool LogarithmicAxis = false;
 
@@ -295,17 +298,44 @@ namespace Odyssee
                     selectedChannel.DisplayFrequencies);
                 }
 
-                PlotAverageCurve(selectedChannel.AverageResponseData, SmoothingFactor);
+                if (CheckBox_CurveFilter.IsChecked == true)
+                {
+                    /* Select filter curve based on GUI radiobutton */
+                    if (selectedCurveFilter.Contains(AudysseyMultEQAvr.AudyEqSetList[0]))
+                    {
+                        /* Load 48kHz audy FIR filter coefficients */
+                        try
+                        {
+                            onlineCurveFirFilter = new(selectedChannel.AudyCurveFilter[AudysseyMultEQAvr.SampleRateList[2]]);
+                        }
+                        catch
+                        {
 
-                /* Apply filter to response based on GUI radiobutton */
-                if (selectedCurveFilter.Contains(AudysseyMultEQAvr.AudyEqSetList[0]))
-                {
-                    /* Audy curve filter */
+                        }
+                    }
+                    else if (selectedCurveFilter.Contains(AudysseyMultEQAvr.AudyEqSetList[1]))
+                    {
+                        /* Load 48kHz flat FIR filter coefficients */
+                        try
+                        {
+                            onlineCurveFirFilter = new(selectedChannel.FlatCurveFilter[AudysseyMultEQAvr.SampleRateList[2]]);
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        onlineCurveFirFilter = null;
+                    }
                 }
-                else if (selectedCurveFilter.Contains(AudysseyMultEQAvr.AudyEqSetList[1]))
+                else
                 {
-                    /* Flat curve filter */
+                    onlineCurveFirFilter = null;
                 }
+
+                PlotAverageCurve(selectedChannel.AverageResponseData, SmoothingFactor);
             }
         }
 
@@ -372,63 +402,81 @@ namespace Odyssee
 
         private void PlotAverageCurve(List<KeyValuePair<string, double[]>> AverageResponseData, int smoothingFactor)
         {
-            if (AverageResponseData != null)
+            if (selectedAxisLimits.Contains("Chirp") == false)
             {
-                if (AverageResponseData.Count > 0)
+
+                if (AverageResponseData != null)
                 {
-                    int Length = AverageResponseData[0].Value.Length;
-                    double[] Frequency = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(Length, 48000);
-                    double[] MagnitudeSquared = new double[Length/2];
-
-                    foreach (var ResponseData in AverageResponseData)
+                    if (AverageResponseData.Count > 0)
                     {
-                        MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[Length];
+                        int Length = AverageResponseData[0].Value.Length;
+                        double[] Frequency = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(Length, 48000);
+                        double[] MagnitudeSquared = new double[Length / 2];
 
-                        for (int i = 0; i < Length; i++)
+                        foreach (var ResponseData in AverageResponseData)
                         {
-                            complexData[i] = (MathNet.Numerics.Complex32)ResponseData.Value[i];
+                            MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[Length];
+
+                            if (CheckBox_CurveFilter.IsChecked == true && onlineCurveFirFilter != null)
+                            {
+                                /* reset FIR filter state */
+                                onlineCurveFirFilter.Reset();
+                                /* FIR filter respnse */
+                                for (int i = 0; i < Length; i++)
+                                {
+                                    complexData[i] = (MathNet.Numerics.Complex32)onlineCurveFirFilter.ProcessSample(ResponseData.Value[i]);
+                                }
+                            }
+                            else
+                            {
+                                /* unfiltered */
+                                for (int i = 0; i < Length; i++)
+                                {
+                                    complexData[i] = (MathNet.Numerics.Complex32)ResponseData.Value[i];
+                                }
+                            }
+
+                            MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
+
+                            for (int i = 0; i < Length / 2; i++)
+                            {
+                                /* averaging in power domain */
+                                MagnitudeSquared[i] += complexData[i].MagnitudeSquared;
+                            }
                         }
 
-                        MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
-
-                        for (int i = 0; i < Length/2; i++)
+                        /* average over all positions */
+                        for (int i = 0; i < Length / 2; i++)
                         {
-                            /* averaging in power domain */
-                            MagnitudeSquared[i] += complexData[i].MagnitudeSquared;
+                            MagnitudeSquared[i] /= AverageResponseData.Count;
                         }
+
+                        if (smoothingFactor > 0)
+                        {
+                            LinSpacedFracOctaveSmooth(49 - smoothingFactor, ref MagnitudeSquared, 1, 1d / 48);
+                        }
+
+                        Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+                        for (int i = 0; i < Length / 2; i++)
+                        {
+                            /* 20*log10(sqrt(MagnitudeSquared)) == 10*log10(MagnitudeSquared) */
+                            dataPoint.Add(new DataPoint(Frequency[i], 10 * Math.Log10(MagnitudeSquared[i])));
+                        }
+
+                        LineSeries lineserie = new LineSeries
+                        {
+                            ItemsSource = dataPoint,
+                            DataFieldX = "X",
+                            DataFieldY = "Y",
+                            StrokeThickness = 2,
+                            MarkerSize = 0,
+                            LineStyle = LineStyle.Dot,
+                            Color = OxyColor.Parse(Brushes.DarkRed.ToString()),
+                            MarkerType = MarkerType.None,
+                        };
+
+                        PlotModel.Series.Add(lineserie);
                     }
-
-                    /* average over all positions */
-                    for (int i = 0; i < Length/2; i++)
-                    {
-                        MagnitudeSquared[i] /= AverageResponseData.Count;
-                    }
-
-                    if (smoothingFactor > 0)
-                    {
-                        LinSpacedFracOctaveSmooth(49 - smoothingFactor, ref MagnitudeSquared, 1, 1d / 48);
-                    }
-
-                    Collection<DataPoint> dataPoint = new Collection<DataPoint>();
-                    for (int i = 0; i < Length / 2; i++)
-                    {
-                        /* 20*log10(sqrt(MagnitudeSquared)) == 10*log10(MagnitudeSquared) */
-                        dataPoint.Add(new DataPoint(Frequency[i], 10 * Math.Log10(MagnitudeSquared[i])));
-                    }
-
-                    LineSeries lineserie = new LineSeries
-                    {
-                        ItemsSource = dataPoint,
-                        DataFieldX = "X",
-                        DataFieldY = "Y",
-                        StrokeThickness = 2,
-                        MarkerSize = 0,
-                        LineStyle = LineStyle.Dot,
-                        Color = OxyColor.Parse(Brushes.DarkRed.ToString()),
-                        MarkerType = MarkerType.None,
-                    };
-
-                    PlotModel.Series.Add(lineserie);
                 }
             }
         }
