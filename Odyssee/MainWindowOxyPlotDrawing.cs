@@ -6,7 +6,6 @@ using System.Numerics;
 using System.Windows;
 using System.Windows.Media;
 using Audyssey.MultEQAvr;
-using MathNet.Numerics.IntegralTransforms;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -176,8 +175,6 @@ namespace Odyssee
         bool LogarithmicAxis = false;
 
         private Dictionary<string, Brush> ResponseDataTraceColor = new Dictionary<string, Brush> { { "0", Brushes.Black }, { "1", Brushes.Blue }, { "2", Brushes.Violet }, { "3", Brushes.Green }, { "4", Brushes.Orange }, { "5", Brushes.Red }, { "6", Brushes.Cyan }, { "7", Brushes.DeepPink } };
-        private Dictionary<string, Brush> FlatCurveFilterTraceColor = new Dictionary<string, Brush> { { AudysseyMultEQAvr.SampleRateList[0], Brushes.BlueViolet }, { AudysseyMultEQAvr.SampleRateList[1], Brushes.BlueViolet }, { AudysseyMultEQAvr.SampleRateList[2], Brushes.BlueViolet }, { AudysseyMultEQAvr.DispDataList[0], Brushes.BlueViolet }, { AudysseyMultEQAvr.DispDataList[1], Brushes.BlueViolet } };
-        private Dictionary<string, Brush> AudyCurveFilterTraceColor = new Dictionary<string, Brush> { { AudysseyMultEQAvr.SampleRateList[0], Brushes.Maroon }, { AudysseyMultEQAvr.SampleRateList[1], Brushes.Maroon }, { AudysseyMultEQAvr.SampleRateList[2], Brushes.Maroon }, { AudysseyMultEQAvr.DispDataList[0], Brushes.Maroon }, { AudysseyMultEQAvr.DispDataList[1], Brushes.Maroon } };
 
         private string selectedAxisLimits = "RadioButton_RangeChirp";
         private Dictionary<string, AxisLimit> AxisLimits = new Dictionary<string, AxisLimit>()
@@ -282,7 +279,7 @@ namespace Odyssee
                 if ((selectedChannel.SelectedAudyCurveFilter.Key != null) && (selectedChannel.SelectedAudyCurveFilter.Value != null))
                 {
                     PlotCurveFilter(selectedChannel.SelectedAudyCurveFilter,
-                    OxyColor.Parse(AudyCurveFilterTraceColor[selectedChannel.SelectedAudyCurveFilter.Key].ToString()),
+                    OxyColor.Parse(Brushes.Teal.ToString()),
                     SmoothingFactor,
                     selectedChannel.FilterFrequencies,
                     selectedChannel.DisplayFrequencies);
@@ -292,11 +289,13 @@ namespace Odyssee
                 if ((selectedChannel.SelectedFlatCurveFilter.Key != null) && (selectedChannel.SelectedFlatCurveFilter.Value != null))
                 {
                     PlotCurveFilter(selectedChannel.SelectedFlatCurveFilter,
-                    OxyColor.Parse(FlatCurveFilterTraceColor[selectedChannel.SelectedFlatCurveFilter.Key].ToString()),
+                    OxyColor.Parse(Brushes.BlueViolet.ToString()),
                     SmoothingFactor,
                     selectedChannel.FilterFrequencies,
                     selectedChannel.DisplayFrequencies);
                 }
+
+                PlotAverageCurve(selectedChannel.AverageResponseData, SmoothingFactor);
 
                 /* Apply filter to response based on GUI radiobutton */
                 if (selectedCurveFilter.Contains(AudysseyMultEQAvr.AudyEqSetList[0]))
@@ -371,6 +370,69 @@ namespace Odyssee
             }
         }
 
+        private void PlotAverageCurve(List<KeyValuePair<string, double[]>> AverageResponseData, int smoothingFactor)
+        {
+            if (AverageResponseData != null)
+            {
+                if (AverageResponseData.Count > 0)
+                {
+                    int Length = AverageResponseData[0].Value.Length;
+                    double[] Frequency = MathNet.Numerics.IntegralTransforms.Fourier.FrequencyScale(Length, 48000);
+                    double[] MagnitudeSquared = new double[Length/2];
+
+                    foreach (var ResponseData in AverageResponseData)
+                    {
+                        MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[Length];
+
+                        for (int i = 0; i < Length; i++)
+                        {
+                            complexData[i] = (MathNet.Numerics.Complex32)ResponseData.Value[i];
+                        }
+
+                        MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
+
+                        for (int i = 0; i < Length/2; i++)
+                        {
+                            /* averaging in power domain */
+                            MagnitudeSquared[i] += complexData[i].MagnitudeSquared;
+                        }
+                    }
+
+                    /* average over all positions */
+                    for (int i = 0; i < Length/2; i++)
+                    {
+                        MagnitudeSquared[i] /= AverageResponseData.Count;
+                    }
+
+                    if (smoothingFactor > 0)
+                    {
+                        LinSpacedFracOctaveSmooth(49 - smoothingFactor, ref MagnitudeSquared, 1, 1d / 48);
+                    }
+
+                    Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+                    for (int i = 0; i < Length / 2; i++)
+                    {
+                        /* 20*log10(sqrt(MagnitudeSquared)) == 10*log10(MagnitudeSquared) */
+                        dataPoint.Add(new DataPoint(Frequency[i], 10 * Math.Log10(MagnitudeSquared[i])));
+                    }
+
+                    LineSeries lineserie = new LineSeries
+                    {
+                        ItemsSource = dataPoint,
+                        DataFieldX = "X",
+                        DataFieldY = "Y",
+                        StrokeThickness = 2,
+                        MarkerSize = 0,
+                        LineStyle = LineStyle.Dot,
+                        Color = OxyColor.Parse(Brushes.DarkRed.ToString()),
+                        MarkerType = MarkerType.None,
+                    };
+
+                    PlotModel.Series.Add(lineserie);
+                }
+            }
+        }
+
         private void PlotCurve(double sampleRate, double[] responseData, int smoothingFactor, OxyColor oxyColor, LineStyle lineStyle, double strokeThickness)
         {
             Collection<DataPoint> dataPoint = new Collection<DataPoint>();
@@ -386,37 +448,40 @@ namespace Odyssee
                 AxisLimit axisLimits = AxisLimits[selectedAxisLimits];
 
                 double[] Frequency = new double[responseData.Length];
-                Complex[] complexData = new Complex[responseData.Length];
+                MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[responseData.Length];
 
                 for (int j = 0; j < responseData.Length; j++)
                 {
                     Frequency[j] = (double)j / responseData.Length * sampleRate;
-                    complexData[j] = (Complex)(responseData[j]);
+                    complexData[j] = (MathNet.Numerics.Complex32)(responseData[j]);
                 }
                 Frequency[0] = 0.5 / responseData.Length * sampleRate;
 
-                MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, FourierOptions.NoScaling);
+                MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
 
                 if (smoothingFactor != 0)
                 {
                     double[] smoothed = new double[responseData.Length];
                     for (int j = 0; j < responseData.Length; j++)
                     {
-                        smoothed[j] = complexData[j].Magnitude;
+                        /* MagnitudeSquared if we take 10*log10 later */
+                        smoothed[j] = complexData[j].MagnitudeSquared;
                     }
 
                     LinSpacedFracOctaveSmooth(49 - smoothingFactor, ref smoothed, 1, 1d / 48);
 
                     for (int x = 0; x < responseData.Length / 2; x++)
                     {
-                        dataPoint.Add(new DataPoint(Frequency[x], 20 * Math.Log10(smoothed[x])));
+                        /* 10*log10 for previously MagnitudeSquared */
+                        dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(smoothed[x])));
                     }
                 }
                 else
                 {
                     for (int x = 0; x < responseData.Length / 2; x++)
                     {
-                        dataPoint.Add(new DataPoint(Frequency[x], 20 * Math.Log10(complexData[x].Magnitude)));
+                        /* 10*log10 for previously MagnitudeSquared */
+                        dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(complexData[x].MagnitudeSquared)));
                     }
                 }
             }

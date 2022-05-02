@@ -54,6 +54,33 @@ namespace Odyssee
             DrawChart();
         }
 
+        private void ListView_CheckBox_ResponseDataAverage_Initialized(object sender, EventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            checkBox.IsChecked = audysseyMultEQAvr.SelectedChannel.AverageResponseData.Contains(keyValuePair);
+        }
+
+        private void ListView_CheckBox_ResponseDataAverage_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            if (!audysseyMultEQAvr.SelectedChannel.AverageResponseData.Contains(keyValuePair))
+            {
+                audysseyMultEQAvr.SelectedChannel.AverageResponseData.Add(keyValuePair);
+                DrawChart();
+            }
+        }
+
+        private void ListView_CheckBox_ResponseDataAverage_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+            KeyValuePair<string, double[]> keyValuePair = (KeyValuePair<string, double[]>)checkBox.DataContext;
+            audysseyMultEQAvr.SelectedChannel.AverageResponseData.Remove(keyValuePair);
+            DrawChart();
+        }
+
+
         private void ListView_FlatCurveFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DrawChart();

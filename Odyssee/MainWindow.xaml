@@ -310,12 +310,19 @@
                         <ListView ItemsSource="{Binding ResponseData}" SelectedItem="{Binding SelectedResponseData}" SelectionChanged="ListView_ResponseData_SelectionChanged" KeyUp="ListView_ResponseData_KeyUp">
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn Header="Response Data" Width="auto" DisplayMemberBinding="{Binding Key}"/>
+                                <GridViewColumn Header="Response" Width="auto" DisplayMemberBinding="{Binding Key}"/>
                                 <GridViewColumn Header="Stick" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                                <CheckBox Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized"/>
-                                        </DataTemplate>
+                                            <CheckBox Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized"/>
+                                         </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Average" Width="auto" >
+                                        <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Checked="ListView_CheckBox_ResponseDataAverage_Checked" Unchecked="ListView_CheckBox_ResponseDataAverage_Unchecked" Initialized="ListView_CheckBox_ResponseDataAverage_Initialized"/>
+                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                             </GridView>
@@ -325,13 +332,6 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Audy Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
-                                <GridViewColumn Header="Stick" Width="auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox IsEnabled="False"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -339,13 +339,6 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key}"/>
-                                <GridViewColumn Header="Stick" Width="auto">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                                <CheckBox IsEnabled="False"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
                     </ListView>
