@@ -551,30 +551,43 @@ namespace Odyssee
 
         private float[] ReadWaveFile(string FileName, int SampleRate, int Channels = 1)
         {
-            WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, Channels);
-
             var readback = new List<float>();
             try
             {
                 using (WaveFileReader reader = new WaveFileReader(FileName))
                 {
-                    float[] sampleframe;
-                    do
+                    if ((reader.WaveFormat.Channels == Channels) &&
+                        (reader.WaveFormat.SampleRate == SampleRate) &&
+                        (reader.WaveFormat.Encoding == WaveFormatEncoding.IeeeFloat) &&
+                        (reader.WaveFormat.BitsPerSample == 32) &&
+                        (reader.SampleCount == 1024))
                     {
-                        sampleframe = reader.ReadNextSampleFrame();
-                        if (sampleframe != null)
+                        float[] sampleframe;
+                        do
                         {
-                            readback.Add(sampleframe[0]);
-                        }
-                    } while (sampleframe != null);
+                            sampleframe = reader.ReadNextSampleFrame();
+                            if (sampleframe != null)
+                            {
+                                readback.Add(sampleframe[0]);
+                            }
+                        } while (sampleframe != null);
+                    }
+                    else
+                    {
+                        string Message = "Channels: " + reader.WaveFormat.Channels +
+                                         "\nBitsPerSample: " + reader.WaveFormat.BitsPerSample +
+                                         "\nEncoding: " + reader.WaveFormat.Encoding.ToString() +
+                                         "\nSampleRate: " + reader.WaveFormat.SampleRate +
+                                         "\nSampleCount: " + reader.SampleCount;
+                        MessageBox.Show(Message, FileName, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
                 }
-                return readback.ToArray();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, FileName, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            return new float[1024];
+            return readback.ToArray();
         }
 
         private void WriteFrdFile(string FileName, double[] WaveData, int SampleRate)
