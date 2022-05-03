@@ -48,12 +48,13 @@
                         <MenuItem Name="menuSaveAs" Header="_Save as..." Command="SaveAs" InputGestureText="Ctrl+S"/>
                         <Separator/>
                         <MenuItem Header="_Import">
-                            <MenuItem Header="Impulse Response from Wave File" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick" ToolTip="16384-sample 32-bit float 1-channel impulse response wav files (16384_MeasChirp_48000_FL_0_10,2.wav)"/>
+                            <MenuItem Header="Impulse Response from Wave File" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick" ToolTip="16384-sample 32-bit float 1-channel impulse response wav files (16384_ImpulseResponse_48000_FL_0_10,2.wav)"/>
                             <MenuItem Header="FIR Coefficients from Wave File" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="1024-tap (704-tap for subwoofer) 32-bit float 1-channel FIR curvefilter coefficient wav files (coefficient48kHz_FlatCurveFilter_FL.wav)"/>
                         </MenuItem>
                         <MenuItem Header="_Export" ToolTip="Export 16384-sample 32-bit float 1-channel impulse response">
                             <MenuItem Header="Impulse Response to Wave File" Click="MenuItem_Export_ChannelResponseData_WaveFile_OnClick" ToolTip="Export all channels, all positions to wav files"/>
                             <MenuItem Header="Impulse Response to Frd File" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick" ToolTip="Export all channels, all positions to FRD files"/>
+                            <MenuItem Header="Filter Coefficients to Wave File" Click="MenuItem_Export_FilterCoefficients_WaveFile_OnClick" ToolTip="Export all filter coefficients to wav files"/>
                         </MenuItem>
                         <Separator/>
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close" InputGestureText="Alt+F4"/>

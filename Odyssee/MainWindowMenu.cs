@@ -230,7 +230,20 @@ namespace Odyssee
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                ParseResponseDataToWaveFile(folderBrowserDialog.SelectedPath);
+                ParseResponseDataToWaveFilePath(folderBrowserDialog.SelectedPath);
+            }
+        }
+
+        private void MenuItem_Export_ChannelResponseData_FrdFile_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
+            folderBrowserDialog.Description = "Select folder to export .frd files";
+            folderBrowserDialog.ShowNewFolderButton = true;
+
+            System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                ParseResponseDataToFrdFilePath(folderBrowserDialog.SelectedPath);
             }
         }
 
@@ -246,7 +259,7 @@ namespace Odyssee
                 string[] FileNames = Directory.GetFiles(folderBrowserDialog.SelectedPath, "*.wav");
                 foreach(var FileName in FileNames)
                 {
-                    ParseWaveFileToResponseData(FileName);
+                    ParseWaveFileNameToResponseData(FileName);
                 }
             }
         }
@@ -260,37 +273,69 @@ namespace Odyssee
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                ParseWaveFileToFilterCoeff(folderBrowserDialog.SelectedPath);
+                ParseWaveFilePathToFilterCoeff(folderBrowserDialog.SelectedPath);
             }
         }
 
-        private void MenuItem_Export_ChannelResponseData_FrdFile_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_Export_FilterCoefficients_WaveFile_OnClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new();
-            folderBrowserDialog.Description = "Select folder to export .frd files";
+            folderBrowserDialog.Description = "Select folder to export .wav files";
             folderBrowserDialog.ShowNewFolderButton = true;
 
             System.Windows.Forms.DialogResult result = folderBrowserDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
-                ParseResponseDataToFrdFile(folderBrowserDialog.SelectedPath);
+                ParseFilterCoeffToWaveFilePath(folderBrowserDialog.SelectedPath);
             }
         }
 
-        private void ParseResponseDataToFrdFile(string FilePath)
+        private void ParseWaveFilePathToFilterCoeff(string FilePath)
         {
             foreach (var ch in audysseyMultEQAvr.DetectedChannels)
             {
-                foreach (var rspd in ch.ResponseData)
+                if (ch.Skip == false)
                 {
-                    int SampleRate = 48000;
-                    string FileName = FilePath + "\\" + rspd.Value.Length / 1024 + "k_MeasChirp_" + SampleRate + "Hz_" + ch.Channel + "_" + rspd.Key + ".frd";
-                    WriteFrdFile(FileName, rspd.Value, SampleRate);
+                    foreach (var SampleRate in MultEQList.SampleRateList)
+                    {
+                        foreach (var CurveFilter in MultEQList.CurveFilterList)
+                        {
+                            string FileName = FilePath + "\\" + SampleRate + "_" + CurveFilter + "_" + ch.Channel + ".wav";
+                            if (CurveFilter.Equals(MultEQList.CurveFilterList[0]))
+                            {
+                                if (ch.AudyCurveFilter.ContainsKey(SampleRate))
+                                {
+                                    if (ch.AudyCurveFilter.Remove(SampleRate))
+                                    {
+                                        ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                    }
+                                }
+                                else
+                                {
+                                    ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                }
+                            }
+                            else if (CurveFilter.Equals(MultEQList.CurveFilterList[1]))
+                            {
+                                if (ch.FlatCurveFilter.ContainsKey(SampleRate))
+                                {
+                                    if (ch.FlatCurveFilter.Remove(SampleRate))
+                                    {
+                                        ch.FlatCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                    }
+                                }
+                                else
+                                {
+                                    ch.FlatCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        private void ParseResponseDataToWaveFile(string FilePath)
+        private void ParseResponseDataToWaveFilePath(string FilePath)
         {
             const int SampleRate = 48000;
             foreach (var ch in audysseyMultEQAvr.DetectedChannels)
@@ -299,19 +344,67 @@ namespace Odyssee
                 {
                     foreach (var rspd in ch.ResponseData)
                     {
-                        string FileName = FilePath + "\\" + rspd.Value.Length + "_MeasChirp_" + SampleRate + "_" + ch.Channel + "_" + rspd.Key + "_" + ch.ChannelReport.Delay + ".wav";
+                        string FileName = FilePath + "\\" + rspd.Value.Length + "_ImpulseResponse_" + SampleRate + "_" + ch.Channel + "_" + rspd.Key + "_" + ch.ChannelReport.Delay + ".wav";
                         WriteWaveFile(FileName, DoubleToFloatArray(rspd.Value), SampleRate);
                     }
                 }
             }
         }
 
-        private void ParseWaveFileToResponseData(string FileName)
+        private void ParseResponseDataToFrdFilePath(string FilePath)
+        {
+            const int SampleRate = 48000;
+            foreach (var ch in audysseyMultEQAvr.DetectedChannels)
+            {
+                if (ch.Skip == false)
+                {
+                    foreach (var rspd in ch.ResponseData)
+                    {
+                        string FileName = FilePath + "\\" + rspd.Value.Length + "_ImpulseResponse_" + SampleRate + "_" + ch.Channel + "_" + rspd.Key + ".frd";
+                        WriteFrdFile(FileName, rspd.Value, SampleRate);
+                    }
+                }
+            }
+        }
+
+        private void ParseFilterCoeffToWaveFilePath(string FilePath)
+        {
+            foreach (var ch in audysseyMultEQAvr.DetectedChannels)
+            {
+                if (ch.Skip == false)
+                {
+                    foreach (var curve in ch.AudyCurveFilter)
+                    {
+                        foreach (var samplerate in MultEQList.SampleRateList)
+                        {
+                            if (samplerate.Equals(curve.Key))
+                            {
+                                string FileName = FilePath + "\\" + curve.Key + "_" + MultEQList.CurveFilterList[0] + "_" + ch.Channel + ".wav";
+                                WriteWaveFile(FileName, DoubleToFloatArray(curve.Value), MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(curve.Key)]);
+                            }
+                        }
+                    }
+                    foreach (var curve in ch.FlatCurveFilter)
+                    {
+                        foreach (var samplerate in MultEQList.SampleRateList)
+                        {
+                            if (samplerate.Equals(curve.Key))
+                            {
+                                string FileName = FilePath + "\\" + curve.Key + "_" + MultEQList.CurveFilterList[1] + "_" + ch.Channel + ".wav";
+                                WriteWaveFile(FileName, DoubleToFloatArray(curve.Value), MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(curve.Key)]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ParseWaveFileNameToResponseData(string FileName)
         {
             if (File.Exists(FileName))
             {
                 string[] keywords = System.IO.Path.GetFileNameWithoutExtension(FileName).Split('_');
-                if ((keywords.Length == 6 || keywords.Length == 5) && keywords[1] == "MeasChirp")
+                if ((keywords.Length == 6 || keywords.Length == 5) && keywords[1] == "ImpulseResponse")
                 {
                     int SampleSize = 0;
                     int SampleRate = 0;
@@ -333,7 +426,7 @@ namespace Odyssee
                     }
 
                     double[] Data = FloatToDoubleArray(ReadWaveFile(FileName, SampleRate, 1));
-                    
+
                     try
                     {
                         if (Data.Length == SampleSize)
@@ -363,30 +456,57 @@ namespace Odyssee
             }
         }
 
-        private void ParseWaveFileToFilterCoeff(string FilePath)
+        private void ParseWaveFileNameToFilterCoeff(string FileName)
         {
-            foreach (var ch in audysseyMultEQAvr.DetectedChannels)
+            if (File.Exists(FileName))
             {
-                if (ch.Skip == false)
+                string[] keywords = System.IO.Path.GetFileNameWithoutExtension(FileName).Split('_');
+                if (keywords.Length == 3)
                 {
-                    ch.AudyCurveFilter = new();
-                    ch.FlatCurveFilter = new();
-                    string SampleRate = string.Empty;
-                    string CurveFilter = string.Empty;
-                    for (var SampleRateIndex = 0; SampleRateIndex < MultEQList.SampleRateList.Count; SampleRateIndex++)
+                    foreach (var ch in audysseyMultEQAvr.DetectedChannels)
                     {
-                        SampleRate = MultEQList.SampleRateList[SampleRateIndex];
-                        for (var CurveFilterIndex = 0; CurveFilterIndex < MultEQList.CurveFilterList.Count; CurveFilterIndex++)
+                        if (ch.Channel.Equals(keywords[2]))
                         {
-                            CurveFilter = MultEQList.CurveFilterList[CurveFilterIndex];
-                            string FileName = FilePath + "\\" + SampleRate + "_" + CurveFilter + "_" + ch.Channel + ".wav";
-                            if (CurveFilterIndex == 0)
+                            foreach (var curve in MultEQList.CurveFilterList)
                             {
-                                ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[SampleRateIndex])));
-                            }
-                            else if (CurveFilterIndex == 1)
-                            {
-                                ch.FlatCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, 48000)));
+                                if (curve.Equals(keywords[1]))
+                                {
+                                    foreach (var samplerate in MultEQList.SampleRateList)
+                                    {
+                                        if (samplerate.Equals(keywords[0]))
+                                        {
+                                            double[] Coefficients = FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(samplerate)]));
+                                            if (curve.Equals(MultEQList.CurveFilterList[0]))
+                                            {
+                                                if (ch.AudyCurveFilter.ContainsKey(samplerate))
+                                                {
+                                                    if (ch.AudyCurveFilter.Remove(samplerate))
+                                                    {
+                                                        ch.AudyCurveFilter.Add(samplerate, Coefficients);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    ch.AudyCurveFilter.Add(samplerate, Coefficients);
+                                                }
+                                            }
+                                            else if (curve.Equals(MultEQList.CurveFilterList[1]))
+                                            {
+                                                if (ch.FlatCurveFilter.ContainsKey(samplerate))
+                                                {
+                                                    if (ch.FlatCurveFilter.Remove(samplerate))
+                                                    {
+                                                        ch.FlatCurveFilter.Add(samplerate, Coefficients);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    ch.FlatCurveFilter.Add(samplerate, Coefficients);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

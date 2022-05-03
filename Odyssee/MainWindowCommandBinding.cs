@@ -25,7 +25,7 @@ namespace Odyssee
 
             if (result == true)
             {
-                ParseFileToAudysseyMultEQAvr(dlg.FileName);
+                ParseOdyFileToAudysseyMultEQAvr(dlg.FileName);
             }
         }
 
@@ -44,7 +44,7 @@ namespace Odyssee
             // Process save file dialog box results
             if (result == true)
             {
-                ParseAudysseyMultEQAvrToFile(dlg.FileName);
+                ParseAudysseyMultEQAvrToOdyFile(dlg.FileName);
             }
         }
 
@@ -69,17 +69,18 @@ namespace Odyssee
                 {
                     if (file.EndsWith(".ody"))
                     {
-                        ParseFileToAudysseyMultEQAvr(file);
+                        ParseOdyFileToAudysseyMultEQAvr(file);
                     }
                     else if (file.EndsWith(".wav"))
                     {
-                        ParseWaveFileToResponseData(file);
+                        ParseWaveFileNameToResponseData(file);
+                        ParseWaveFileNameToFilterCoeff(file);
                     }
                 }
             }
         }
 
-        private void ParseFileToAudysseyMultEQAvr(string FileName)
+        private void ParseOdyFileToAudysseyMultEQAvr(string FileName)
         {
             if (File.Exists(FileName))
             {
@@ -92,7 +93,7 @@ namespace Odyssee
             }
         }
 
-        private void ParseAudysseyMultEQAvrToFile(string FileName)
+        private void ParseAudysseyMultEQAvrToOdyFile(string FileName)
         {
             if (audysseyMultEQAvr != null)
             {

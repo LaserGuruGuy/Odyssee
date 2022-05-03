@@ -37,6 +37,27 @@ namespace Audyssey
                 }
             }
 
+            public static void Sort<TKey, TValue , TOrder>(this Dictionary<TKey, TValue> source, TOrder Order)
+            {
+                Dictionary<string, double[]> collection = source as Dictionary<string, double[]>;
+                ObservableCollection<string> SampleRateOrder = Order as ObservableCollection<string>;
+
+                for (var i = source.Count() - 1; i > 0; i--)
+                {
+                    for (var j = 1; j <= i; j++)
+                    {
+                        KeyValuePair<string, double[]> o1 = collection.ElementAt(j - 1);
+                        KeyValuePair<string, double[]> o2 = collection.ElementAt(j);
+
+                        if (SampleRateOrder.IndexOf(o1.Key) > SampleRateOrder.IndexOf(o2.Key))
+                        {
+                            collection.Remove(o1.Key);
+                            collection.Add(o1.Key, o1.Value);
+                        }
+                    }
+                }
+            }
+
             public static TKey SmartReverseLookup<TKey, TValue>(this Dictionary<TKey, TValue> me, TValue value, TKey DefaultIfEmpty)
             {
                 try
