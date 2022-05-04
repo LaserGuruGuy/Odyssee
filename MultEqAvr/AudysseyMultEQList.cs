@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using Newtonsoft.Json;
 
 namespace Audyssey
@@ -11,7 +10,7 @@ namespace Audyssey
         public class StatusList
         {
             [JsonIgnore]
-            public static readonly StringCollection ChSetupList = new()
+            public static Collection<string> ChSetupList { get;  } = new()
             {
                 "FL",
                 "C",
@@ -25,7 +24,7 @@ namespace Audyssey
                 "TMR",
                 "RHR",
                 "TRR",
-                "TRL", 
+                "TRL",
                 "RHL",
                 "TML",
                 "TFL",
@@ -62,7 +61,7 @@ namespace Audyssey
             };
 
             [JsonIgnore]
-            public static ObservableCollection<decimal> ChLevelList { get; } = new()
+            public static Collection<decimal> ChLevelList { get; } = new()
             {
                 -12m,
                 -11.5m,
@@ -116,18 +115,18 @@ namespace Audyssey
             };
 
             [JsonIgnore]
-            public static ObservableCollection<object> CrossoverList { get; } = new()
+            public static Collection<object> CrossoverList { get; } = new()
             { (long)40, (long)60, (long)80, (long)90, (long)100, (long)110, (long)120, (long)150, (long)180, (long)200, (long)250, "F" };
         }
 
         public class ChannelReportList
         {
             [JsonIgnore]
-            public static ObservableCollection<string> SetupList { get; } = new()
+            public static Collection<string> SetupList { get; } = new()
             { "L", "N", "S", "E" };
 
             [JsonIgnore]
-            public static ObservableCollection<string> PolarityList { get; } = new()
+            public static Collection<string> PolarityList { get; } = new()
             { "N", "R" };
         }
 
@@ -136,52 +135,65 @@ namespace Audyssey
             [JsonIgnore]
             public static Dictionary<string, byte> CoefChannelList { get; } = new()
             {
-                { "FL", 0x00 },
-                { "C", 0x01 },
-                { "FR", 0x02 },
-                { "SLA", 0x03 },
+                { "FL",  0x00 },
+                { "C",   0x01 },
+                { "FR",  0x02 },
                 { "SRA", 0x0C },
-                { "SW1", 0x0D }
+                { "SBR", 0xFF }, /* TODO */
+                { "SBL", 0xFF }, /* TODO */
+                { "SLA", 0x03 },
+                { "FHR", 0xFF }, /* TODO */
+                { "TFR", 0xFF }, /* TODO */
+                { "TMR", 0xFF }, /* TODO */
+                { "RHR", 0xFF }, /* TODO */
+                { "TRR", 0xFF }, /* TODO */
+                { "TRL", 0xFF }, /* TODO */
+                { "RHL", 0xFF }, /* TODO */
+                { "TML", 0xFF }, /* TODO */
+                { "TFL", 0xFF }, /* TODO */
+                { "FHL", 0xFF }, /* TODO */
+                { "SW1", 0x0D },
+                { "SW2", 0xFF }  /* TODO */
             };
 
             [JsonIgnore]
-            public static ObservableCollection<string> DispDataList { get; } = new()
+            public static Collection<string> DispDataList { get; } = new()
             { "dispLargeData", "dispSmallData" };
 
             [JsonIgnore]
-            public static ObservableCollection<string> SampleRateList { get; } = new()
+            public static Collection<string> SampleRateList { get; } = new()
             { "coefficient32kHz", "coefficient441kHz", "coefficient48kHz" };
 
             [JsonIgnore]
-            public static ObservableCollection<int> SampleFrequencyList { get; } = new()
+            public static Collection<int> SampleFrequencyList { get; } = new()
             { 32000, 44100, 48000 };
 
             [JsonIgnore]
-            public static ObservableCollection<int> SampleCountList { get; } = new()
+            public static Collection<int> SampleCountList { get; } = new()
             { 1024, 704 };
 
             [JsonIgnore]
-            public static ObservableCollection<string> CurveFilterList { get; } = new()
+            public static Collection<string> CurveFilterList { get; } = new()
             { "referenceCurveFilter", "flatCurveFilter" };
 
             [JsonIgnore]
-            public static ObservableCollection<string> AudyDynSetList { get; } = new()
+            public static Collection<string> AudyDynSetList { get; } = new()
             { "H", "M", "L" };
 
             [JsonIgnore]
-            public static ObservableCollection<string> AudyEqSetList { get; } = new()
+            public static Collection<string> AudyEqSetList { get; } = new()
             { "Audy", "Flat" };
 
             [JsonIgnore]
-            public static ObservableCollection<int> AudyEqRefList { get; } = new()
+            public static Collection<int> AudyEqRefList { get; } = new()
             { 0, 5, 10, 15 };
 
             [JsonIgnore]
-            public static ObservableCollection<int> AudyLfcLevList { get; } = new()
+            public static Collection<int> AudyLfcLevList { get; } = new()
             { 1, 2, 3, 4, 5, 6, 7 };
 
             [JsonIgnore]
-            public static ObservableCollection<string> AudyFinFlgList { get; } = new()
+            public static Collection<string> AudyFinFlgList { get; } = new()
             { "Fin", "NotFin" };
         }
     }

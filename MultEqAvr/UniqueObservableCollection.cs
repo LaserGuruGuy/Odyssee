@@ -12,10 +12,11 @@ namespace Audyssey
         {
             public static void Sort<T, K>(this UniqueObservableCollection<T> source, K Order)
             {
-                if (source.GetType() == typeof(UniqueObservableCollection<Dictionary<string, string>>))
+                if (source.GetType() == typeof(UniqueObservableCollection<Dictionary<string, string>>) &&
+                    Order.GetType() == typeof(Collection<string>))
                 {
                     UniqueObservableCollection<Dictionary<string, string>> collection = source as UniqueObservableCollection<Dictionary<string, string>>;
-                    StringCollection SpeakerOrder = Order as StringCollection;
+                    Collection<string> SpeakerOrder = Order as Collection<string>;
 
                     for (var i = source.Count() - 1; i > 0; i--)
                     {
