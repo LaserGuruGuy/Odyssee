@@ -54,34 +54,50 @@ namespace Audyssey
             {
             }
 
-            public void TransmitTcpAvrStream(byte[] Data)
+            public bool TransmitTcpAvrStream(byte[] Data)
             {
-                _NetworkStream.Write(Data, 0, 1);
+                try
+                {
+                    _NetworkStream.Write(Data, 0, 1);
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
             
-            public void TransmitTcpAvrStream(string CmdStr, string DataStr)
+            public bool TransmitTcpAvrStream(string CmdStr, string DataStr)
             {
-                TransmitTcpAvrStream(CmdStr, Encoding.ASCII.GetBytes(DataStr));
+                return TransmitTcpAvrStream(CmdStr, Encoding.ASCII.GetBytes(DataStr));
             }
             
-            public void TransmitTcpAvrStream(byte[] Data, string CmdStr, string DataStr)
+            public bool TransmitTcpAvrStream(byte[] Data, string CmdStr, string DataStr)
             {
                 if (Data != null)
                 {
-                    _NetworkStream.Write(Data, 0, 1);
+                    try
+                    {
+                        _NetworkStream.Write(Data, 0, 1);
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
-                    TransmitTcpAvrStream(CmdStr, Encoding.ASCII.GetBytes(DataStr));
+                    return TransmitTcpAvrStream(CmdStr, Encoding.ASCII.GetBytes(DataStr));
                 }
             }
 
-            public void TransmitTcpAvrStream(string Cmd, Int32[] Data, int CurrentPacket = 0, int TotalPackets = 0)
+            public bool TransmitTcpAvrStream(string Cmd, Int32[] Data, int CurrentPacket = 0, int TotalPackets = 0)
             {
-                TransmitTcpAvrStream(Cmd, Int32ToByte(Data), CurrentPacket, TotalPackets);
+                return TransmitTcpAvrStream(Cmd, Int32ToByte(Data), CurrentPacket, TotalPackets);
             }
 
-            public void TransmitTcpAvrStream(string Cmd, byte[] Data, int CurrentPacket = 0, int TotalPackets = 0)
+            public bool TransmitTcpAvrStream(string Cmd, byte[] Data, int CurrentPacket = 0, int TotalPackets = 0)
             {
                 const UInt16 HeaderLength = 9;
                 byte[] Command;
@@ -127,10 +143,20 @@ namespace Audyssey
                 try
                 {
                     _NetworkStream.BeginWrite(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, WriteCallback, null);
+                    return true;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
+                    return false;
+                }
+            }
+
+            public bool Connected
+            {
+                get
+                {
+                    return _TcpClient == null ? false : _TcpClient.Connected;
                 }
             }
             

@@ -416,10 +416,10 @@ namespace Audyssey
                 }
                 return result;
             }
-            private void ResetAvrInfo() { _AvrInfo?.Reset(); }
-            private void ResetAvrStatus() { _AvrStatus?.Reset(); }
-            private void ResetDetectedChannels() { _DetectedChannels = new(); }
-            private void ResetSelectedChannel() { _SelectedChannel = null; }
+            private void ResetAvrInfo() { /* reset class object */ AvrInfo.Reset(); }
+            private void ResetAvrStatus() { /* reset class object */ AvrStatus.Reset(); }
+            private void ResetDetectedChannels() { /* new collection of class objects */ _DetectedChannels = new(); }
+            private void ResetSelectedChannel() { /* no object */ _SelectedChannel = null; }
             private void ResetMeasuredPosition() { /* property has no backingfield */ }
             private void ResetMeasuredChannel() { /* property has no backingfield */ }
             private void ResetNumPos() { _NumPos = 8; }
@@ -499,8 +499,8 @@ namespace Audyssey
 
             #region Methods
             private void ResetSerialized() { _Serialized = string.Empty; }
-            private void ResetAvrConnect_IsChecked() { _AvrConnect_IsChecked = false;  }
-            private void ResetSnifferAttach_IsChecked() { _SnifferAttach_IsChecked = false; }
+            private void ResetAvrConnect_IsChecked() { /*_AvrConnect_IsChecked = false;*/  }
+            private void ResetSnifferAttach_IsChecked() { /*_SnifferAttach_IsChecked = false;*/ }
             private void ResetAvrLvlm_SW1_IsChecked() { _AvrLvlm_SW1_IsChecked = false; }
             private void ResetAvrLvlm_SW2_IsChecked() { _AvrLvlm_SW2_IsChecked = false; }
             private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }

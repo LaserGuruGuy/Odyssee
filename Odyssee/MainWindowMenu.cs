@@ -49,13 +49,31 @@ namespace Odyssee
                     audysseyMultEQAvrTcp.Open();
                 }
             }
+            // receiver object does exist but is not connected
+            else if (audysseyMultEQAvrTcp.Connected == false)
+            {
+                // if there is no IP address text
+                if (string.IsNullOrEmpty(cmbInterfaceReceiver.Text))
+                {
+                    // display message to report error to user
+                    MessageBox.Show("Enter select a valid receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    // create receiver tcp instance and strip receiver name and keep receiver IP Address
+                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text);
+                    // open connection to receiver
+                    audysseyMultEQAvrTcp.Open();
+                }
+            }
             else
             {
                 audysseyMultEQAvr.Reset();
                 // close the connection
                 audysseyMultEQAvrTcp.Close();
+                // open dummy stub to localhost
+                audysseyMultEQAvrTcp = new(ref audysseyMultEQAvr);
                 // immediately clean up the object
-                audysseyMultEQAvrTcp = null;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }

@@ -94,7 +94,7 @@
                 <ToggleButton Click="OnButtonClick_Audyssey" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}" ToolTip="Enter Receiver remote control">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Icons/Audyssey.png"/>
                 </ToggleButton>
-                <ToggleButton Click="OnButtonClick_SubwooferLevel" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrLvlm_IsChecked, Mode=TwoWay}" ToolTip="Adjust Subwoofer Level">
+                <ToggleButton Click="OnButtonClick_SubwooferOneLevel" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrLvlm_SW1_IsChecked, Mode=TwoWay}" ToolTip="Adjust Subwoofer 1 Level">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Icons/Subwoofer.png"/>
                 </ToggleButton>
                 <Button Click="OnButtonClick_Microphone" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Measure Chirp Response with Receiver Microphone">

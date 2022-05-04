@@ -1,7 +1,6 @@
 using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Audyssey
@@ -125,6 +124,7 @@ namespace Audyssey
             private void ResetMic() { _Mic = null; }
             private void ResetAmpAssign() { _AmpAssign = null; }
             private void ResetAssignBin() { _AssignBin = null; }
+            private void ResetChSetup() { _ChSetup = null; }
             private void ResetBTTXStatus() { _BTTXStatus = null; }
             private void ResetSpPreset() { _SpPreset = null; }
             private void RaisePropertyChanged(string propertyName)
