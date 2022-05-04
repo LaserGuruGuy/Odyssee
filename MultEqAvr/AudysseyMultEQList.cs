@@ -10,8 +10,9 @@ namespace Audyssey
     {
         public class StatusList
         {
+            [JsonIgnore]
             public static readonly StringCollection ChSetupList = new()
-            { 
+            {
                 "FL",
                 "C",
                 "FR",
@@ -33,9 +34,11 @@ namespace Audyssey
                 "SWMIX2"
             };
         }
+
         public class ChannelList
         {
-            private static readonly Dictionary<string, string> _ChannelNameList = new()
+            [JsonIgnore]
+            public static Dictionary<string, string> ChannelNameList { get; } = new()
             {
                 { "FL", "Front Left" },
                 { "C", "Center" },
@@ -58,7 +61,8 @@ namespace Audyssey
                 { "SW2", "Subwoofer Mix 2" }
             };
 
-            private static readonly ObservableCollection<decimal> _ChLevelList = new()
+            [JsonIgnore]
+            public static ObservableCollection<decimal> ChLevelList { get; } = new()
             {
                 -12m,
                 -11.5m,
@@ -111,67 +115,26 @@ namespace Audyssey
                 12m
             };
 
-            private static readonly ObservableCollection<object> _CrossoverList = new()
+            [JsonIgnore]
+            public static ObservableCollection<object> CrossoverList { get; } = new()
             { (long)40, (long)60, (long)80, (long)90, (long)100, (long)110, (long)120, (long)150, (long)180, (long)200, (long)250, "F" };
-
-            [JsonIgnore]
-            public static Dictionary<string, string> ChannelNameList
-            {
-                get
-                {
-                    return _ChannelNameList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<decimal> ChLevelList
-            {
-                get
-                {
-                    return _ChLevelList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<object> CrossoverList
-            {
-                get
-                {
-                    return _CrossoverList;
-                }
-            }
         }
 
         public class ChannelReportList
         {
-            private static readonly ObservableCollection<string> _SetupList = new()
+            [JsonIgnore]
+            public static ObservableCollection<string> SetupList { get; } = new()
             { "L", "N", "S", "E" };
 
-            private static readonly ObservableCollection<string> _PolarityList = new()
+            [JsonIgnore]
+            public static ObservableCollection<string> PolarityList { get; } = new()
             { "N", "R" };
-
-            [JsonIgnore]
-            public static ObservableCollection<string> SetupList
-            {
-                get
-                {
-                    return _SetupList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<string> PolarityList
-            {
-                get
-                {
-                    return _PolarityList;
-                }
-            }
         }
 
         public class MultEQList
         {
-            private static readonly Dictionary<string, byte> _CoefChannelList = new()
+            [JsonIgnore]
+            public static Dictionary<string, byte> CoefChannelList { get; } = new()
             {
                 { "FL", 0x00 },
                 { "C", 0x01 },
@@ -180,123 +143,46 @@ namespace Audyssey
                 { "SRA", 0x0C },
                 { "SW1", 0x0D }
             };
-            
-            private static readonly ObservableCollection<string> _DispDataList = new()
+
+            [JsonIgnore]
+            public static ObservableCollection<string> DispDataList { get; } = new()
             { "dispLargeData", "dispSmallData" };
 
-            private static readonly ObservableCollection<string> _SampleRateList = new()
+            [JsonIgnore]
+            public static ObservableCollection<string> SampleRateList { get; } = new()
             { "coefficient32kHz", "coefficient441kHz", "coefficient48kHz" };
 
-            private static readonly ObservableCollection<int> _SampleFrequencyList = new()
+            [JsonIgnore]
+            public static ObservableCollection<int> SampleFrequencyList { get; } = new()
             { 32000, 44100, 48000 };
 
-            private static readonly ObservableCollection<string> _CurveFilterList = new()
+            [JsonIgnore]
+            public static ObservableCollection<int> SampleCountList { get; } = new()
+            { 1024, 704 };
+
+            [JsonIgnore]
+            public static ObservableCollection<string> CurveFilterList { get; } = new()
             { "referenceCurveFilter", "flatCurveFilter" };
 
-            private static readonly ObservableCollection<string> _AudyDynSetList = new()
+            [JsonIgnore]
+            public static ObservableCollection<string> AudyDynSetList { get; } = new()
             { "H", "M", "L" };
 
-            private static readonly ObservableCollection<string> _AudyEqSetList = new()
+            [JsonIgnore]
+            public static ObservableCollection<string> AudyEqSetList { get; } = new()
             { "Audy", "Flat" };
 
-            private static readonly ObservableCollection<int> _AudyEqRefList = new()
+            [JsonIgnore]
+            public static ObservableCollection<int> AudyEqRefList { get; } = new()
             { 0, 5, 10, 15 };
 
-            private static readonly ObservableCollection<int> _AudyLfcLevList = new()
+            [JsonIgnore]
+            public static ObservableCollection<int> AudyLfcLevList { get; } = new()
             { 1, 2, 3, 4, 5, 6, 7 };
 
-            private static readonly ObservableCollection<string> _AudyFinFlgList = new()
+            [JsonIgnore]
+            public static ObservableCollection<string> AudyFinFlgList { get; } = new()
             { "Fin", "NotFin" };
-
-            [JsonIgnore]
-            public static Dictionary<string, byte> CoefChannelList
-            {
-                get
-                {
-                    return _CoefChannelList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<string> DispDataList
-            {
-                get
-                {
-                    return _DispDataList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<string> SampleRateList
-            {
-                get
-                {
-                    return _SampleRateList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<int> SampleFrequencyList
-            {
-                get
-                {
-                    return _SampleFrequencyList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<string> CurveFilterList
-            {
-                get
-                {
-                    return _CurveFilterList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<string> AudyDynSetList
-            {
-                get
-                {
-                    return _AudyDynSetList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<string> AudyEqSetList
-            {
-                get
-                {
-                    return _AudyEqSetList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<int> AudyEqRefList
-            {
-                get
-                {
-                    return _AudyEqRefList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<int> AudyLfcLevList
-            {
-                get
-                {
-                    return _AudyLfcLevList;
-                }
-            }
-
-            [JsonIgnore]
-            public static ObservableCollection<string> AudyFinFlgList
-            {
-                get
-                {
-                    return _AudyFinFlgList;
-                }
-            }
         }
     }
 }

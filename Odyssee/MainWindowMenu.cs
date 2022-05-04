@@ -425,7 +425,7 @@ namespace Odyssee
 
                     }
 
-                    double[] Data = FloatToDoubleArray(ReadWaveFile(FileName, SampleRate, 1));
+                    double[] Data = FloatToDoubleArray(ReadWaveFile(FileName, SampleRate));
 
                     try
                     {
@@ -549,18 +549,18 @@ namespace Odyssee
             }
         }
 
-        private float[] ReadWaveFile(string FileName, int SampleRate, int Channels = 1)
+        private float[] ReadWaveFile(string FileName, int SampleRate)
         {
             var readback = new List<float>();
             try
             {
                 using (WaveFileReader reader = new WaveFileReader(FileName))
                 {
-                    if ((reader.WaveFormat.Channels == Channels) &&
-                        (reader.WaveFormat.SampleRate == SampleRate) &&
-                        (reader.WaveFormat.Encoding == WaveFormatEncoding.IeeeFloat) &&
+                    if ((reader.WaveFormat.Channels == 1) &&
                         (reader.WaveFormat.BitsPerSample == 32) &&
-                        (reader.SampleCount == 1024))
+                        (reader.WaveFormat.Encoding == WaveFormatEncoding.IeeeFloat) &&
+                        (reader.WaveFormat.SampleRate == SampleRate) &&
+                        ((reader.SampleCount == MultEQList.SampleCountList[0]) || (reader.SampleCount == MultEQList.SampleCountList[1])))
                     {
                         float[] sampleframe;
                         do
@@ -579,7 +579,7 @@ namespace Odyssee
                                          "\nEncoding: " + reader.WaveFormat.Encoding.ToString() +
                                          "\nSampleRate: " + reader.WaveFormat.SampleRate +
                                          "\nSampleCount: " + reader.SampleCount;
-                        MessageBox.Show(Message, FileName, MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show(Message, FileName.Substring(FileName.LastIndexOf('\\')), MessageBoxButton.OK, MessageBoxImage.Warning);
                     }
                 }
             }
