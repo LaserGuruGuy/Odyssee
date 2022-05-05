@@ -78,7 +78,7 @@ namespace Odyssee
                     }
                     else if (FileName.EndsWith(".ady"))
                     {
-                        ParseFileToAudysseyMultEQAvrAdapter(FileName);
+                        ParseAdyFileToAudysseyMultEQAvrAdapter(FileName);
                     }
                 }
             }
@@ -112,7 +112,7 @@ namespace Odyssee
             }
         }
 
-        private void ParseFileToAudysseyMultEQAvrAdapter(string FileName)
+        private void ParseAdyFileToAudysseyMultEQAvrAdapter(string FileName)
         {
             if (File.Exists(FileName))
             {

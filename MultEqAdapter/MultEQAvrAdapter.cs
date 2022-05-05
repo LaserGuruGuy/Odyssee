@@ -125,11 +125,11 @@ namespace MultEQAvrAdapter
                 get
                 {
 
-                    return MultEQList.AudyEqSetList.IndexOf(_AudysseyMultEQAvr.AudyEqSet);
+                    return MultEQList.AudyEqSetList.IndexOf(_AudysseyMultEQAvr.AudyEqSet) + 1;
                 }
                 set
                 {
-                    _AudysseyMultEQAvr.AudyEqSet = MultEQList.AudyEqSetList.ElementAt((int) value);
+                    _AudysseyMultEQAvr.AudyEqSet = MultEQList.AudyEqSetList.ElementAt((int) value - 1);
                     RaisePropertyChanged("AudyEqSetList");
                 }
             }
@@ -199,13 +199,46 @@ namespace MultEQAvrAdapter
                 }
             }
 
-            public Collection<DetectedChannel> DetectedChannels { get; set; }
+            public Collection<DetectedChannel> DetectedChannels
+            {
+                get
+                {
+                    Collection<DetectedChannel> _DetectedChannels = new();
+                    return _DetectedChannels;
+                }
+                set
+                {
+                    UniqueObservableCollection<Audyssey.MultEQAvr.DetectedChannel> channels = _AudysseyMultEQAvr.DetectedChannels;
+                    _AudysseyMultEQAvr.DetectedChannels = new();
+                    Audyssey.MultEQAvr.DetectedChannel channel = null;
+                    foreach (var ch in value)
+                    {
+                        for (var i = 0; i <= channels.Count; i++)
+                        {
+                            if (i == channels.Count)
+                            {
+                                channel = new Audyssey.MultEQAvr.DetectedChannel();
+                                channel.Channel = ch.CommandId;
+                                channel.Skip = ch.IsSkipMeasurement;
+                                channels.Add(channel);
+                                break;
+                            }
+                            else if (channels[i].Channel.Equals(ch.CommandId))
+                            {
+                                channel = channels[i];
+                                break;
+                            }
+                        }
+                    }
+                    _AudysseyMultEQAvr.DetectedChannels = channels; 
+                }
+            }
 
             public event PropertyChangedEventHandler PropertyChanged = delegate { };
             #endregion
 
             #region Methods
-            protected void RaisePropertyChanged(string propertyName)
+            protected void RaisePropertyChanged(string propertyName = null)
             {
                 this?.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }

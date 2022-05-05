@@ -103,8 +103,12 @@ namespace Audyssey
                         {
                             _DetectedChannels = value;
                         }
-                        RaisePropertyChanged("DetectedChannels");
                     }
+                    else
+                    {
+                        _DetectedChannels = value;
+                    }
+                    RaisePropertyChanged("DetectedChannels");
                 }
             }
             [JsonIgnore]
