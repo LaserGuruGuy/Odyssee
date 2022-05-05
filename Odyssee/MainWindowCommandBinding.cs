@@ -63,18 +63,22 @@ namespace Odyssee
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string[] FileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                foreach (var file in files)
+                foreach (var FileName in FileNames)
                 {
-                    if (file.EndsWith(".ody"))
+                    if (FileName.EndsWith(".ody"))
                     {
-                        ParseOdyFileToAudysseyMultEQAvr(file);
+                        ParseOdyFileToAudysseyMultEQAvr(FileName);
                     }
-                    else if (file.EndsWith(".wav"))
+                    else if (FileName.EndsWith(".wav"))
                     {
-                        ParseWaveFileNameToResponseData(file);
-                        ParseWaveFileNameToFilterCoeff(file);
+                        ParseWaveFileNameToResponseData(FileName);
+                        ParseWaveFileNameToFilterCoeff(FileName);
+                    }
+                    else if (FileName.EndsWith(".ady"))
+                    {
+                        ParseFileToAudysseyMultEQAvrAdapter(FileName);
                     }
                 }
             }
@@ -105,6 +109,19 @@ namespace Odyssee
                 {
                     File.WriteAllText(FileName, Serialized);
                 }
+            }
+        }
+
+        private void ParseFileToAudysseyMultEQAvrAdapter(string FileName)
+        {
+            if (File.Exists(FileName))
+            {
+                string Serialized = File.ReadAllText(FileName);
+                JsonConvert.PopulateObject(Serialized, audysseyMultEQAvrAdapter, new JsonSerializerSettings
+                {
+                    ObjectCreationHandling = ObjectCreationHandling.Replace,
+                    FloatParseHandling = FloatParseHandling.Decimal
+                });
             }
         }
     }

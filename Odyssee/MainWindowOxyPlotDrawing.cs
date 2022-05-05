@@ -343,18 +343,18 @@ namespace Odyssee
         {
             if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[0]))
             {
-                /* 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 48d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                /* 32 kHz 1024 filter coefficients (704 for subwoofer) */
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 16d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[1]))
             {
-                /* 1024 filter coefficients (704 for subwoofer)*/
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 48d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                /* 44.1 kHz 1024 filter coefficients (704 for subwoofer)*/
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 16d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[2]))
             {
-                /* 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 48d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                /* 48 kHz 1024 filter coefficients (704 for subwoofer) */
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 16d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.DispDataList[0]))
             {

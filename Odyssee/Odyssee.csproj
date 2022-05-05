@@ -190,6 +190,10 @@
       <Project>{a90a6e78-2b60-4a6f-a249-60683dae7b8b}</Project>
       <Name>CustomControls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MultEqAdapter\MultEqAdapter.csproj">
+      <Project>{D0F5FFDA-9023-4F49-922E-FE146385146D}</Project>
+      <Name>MultEqAdapter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MultEqAvr\MultEqAvr.csproj">
       <Project>{31e9eeb9-7d72-4db5-b484-fd2867c15d5c}</Project>
       <Name>MultEqAvr</Name>

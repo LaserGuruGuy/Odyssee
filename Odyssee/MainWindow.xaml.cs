@@ -20,7 +20,7 @@ using System.Windows.Shapes;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcp;
 using Audyssey.MultEQTcpSniffer;
-using Newtonsoft.Json;
+using MultEQAvrAdapter.MultEQApp;
 
 namespace Odyssee
 {
@@ -32,6 +32,8 @@ namespace Odyssee
         private AudysseyMultEQAvr audysseyMultEQAvr = null;
         private AudysseyMultEQAvrTcp audysseyMultEQAvrTcp = null;
         private AudysseyMultEQTcpSniffer audysseyMultEQTcpSniffer = null;
+        private AudysseyMultEQAvrAdapter audysseyMultEQAvrAdapter = null;
+
 
         public MainWindow()
         {
@@ -45,6 +47,7 @@ namespace Odyssee
             audysseyMultEQAvr.AvrInfo.PropertyChanged += PropertyChanged;
 
             audysseyMultEQAvrTcp = new(ref audysseyMultEQAvr);
+            audysseyMultEQAvrAdapter = new(ref audysseyMultEQAvr);
 
             this.DataContext = audysseyMultEQAvr;
         }
