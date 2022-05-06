@@ -4,6 +4,9 @@ using System.Linq;
 using MultEQAvrAdapter.AdapterList;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQ.List;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace MultEQAvrAdapter
 {
@@ -203,11 +206,13 @@ namespace MultEQAvrAdapter
             {
                 get
                 {
+                    //  TODO convertback
                     Collection<DetectedChannel> _DetectedChannels = new();
                     return _DetectedChannels;
                 }
                 set
                 {
+                    // Todo stash properties only relevant for App
                     UniqueObservableCollection<Audyssey.MultEQAvr.DetectedChannel> channels = _AudysseyMultEQAvr.DetectedChannels;
                     _AudysseyMultEQAvr.DetectedChannels = new();
                     Audyssey.MultEQAvr.DetectedChannel channel = null;
@@ -220,18 +225,109 @@ namespace MultEQAvrAdapter
                                 channel = new Audyssey.MultEQAvr.DetectedChannel();
                                 channel.Channel = ch.CommandId;
                                 channel.Skip = ch.IsSkipMeasurement;
+                                channel.Crossover = ch.CustomCrossover;
+                                channel.ChLevel = Convert.ToDecimal(ch.CustomLevel);
+                                channel.ChannelReport.SpConnect = ChannelReportList.SetupList[(Int32)ch.ChannelReport.EnSpeakerConnect];
+                                channel.ChannelReport.Distance = Convert.ToInt32(100m * ch.ChannelReport.Distance);
+                                channel.ChannelReport.Polarity = ChannelReportList.PolarityList[Convert.ToInt32((bool)ch.ChannelReport.IsReversePolarity)];
+                                channel.Setup = ch.CustomSpeakerType;
+                                foreach (var Filter in ch.ReferenceCurveFilter)
+                                {
+                                    channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                }
+                                foreach (var Filter in ch.FlatCurveFilter)
+                                {
+                                    channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                }
+                                foreach (var Filter in ch.ResponseData)
+                                {
+                                    channel.ResponseData.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                }
                                 channels.Add(channel);
                                 break;
                             }
                             else if (channels[i].Channel.Equals(ch.CommandId))
                             {
                                 channel = channels[i];
+                                channel.Skip = ch.IsSkipMeasurement;
+                                channel.Crossover = ch.CustomCrossover;
+                                channel.ChLevel = Convert.ToDecimal(ch.CustomLevel);
+                                channel.ChannelReport.SpConnect = ChannelReportList.SetupList[(Int32)ch.ChannelReport.EnSpeakerConnect];
+                                channel.ChannelReport.Distance = Convert.ToInt32(100m * ch.ChannelReport.Distance);
+                                channel.ChannelReport.Polarity = ChannelReportList.PolarityList[Convert.ToInt32((bool)ch.ChannelReport.IsReversePolarity)];
+                                channel.Setup = ch.CustomSpeakerType;
+                                foreach (var Filter in ch.ReferenceCurveFilter)
+                                {
+                                    for (var k = 0; k <= channel.AudyCurveFilter.Count; k++)
+                                    {
+                                        if (k == channel.AudyCurveFilter.Count)
+                                        {
+                                            channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                            break;
+                                        }
+                                        else if (channel.AudyCurveFilter.ContainsKey(Filter.Key))
+                                        {
+                                            if (channel.AudyCurveFilter.Remove(Filter.Key))
+                                            {
+                                                channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                foreach (var Filter in ch.FlatCurveFilter)
+                                {
+                                    for (var k = 0; k <= channel.FlatCurveFilter.Count; k++)
+                                    {
+                                        if (k == channel.FlatCurveFilter.Count)
+                                        {
+                                            channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                            break;
+                                        }
+                                        else if (channel.FlatCurveFilter.ContainsKey(Filter.Key))
+                                        {
+                                            if (channel.FlatCurveFilter.Remove(Filter.Key))
+                                            {
+                                                channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                foreach (var Filter in ch.ResponseData)
+                                {
+                                    for (var k = 0; k <= channel.ResponseData.Count; k++)
+                                    {
+                                        if (k == channel.ResponseData.Count)
+                                        {
+                                            channel.ResponseData.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                            break;
+                                        }
+                                        else if (channel.ResponseData.ContainsKey(Filter.Key))
+                                        {
+                                            if (channel.ResponseData.Remove(Filter.Key))
+                                            {
+                                                channel.ResponseData.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                                 break;
                             }
                         }
                     }
                     _AudysseyMultEQAvr.DetectedChannels = channels; 
                 }
+            }
+
+            public static double ParseStringToDouble(string value)
+            {
+                if (Double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var dbl))
+                {
+                    return dbl;
+                }
+                throw new ApplicationException("Error parsing value " + value);
             }
 
             public event PropertyChangedEventHandler PropertyChanged = delegate { };

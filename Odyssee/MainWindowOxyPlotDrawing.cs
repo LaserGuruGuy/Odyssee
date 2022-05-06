@@ -344,17 +344,17 @@ namespace Odyssee
             if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[0]))
             {
                 /* 32 kHz 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 16d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 24d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[1]))
             {
                 /* 44.1 kHz 1024 filter coefficients (704 for subwoofer)*/
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 16d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 24d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[2]))
             {
                 /* 48 kHz 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 16d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 24d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.DispDataList[0]))
             {
