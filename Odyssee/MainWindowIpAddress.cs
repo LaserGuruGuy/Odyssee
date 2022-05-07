@@ -18,8 +18,8 @@ namespace Odyssee
             var HostName = System.Net.Dns.GetHostName();
             var HostEntry = await System.Net.Dns.GetHostEntryAsync(HostName);
 
-            cmbInterfaceComputer.Items.Clear();
-            
+            audysseyMultEQAvr.ComputerDeviceInfo = new();
+
             if (HostEntry.AddressList.Length > 0)
             {
                 foreach (System.Net.IPAddress IP in HostEntry.AddressList)
@@ -34,7 +34,14 @@ namespace Odyssee
                                 {
                                     if (UnicastAddress.Address.Equals(IP))
                                     {
-                                        cmbInterfaceComputer.Items.Add(IP.ToString() + " | " + nic.Description);
+                                        Audyssey.MultEQAvr.ComputerDeviceInfo _ComputerDeviceInfo = new()
+                                        {
+                                            IpAddress = IP.ToString(),
+                                            Description = nic.Description,
+                                            Name = nic.Name,
+                                        };
+                                        audysseyMultEQAvr.ComputerDeviceInfo.Add(_ComputerDeviceInfo);
+                                        cmbInterfaceComputer.SelectedItem = _ComputerDeviceInfo;
                                     }
                                 }
                             }
@@ -44,7 +51,6 @@ namespace Odyssee
                     {
                     }
                 }
-                cmbInterfaceComputer.SelectedIndex = cmbInterfaceComputer.Items.Count - 1;
             }
         }
 
@@ -56,8 +62,6 @@ namespace Odyssee
             using var deviceLocator = new SsdpDeviceLocator(new Rssdp.Infrastructure.SsdpCommunicationsServer(new SocketFactory(ComputerIpAddress)));
             // Can pass search arguments here (device type, uuid). No arguments means all devices.
             var foundDevices = await deviceLocator.SearchAsync("upnp:rootdevice");
-
-            cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
 
             audysseyMultEQAvr.ReceiverDeviceInfo = new();
 
@@ -93,7 +97,7 @@ namespace Odyssee
                 }
             }
 
-            // select the last added item
+            // select the last item
             cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
         }
     }

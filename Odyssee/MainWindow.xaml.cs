@@ -91,10 +91,7 @@ namespace Odyssee
 
             if (comboBox.Items.Count > 0)
             {
-                string selectedHost = (string)comboBox.SelectedItem;
-                selectedHost = selectedHost.Substring(0, selectedHost.IndexOf('|')).TrimEnd(' ');
-
-                SearchForReceiverIpAddress(selectedHost);
+                SearchForReceiverIpAddress((comboBox.SelectedItem as ComputerDeviceInfo).IpAddress);
             }
         }
 

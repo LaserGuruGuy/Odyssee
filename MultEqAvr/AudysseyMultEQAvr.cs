@@ -59,6 +59,7 @@ namespace Audyssey
         public class ComputerDeviceInfo : INotifyPropertyChanged
         {
             public string Description { get; set; }
+            public string Name { get; set; }
             public string IpAddress { get; set; }
 
             public event PropertyChangedEventHandler PropertyChanged = delegate { };
@@ -90,7 +91,7 @@ namespace Audyssey
                     RaisePropertyChanged("ComputerDeviceInfo");
                 }
             }
-        
+
             public UniqueObservableCollection<ReceiverDeviceInfo> ReceiverDeviceInfo
             {
                 get

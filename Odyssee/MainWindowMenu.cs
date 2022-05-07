@@ -21,7 +21,7 @@ namespace Odyssee
     {
         private void MenuItem_DetectReceiver_OnClick(object sender, RoutedEventArgs e)
         {
-            SearchForReceiverIpAddress(cmbInterfaceComputer.Text.IndexOf(' ') > -1 ? cmbInterfaceComputer.Text.Substring(0, cmbInterfaceComputer.Text.IndexOf(' ')) : cmbInterfaceComputer.Text);
+            SearchForReceiverIpAddress((cmbInterfaceComputer.SelectedItem as ComputerDeviceInfo).IpAddress);
         }
 
         private void MenuItem_ConnectReceiver_OnClick(object sender, RoutedEventArgs e)
@@ -37,10 +37,10 @@ namespace Odyssee
             if (audysseyMultEQAvrTcp == null)
             {
                 // if there is no IP address text
-                if (string.IsNullOrEmpty((string)cmbInterfaceReceiver.SelectedValue))
+                if (string.IsNullOrEmpty((cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).FriendlyName))
                 {
                     // display message to report error to user
-                    MessageBox.Show("Scan for receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Scan for receiver IP address", "No valid receiver IP address found", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
@@ -54,10 +54,10 @@ namespace Odyssee
             else if (audysseyMultEQAvrTcp.Connected == false)
             {
                 // if there is no IP address text
-                if (string.IsNullOrEmpty((string)cmbInterfaceReceiver.SelectedValue))
+                if (string.IsNullOrEmpty((cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).FriendlyName))
                 {
                     // display message to report error to user
-                    MessageBox.Show("Enter select a valid receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Enter select a valid receiver IP address", "No valid receiver IP address found", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
@@ -108,8 +108,8 @@ namespace Odyssee
                     // strip computer ethernet adapter name and keep computer IP Address
                     // strip receiver name and keep receiver IP Address
                     audysseyMultEQTcpSniffer = new AudysseyMultEQTcpSniffer(
-                        cmbInterfaceComputer.Text.IndexOf(' ') > -1 ? cmbInterfaceComputer.Text.Substring(0, cmbInterfaceComputer.Text.IndexOf(' ')) : cmbInterfaceComputer.Text,
-                        (string)cmbInterfaceReceiver.SelectedValue,
+                        (cmbInterfaceComputer.SelectedItem as ComputerDeviceInfo).IpAddress,
+                        (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress,
                         0, 1256, 0, 0, AvrSnifferCallback, null, null, audysseyMultEQAvrTcp.Populate);
                     // open sniffer connection to receiver
                     audysseyMultEQTcpSniffer.Open();
