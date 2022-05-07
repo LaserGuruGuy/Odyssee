@@ -138,85 +138,84 @@ namespace Odyssee
 
         private void MenuItem_AvrInfo_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.AvrInfo_IsChecked = (bool)audysseyMultEQAvrTcp?.GetAvrInfo(OnCmdResponse);
+            audysseyMultEQAvr.AvrInfo_IsChecked = audysseyMultEQAvrTcp.GetAvrInfo(OnCmdResponse);
         }
 
         private void MenuItem_AvrStatus_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.AvrStatus_IsChecked = (bool)audysseyMultEQAvrTcp?.GetAvrStatus(OnCmdResponse);
+            audysseyMultEQAvr.AvrStatus_IsChecked = audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponse);
         }
 
         private void MenuItem_AudysseyMode_OnClick(object sender, RoutedEventArgs e)
         {
             if (audysseyMultEQAvr.AudysseyMode_IsChecked)
             {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = (bool)audysseyMultEQAvrTcp?.EnterAudysseyMode(OnCmdResponse);
+                audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponse);
             }
             else
             {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = (bool)audysseyMultEQAvrTcp?.ExitAudysseyMode(OnCmdResponse);
+                audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse);
             }
         }
 
         private void MenuItem_AvrLvLm_SW1_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.AvrLvlm_SW1_IsChecked = (bool)audysseyMultEQAvrTcp?.StartLvLmSw1(OnCmdResponse);
+            audysseyMultEQAvr.AvrLvlm_SW1_IsChecked = audysseyMultEQAvrTcp.StartLvLmSw1(OnCmdResponse);
         }
 
         private void MenuItem_AvrLvLm_SW2_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.AvrLvlm_SW2_IsChecked = (bool)audysseyMultEQAvrTcp?.StartLvLmSw2(OnCmdResponse);
+            audysseyMultEQAvr.AvrLvlm_SW2_IsChecked = audysseyMultEQAvrTcp.StartLvLmSw2(OnCmdResponse);
         }
 
         private void MenuItem_Abort_Oprt_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp?.AbortOprt(OnCmdResponse);
+            audysseyMultEQAvrTcp.AbortOprt(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.SetPosNum_IsChecked = (bool)audysseyMultEQAvrTcp?.SetPosNum(OnCmdResponse);
+            audysseyMultEQAvr.SetPosNum_IsChecked = audysseyMultEQAvrTcp.SetPosNum(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrStartChnl_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.StartChnl_IsChecked = (bool)audysseyMultEQAvrTcp?.StartChnl(OnCmdResponse);
+            audysseyMultEQAvr.StartChnl_IsChecked = audysseyMultEQAvrTcp.StartChnl(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrGetRespon_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.GetRespon_IsChecked = (bool)audysseyMultEQAvrTcp?.GetRespon(OnCmdResponse);
+            audysseyMultEQAvr.GetRespon_IsChecked = audysseyMultEQAvrTcp.GetRespon(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.SetAmp_IsChecked = (bool)audysseyMultEQAvrTcp?.SetAmp(OnCmdResponse);
+            audysseyMultEQAvr.SetAmp_IsChecked = audysseyMultEQAvrTcp.SetAmp(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrSetAudy_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.SetAudy_IsChecked = (bool)audysseyMultEQAvrTcp?.SetAudy(OnCmdResponse);
+            audysseyMultEQAvr.SetAudy_IsChecked = audysseyMultEQAvrTcp.SetAudy(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrSetDisFil_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.SetDisFil_IsChecked = (bool)audysseyMultEQAvrTcp?.SetAvrSetDisFil(OnCmdResponse);
+            audysseyMultEQAvr.SetDisFil_IsChecked = audysseyMultEQAvrTcp.SetAvrSetDisFil(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrInitCoefs_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.InitCoefs_IsChecked = (bool)audysseyMultEQAvrTcp?.SetAvrInitCoefs(OnCmdResponse);
+            audysseyMultEQAvr.InitCoefs_IsChecked = audysseyMultEQAvrTcp.SetAvrInitCoefs(OnCmdResponse);
         }
 
         private void MenuItem_SetAvrSetCoefDt_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            audysseyMultEQAvr.SetCoefDt_IsChecked = audysseyMultEQAvrTcp.SetAvrSetCoefDt(OnCmdResponse);
         }
 
         private void MenuItem_AudyFinFlag_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.AudyFinFlag_IsChecked = (bool)audysseyMultEQAvrTcp?.AudyFinFlag(OnCmdResponseAudyFinFlag);
+            audysseyMultEQAvr.AudyFinFlag_IsChecked = audysseyMultEQAvrTcp.AudyFinFlag(OnCmdResponseAudyFinFlag);
         }
 
         private void OnCmdResponseAudyFinFlag(string Response)
