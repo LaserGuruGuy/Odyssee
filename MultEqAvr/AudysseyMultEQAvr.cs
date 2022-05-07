@@ -1,6 +1,7 @@
 ﻿using Audyssey.MultEQ.List;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -42,9 +43,32 @@ namespace Audyssey
             public byte[] RspData { get; set; }
         }
 
+        public class ReceiverDeviceInfo : INotifyPropertyChanged
+        {
+            public string Manufacturer { get; set; }
+            public string FriendlyName { get; set; }
+            public string ModelName { get; set; }
+            public string ModelNumber { get; set; }
+            public string SerialNumber { get; set; }
+            public string IpAddress { get; set; }
+            public int Port { get; set; }
+
+            public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        }
+
+        public class ComputerDeviceInfo : INotifyPropertyChanged
+        {
+            public string Description { get; set; }
+            public string IpAddress { get; set; }
+
+            public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        }
+
         public partial class AudysseyMultEQAvr : MultEQList, INotifyPropertyChanged
         {
             #region BackingField
+            private UniqueObservableCollection<ComputerDeviceInfo> _ComputerDeviceInfo = new();
+            private UniqueObservableCollection<ReceiverDeviceInfo> _ReceiverDeviceInfo = new();
             private AvrInfo _AvrInfo = new();
             private AvrStatus _AvrStatus = new();
             private UniqueObservableCollection<DetectedChannel> _DetectedChannels = new();
@@ -54,6 +78,31 @@ namespace Audyssey
             #endregion
 
             #region Properties
+            public UniqueObservableCollection<ComputerDeviceInfo> ComputerDeviceInfo
+            {
+                get
+                {
+                    return _ComputerDeviceInfo;
+                }
+                set
+                {
+                    _ComputerDeviceInfo = value;
+                    RaisePropertyChanged("ComputerDeviceInfo");
+                }
+            }
+        
+            public UniqueObservableCollection<ReceiverDeviceInfo> ReceiverDeviceInfo
+            {
+                get
+                {
+                    return _ReceiverDeviceInfo;
+                }
+                set
+                {
+                    _ReceiverDeviceInfo = value;
+                    RaisePropertyChanged("ReceiverDeviceInfo");
+                }
+            }
             public AvrInfo AvrInfo
             {
                 get

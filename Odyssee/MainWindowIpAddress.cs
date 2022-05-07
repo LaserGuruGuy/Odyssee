@@ -15,11 +15,11 @@ namespace Odyssee
         /// </summary>
         private async void SearchForComputerIpAddress()
         {
-            cmbInterfaceComputer.Items.Clear();
-            cmbInterfaceComputer.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
             var HostName = System.Net.Dns.GetHostName();
             var HostEntry = await System.Net.Dns.GetHostEntryAsync(HostName);
+
             cmbInterfaceComputer.Items.Clear();
+            
             if (HostEntry.AddressList.Length > 0)
             {
                 foreach (System.Net.IPAddress IP in HostEntry.AddressList)
@@ -53,12 +53,14 @@ namespace Odyssee
         /// </summary>
         private async void SearchForReceiverIpAddress(string ComputerIpAddress)
         {
-            cmbInterfaceReceiver.Items.Clear();
-            cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
             using var deviceLocator = new SsdpDeviceLocator(new Rssdp.Infrastructure.SsdpCommunicationsServer(new SocketFactory(ComputerIpAddress)));
             // Can pass search arguments here (device type, uuid). No arguments means all devices.
             var foundDevices = await deviceLocator.SearchAsync("upnp:rootdevice");
-            cmbInterfaceReceiver.Items.Clear();
+
+            cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
+
+            audysseyMultEQAvr.ReceiverDeviceInfo = new();
+
             foreach (var foundDevice in foundDevices)
             {
                 try
@@ -69,16 +71,30 @@ namespace Odyssee
                     //Device data returned only contains basic device details and location of full device description.
                     Console.WriteLine("Found " + fullDevice.FriendlyName + " with " + foundDevice.Usn + " at " + foundDevice.DescriptionLocation.ToString());
 
-                    if (fullDevice.FriendlyName.Contains("Denon AVR"))
+                    // build avripinfo from fulldevice
+                    if (fullDevice.Manufacturer.Equals("Denon") || fullDevice.Manufacturer.Equals("Marantz"))
                     {
-                        cmbInterfaceReceiver.Items.Add(foundDevice.DescriptionLocation.Host + " | " + fullDevice.FriendlyName);
-                        cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
+                        Audyssey.MultEQAvr.ReceiverDeviceInfo _ReceiverDeviceInfo = new()
+                        {
+                            Manufacturer = fullDevice.Manufacturer,
+                            FriendlyName = fullDevice.FriendlyName,
+                            ModelName = fullDevice.ModelName,
+                            ModelNumber = fullDevice.ModelNumber,
+                            SerialNumber = fullDevice.SerialNumber,
+                            IpAddress = foundDevice.DescriptionLocation.Host,
+                            Port = fullDevice.CustomProperties.Contains("DMH:X_AudysseyPort") ? int.Parse(fullDevice.CustomProperties["DMH:X_AudysseyPort"].Value) : 1256
+                        };
+                        // add receiver to list
+                        audysseyMultEQAvr.ReceiverDeviceInfo.Add(_ReceiverDeviceInfo);
                     }
                 }
                 catch
                 {
                 }
             }
+
+            // select the last added item
+            cmbInterfaceReceiver.SelectedIndex = cmbInterfaceReceiver.Items.Count - 1;
         }
     }
 }

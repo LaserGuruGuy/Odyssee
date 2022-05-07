@@ -1,4 +1,5 @@
 ﻿using Audyssey.MultEQ.List;
+using Audyssey.MultEQAvr;
 using Audyssey.MultEQTcp;
 using Audyssey.MultEQTcpSniffer;
 using MathNet.Numerics.IntegralTransforms;
@@ -36,15 +37,15 @@ namespace Odyssee
             if (audysseyMultEQAvrTcp == null)
             {
                 // if there is no IP address text
-                if (string.IsNullOrEmpty(cmbInterfaceReceiver.Text))
+                if (string.IsNullOrEmpty((string)cmbInterfaceReceiver.SelectedValue))
                 {
                     // display message to report error to user
-                    MessageBox.Show("Enter select a valid receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Scan for receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
                     // create receiver tcp instance and strip receiver name and keep receiver IP Address
-                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text);
+                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).Port);
                     // open connection to receiver
                     audysseyMultEQAvrTcp.Open();
                 }
@@ -53,7 +54,7 @@ namespace Odyssee
             else if (audysseyMultEQAvrTcp.Connected == false)
             {
                 // if there is no IP address text
-                if (string.IsNullOrEmpty(cmbInterfaceReceiver.Text))
+                if (string.IsNullOrEmpty((string)cmbInterfaceReceiver.SelectedValue))
                 {
                     // display message to report error to user
                     MessageBox.Show("Enter select a valid receiver IP address.", "No valid receiver IP address found.", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -61,7 +62,7 @@ namespace Odyssee
                 else
                 {
                     // create receiver tcp instance and strip receiver name and keep receiver IP Address
-                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text);
+                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).Port);
                     // open connection to receiver
                     audysseyMultEQAvrTcp.Open();
                 }
@@ -108,7 +109,7 @@ namespace Odyssee
                     // strip receiver name and keep receiver IP Address
                     audysseyMultEQTcpSniffer = new AudysseyMultEQTcpSniffer(
                         cmbInterfaceComputer.Text.IndexOf(' ') > -1 ? cmbInterfaceComputer.Text.Substring(0, cmbInterfaceComputer.Text.IndexOf(' ')) : cmbInterfaceComputer.Text,
-                        cmbInterfaceReceiver.Text.IndexOf(' ') > -1 ? cmbInterfaceReceiver.Text.Substring(0, cmbInterfaceReceiver.Text.IndexOf(' ')) : cmbInterfaceReceiver.Text,
+                        (string)cmbInterfaceReceiver.SelectedValue,
                         0, 1256, 0, 0, AvrSnifferCallback, null, null, audysseyMultEQAvrTcp.Populate);
                     // open sniffer connection to receiver
                     audysseyMultEQTcpSniffer.Open();

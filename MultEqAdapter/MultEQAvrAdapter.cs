@@ -5,7 +5,6 @@ using MultEQAvrAdapter.AdapterList;
 using Audyssey.MultEQAvr;
 using Audyssey.MultEQ.List;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace MultEQAvrAdapter
@@ -14,6 +13,8 @@ namespace MultEQAvrAdapter
     {
         public class AudysseyMultEQAvrAdapter
         {
+            private Collection<DetectedChannel> _DetectedChannels;
+
             #region Poperties
             private AudysseyMultEQAvr _AudysseyMultEQAvr;
 
@@ -207,12 +208,13 @@ namespace MultEQAvrAdapter
                 get
                 {
                     //  TODO convertback
-                    Collection<DetectedChannel> _DetectedChannels = new();
                     return _DetectedChannels;
                 }
                 set
                 {
-                    // Todo stash properties only relevant for App
+                    // stash properties only relevant for App
+                    _DetectedChannels = value;
+                    // import compatible properties
                     UniqueObservableCollection<Audyssey.MultEQAvr.DetectedChannel> channels = _AudysseyMultEQAvr.DetectedChannels;
                     _AudysseyMultEQAvr.DetectedChannels = new();
                     Audyssey.MultEQAvr.DetectedChannel channel = null;
