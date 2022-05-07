@@ -68,7 +68,7 @@ namespace Odyssee
             {
                 if (ex.NativeErrorCode == 1223)
                 {
-                    MessageBox.Show("Run the app elevated.", "Elevated rights required to capture packets from a raw socket.", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Run the app elevated", "Elevated rights required to capture packets from a raw socket", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
                 else
                 {
