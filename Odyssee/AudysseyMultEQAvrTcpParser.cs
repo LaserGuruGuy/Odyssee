@@ -460,31 +460,33 @@ namespace Audyssey
                             {
                                 string CmdString = "SET_DISFIL";
                                 // build JSON
-                                string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings { ContractResolver = new InterfaceContractResolver(typeof(IDisFil)) });
+                                string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
+                                {
+                                    ContractResolver = new InterfaceContractResolver(typeof(IDisFil))
+                                });
                                 // toolbar
                                 AudysseyMultEQAvr.Serialized += CmdString + AvrString + "\n";
                                 // transmit request
                                 if (AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, AvrString))
                                 {
-                                    // callback
                                     cmdAck.Rqst(CallBack);
-                                    // wait
                                     while (cmdAck.Pending);
+                                    if (!cmdAck.Status.Equals("ACK"))
+                                    {
+                                        return false;
+                                    }
                                 }
                                 else
                                 {
-                                    // return command squence was not issued
                                     return false;
                                 }
                             }
                         }
                     }
-                    // return command sequence was issued
                     return true;
                 }
                 else
                 {
-                    // return command was not issued
                     return false;
                 }
             }
@@ -530,7 +532,7 @@ namespace Audyssey
                             if (coeff.Key.StartsWith("coefficient"))
                             {
                                 AudysseyMultEQAvr.CoefCurve = 0x00;
-                                AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(coeff.Key)];
+                                AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(coeff.Key);
                                 if (PumpAvrSetCoefDt(CallBack) == false)
                                 {
                                     return false;
@@ -542,7 +544,7 @@ namespace Audyssey
                             if (coeff.Key.StartsWith("coefficient"))
                             {
                                 AudysseyMultEQAvr.CoefCurve = 0x01;
-                                AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(coeff.Key)];
+                                AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(coeff.Key);
                                 if (PumpAvrSetCoefDt(CallBack) == false)
                                 {
                                     return false;
@@ -560,6 +562,7 @@ namespace Audyssey
 
             private bool PumpAvrSetCoefDt(CmdAckCallBack CallBack = null)
             {
+                AudysseyMultEQAvr.Serialized += "Channel " + AudysseyMultEQAvr.CoefChannel + ", Curve " + AudysseyMultEQAvr.CoefCurve + ", SampleRate " + AudysseyMultEQAvr.CoefSampleRate + "\n";
                 // get binary datablob
                 byte[] Data = AudysseyMultEQAvr.CoefData;
                 // transmit packets in chunks of 512 bytes
@@ -574,19 +577,18 @@ namespace Audyssey
                     byte[] CopyData = current_packet < total_byte_packets - 1 ? new byte[256] : new byte[last_packet_length];
                     Array.Copy(Data, current_packet * 256, CopyData, 0, current_packet < total_byte_packets - 1 ? 256 : last_packet_length);
                     string CmdString = "SET_COEFDT";
-                    // toolbar
-                    AudysseyMultEQAvr.Serialized += CmdString + " packet " + current_packet + " of " + total_byte_packets  + " with " + CopyData.Length + " bytes \n";
-                    // transmit request
+                    AudysseyMultEQAvr.Serialized += CmdString + " packet " + current_packet + " of " + total_byte_packets + " with " + CopyData.Length + " bytes \n";
                     if (AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, CopyData, current_packet, total_byte_packets - 1))
                     {
-                        // callback
                         cmdAck.Rqst(CallBack);
-                        // wait
-                        while (cmdAck.Pending) ;
+                        while (cmdAck.Pending);
+                        if (!cmdAck.Status.Equals("ACK"))
+                        {
+                            return false;
+                        }
                     }
                     else
                     {
-                        // return command squence was not issued
                         return false;
                     }
                 }
@@ -1235,6 +1237,8 @@ namespace Audyssey
         {
             private System.Timers.Timer Timer;
             private CmdAckCallBack Callback;
+            
+            public string Status { get; internal set; }
 
             public bool Pending { get; internal set; }
 
@@ -1244,6 +1248,7 @@ namespace Audyssey
                 Timer.AutoReset = false;
                 Timer.Elapsed += TimerElapsed;
                 Pending = false;
+                Status = string.Empty;
                 Callback = null;
             }
 
@@ -1256,6 +1261,7 @@ namespace Audyssey
             {
                 Timer.Stop();
                 Pending = true;
+                Status = "RQST";
                 Callback = CallBack;
                 Timer.Interval = TimerInterval;
                 Timer.Start();
@@ -1268,7 +1274,8 @@ namespace Audyssey
             {
                 Timer.Stop();
                 Pending = false;
-                Callback?.Invoke("ACK");
+                Status = "ACK";
+                Callback?.Invoke(Status);
             }
 
             /// <summary>
@@ -1281,7 +1288,8 @@ namespace Audyssey
                 {
                     Timer.Stop();
                     Timer.Start();
-                    Callback?.Invoke("INPROGRESS");
+                    Status = "INPROGRESS";
+                    Callback?.Invoke(Status);
                 }
             }
 
@@ -1292,7 +1300,8 @@ namespace Audyssey
             {
                 Timer.Stop();
                 Pending = false;
-                Callback?.Invoke("NACK");
+                Status = "NACK";
+                Callback?.Invoke(Status);
             }
 
             /// <summary>
@@ -1301,7 +1310,8 @@ namespace Audyssey
             private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
             {
                 Pending = false;
-                Callback?.Invoke("TIMEOUT");
+                Status = "TIMEOUT";
+                Callback?.Invoke(Status);
             }
         }
     }

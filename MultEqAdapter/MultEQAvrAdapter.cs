@@ -233,17 +233,40 @@ namespace MultEQAvrAdapter
                                 channel.ChannelReport.Distance = Convert.ToInt32(100m * ch.ChannelReport.Distance);
                                 channel.ChannelReport.Polarity = ChannelReportList.PolarityList[Convert.ToInt32((bool)ch.ChannelReport.IsReversePolarity)];
                                 channel.Setup = ch.CustomSpeakerType;
-                                foreach (var Filter in ch.ReferenceCurveFilter)
+                                if (ch.ReferenceCurveFilter != null)
                                 {
-                                    channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                    foreach (var Filter in ch.ReferenceCurveFilter)
+                                    {
+                                        if (Filter.Key.Equals(MultEQList.DispDataList[0]))
+                                        {
+                                            channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDoubleNormalised)));
+                                        }
+                                        else
+                                        {
+                                            channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                        }
+                                    }
                                 }
-                                foreach (var Filter in ch.FlatCurveFilter)
+                                if (ch.FlatCurveFilter != null)
                                 {
-                                    channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                    foreach (var Filter in ch.FlatCurveFilter)
+                                    {
+                                        if (Filter.Key.Equals(MultEQList.DispDataList[0]))
+                                        {
+                                            channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDoubleNormalised)));
+                                        }
+                                        else
+                                        {
+                                            channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                        }
+                                    }
                                 }
-                                foreach (var Filter in ch.ResponseData)
+                                if (ch.ResponseData != null)
                                 {
-                                    channel.ResponseData.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                    foreach (var Filter in ch.ResponseData)
+                                    {
+                                        channel.ResponseData.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                    }
                                 }
                                 channels.Add(channel);
                                 break;
@@ -264,14 +287,28 @@ namespace MultEQAvrAdapter
                                     {
                                         if (k == channel.AudyCurveFilter.Count)
                                         {
-                                            channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                            if(Filter.Key.Equals(MultEQList.DispDataList[0]))
+                                            {
+                                                channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDoubleNormalised)));
+                                            }
+                                            else
+                                            {
+                                                channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                            }
                                             break;
                                         }
                                         else if (channel.AudyCurveFilter.ContainsKey(Filter.Key))
                                         {
                                             if (channel.AudyCurveFilter.Remove(Filter.Key))
                                             {
-                                                channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                                if (Filter.Key.Equals(MultEQList.DispDataList[0]))
+                                                {
+                                                    channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDoubleNormalised)));
+                                                }
+                                                else
+                                                {
+                                                    channel.AudyCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                                }
                                                 break;
                                             }
                                         }
@@ -283,14 +320,28 @@ namespace MultEQAvrAdapter
                                     {
                                         if (k == channel.FlatCurveFilter.Count)
                                         {
-                                            channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                            if (Filter.Key.Equals(MultEQList.DispDataList[0]))
+                                            {
+                                                channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDoubleNormalised)));
+                                            }
+                                            else
+                                            {
+                                                channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                            }
                                             break;
                                         }
                                         else if (channel.FlatCurveFilter.ContainsKey(Filter.Key))
                                         {
                                             if (channel.FlatCurveFilter.Remove(Filter.Key))
                                             {
-                                                channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                                if (Filter.Key.Equals(MultEQList.DispDataList[0]))
+                                                {
+                                                    channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDoubleNormalised)));
+                                                }
+                                                else
+                                                {
+                                                    channel.FlatCurveFilter.Add(Filter.Key, Array.ConvertAll(Filter.Value, new Converter<string, double>(ParseStringToDouble)));
+                                                }
                                                 break;
                                             }
                                         }
@@ -328,6 +379,15 @@ namespace MultEQAvrAdapter
                 if (Double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var dbl))
                 {
                     return dbl;
+                }
+                throw new ApplicationException("Error parsing value " + value);
+            }
+
+            public static double ParseStringToDoubleNormalised(string value)
+            {
+                if (Double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var dbl))
+                {
+                    return Math.Round(dbl);
                 }
                 throw new ApplicationException("Error parsing value " + value);
             }

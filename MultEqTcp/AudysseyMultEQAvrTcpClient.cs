@@ -165,7 +165,7 @@ namespace Audyssey
                 try
                 {
                     _TcpClient = new(AddressFamily.InterNetwork);
-                    _TcpClient.SendTimeout = 500;
+                    _TcpClient.SendTimeout = _TimeoutMilliseconds;
                 }
                 catch (Exception ex)
                 {

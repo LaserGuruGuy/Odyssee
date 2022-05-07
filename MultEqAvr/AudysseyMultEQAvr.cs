@@ -93,6 +93,7 @@ namespace Audyssey
                 }
             }
 
+            [JsonIgnore]
             public UniqueObservableCollection<ReceiverDeviceInfo> ReceiverDeviceInfo
             {
                 get
