@@ -21,7 +21,10 @@ namespace Odyssee
     {
         private void MenuItem_DetectReceiver_OnClick(object sender, RoutedEventArgs e)
         {
-            SearchForReceiverIpAddress((cmbInterfaceComputer.SelectedItem as ComputerDeviceInfo).IpAddress);
+            if (cmbInterfaceComputer.SelectedItem != null)
+            {
+                SearchForReceiverIpAddress((cmbInterfaceComputer.SelectedItem as ComputerDeviceInfo).IpAddress);
+            }
         }
 
         private void MenuItem_ConnectReceiver_OnClick(object sender, RoutedEventArgs e)
@@ -45,13 +48,13 @@ namespace Odyssee
                 else
                 {
                     // create receiver tcp instance and strip receiver name and keep receiver IP Address
-                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).Port);
+                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).AudysseyPort);
                     // open connection to receiver
                     audysseyMultEQAvrTcp.Open();
                 }
             }
             // receiver object does exist but is not connected
-            else if (audysseyMultEQAvrTcp.Connected == false)
+            else if (audysseyMultEQAvrTcp.Connected == false && cmbInterfaceReceiver.SelectedItem != null)
             {
                 // if there is no IP address text
                 if (string.IsNullOrEmpty((cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).FriendlyName))
@@ -62,7 +65,7 @@ namespace Odyssee
                 else
                 {
                     // create receiver tcp instance and strip receiver name and keep receiver IP Address
-                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).Port);
+                    audysseyMultEQAvrTcp = new AudysseyMultEQAvrTcp(ref audysseyMultEQAvr, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress, (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).AudysseyPort);
                     // open connection to receiver
                     audysseyMultEQAvrTcp.Open();
                 }

@@ -51,7 +51,7 @@ namespace Audyssey
             public string ModelNumber { get; set; }
             public string SerialNumber { get; set; }
             public string IpAddress { get; set; }
-            public int Port { get; set; }
+            public int AudysseyPort { get; set; }
 
             public event PropertyChangedEventHandler PropertyChanged = delegate { };
         }
@@ -79,6 +79,7 @@ namespace Audyssey
             #endregion
 
             #region Properties
+            [JsonIgnore]
             public UniqueObservableCollection<ComputerDeviceInfo> ComputerDeviceInfo
             {
                 get

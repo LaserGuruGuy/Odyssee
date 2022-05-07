@@ -76,7 +76,7 @@ namespace Odyssee
                     Console.WriteLine("Found " + fullDevice.FriendlyName + " with " + foundDevice.Usn + " at " + foundDevice.DescriptionLocation.ToString());
 
                     // build avripinfo from fulldevice
-                    if (fullDevice.Manufacturer.Equals("Denon") || fullDevice.Manufacturer.Equals("Marantz"))
+                    if (fullDevice.CustomProperties.Contains("DMH:X_AudysseyPort"))
                     {
                         Audyssey.MultEQAvr.ReceiverDeviceInfo _ReceiverDeviceInfo = new()
                         {
@@ -86,7 +86,7 @@ namespace Odyssee
                             ModelNumber = fullDevice.ModelNumber,
                             SerialNumber = fullDevice.SerialNumber,
                             IpAddress = foundDevice.DescriptionLocation.Host,
-                            Port = fullDevice.CustomProperties.Contains("DMH:X_AudysseyPort") ? int.Parse(fullDevice.CustomProperties["DMH:X_AudysseyPort"].Value) : 1256
+                            AudysseyPort = int.Parse(fullDevice.CustomProperties["DMH:X_AudysseyPort"].Value)
                         };
                         // add receiver to list
                         audysseyMultEQAvr.ReceiverDeviceInfo.Add(_ReceiverDeviceInfo);

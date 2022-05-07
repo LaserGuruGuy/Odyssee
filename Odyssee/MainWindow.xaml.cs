@@ -89,7 +89,7 @@ namespace Odyssee
         {
             ComboBox comboBox = sender as ComboBox;
 
-            if (comboBox.Items.Count > 0)
+            if (comboBox.Items.Count > 0 && comboBox.SelectedItem != null)
             {
                 SearchForReceiverIpAddress((comboBox.SelectedItem as ComputerDeviceInfo).IpAddress);
             }
