@@ -580,6 +580,13 @@ namespace Audyssey
             #endregion
 
             #region Methods
+            public void StatusBar(string LogString)
+            {
+#if DEBUG
+                //System.IO.File.AppendAllText(System.Environment.CurrentDirectory + "\\debuglog.txt", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt") + " " + LogString + "\n");
+#endif
+                Serialized += DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt") + " " + LogString + "\n";
+            }
             public void Reset()
             {
                 foreach (PropertyDescriptor prop in TypeDescriptor.GetProperties(GetType()))

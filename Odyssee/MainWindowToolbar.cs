@@ -81,9 +81,15 @@ namespace Odyssee
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
         private void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseMicrophone_EnterAudysseyMode);
+            task = System.Threading.Tasks.Task.Run(() => audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseMicrophone_EnterAudysseyMode));
         }
 
         private void OnCmdResponseMicrophone_EnterAudysseyMode(string Response)
@@ -94,7 +100,7 @@ namespace Odyssee
             }
             else
             {
-                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvr.StatusBar(Response);
             }
         }
 
@@ -106,7 +112,7 @@ namespace Odyssee
             }
             else
             {
-                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvr.StatusBar(Response);
             }
         }
 
@@ -118,7 +124,7 @@ namespace Odyssee
             }
             else
             {
-                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvr.StatusBar(Response);
             }
         }
 
@@ -138,26 +144,139 @@ namespace Odyssee
                 }
                 else
                 {
-                    audysseyMultEQAvrTcp.ExitAudysseyMode();
+                    audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse);
                 }
             }
             else if (Response.Equals("TIMEOUT") && MessageBoxResult.OK == MessageBox.Show(
                         "Error during receiving responsedata: " + Response,
                         "Continue with last position ", MessageBoxButton.OKCancel, MessageBoxImage.Question))
             {
-                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvr.StatusBar(Response);
                 audysseyMultEQAvrTcp.GetRespon(OnCmdAckMicrophone_GetRespon);
             }
             else
             {
-                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvr.StatusBar(Response);
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
         private void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
         {
-            // TODO
-            audysseyMultEQAvr.Serialized += "Not implemented\n";
+            audysseyMultEQAvr.AvrStatus_IsChecked = audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponseSpeaker_GetAvrStatus);
+        }
+
+        private void OnCmdResponseSpeaker_GetAvrStatus(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.AvrInfo_IsChecked = audysseyMultEQAvrTcp.GetAvrInfo(OnCmdResponseSpeaker_GetAvrInfo);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_GetAvrInfo(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseSpeaker_EnterAudysseyMode);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_EnterAudysseyMode(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.SetAmp_IsChecked = audysseyMultEQAvrTcp.SetAmp(OnCmdResponseSpeaker_SetAmp);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_SetAmp(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.SetAudy_IsChecked = audysseyMultEQAvrTcp.SetAudy(OnCmdResponseSpeaker_SetAudy);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_SetAudy(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.SetDisFil_IsChecked = audysseyMultEQAvrTcp.SetAvrSetDisFil(OnCmdResponseSpeaker_SetAvrSetDisFil);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_SetAvrSetDisFil(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.InitCoefs_IsChecked = audysseyMultEQAvrTcp.SetAvrInitCoefs(OnCmdResponseSpeaker_SetAvrInitCoefs);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_SetAvrInitCoefs(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.SetCoefDt_IsChecked = audysseyMultEQAvrTcp.SetAvrSetCoefDt(OnCmdResponseSpeaker_SetAvrSetCoefDt);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_SetAvrSetCoefDt(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.AudyFinFlag_IsChecked = audysseyMultEQAvrTcp.AudyFinFlag(OnCmdResponseSpeaker_AudyFinFlag);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_AudyFinFlag(string Response)
+        {
+            if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
         }
     }
 }

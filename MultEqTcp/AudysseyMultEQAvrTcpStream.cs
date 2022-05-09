@@ -31,7 +31,7 @@ namespace Audyssey
 
             public void Unpack(byte[] packetData, ushort packetLength)
             {
-                if (packetLength > 19)
+                if (packetLength > 18)
                 {
                     try
                     {
@@ -39,13 +39,13 @@ namespace Audyssey
 
                         // If we want to filter only packets which we can decode the minimum
                         // length of a packet with no data is header + checksum = 19 bytes.
-                        if (memoryStream.Length >= 19)
+                        if (memoryStream.Length > 18)
                         {
                             byte[] array = memoryStream.ToArray();
                             Array.Resize<byte>(ref array, array.Length - 1);
                             byte CheckSum = CalculateChecksum(array);
 
-                            if (memoryStream.Length > 19)
+                            if (memoryStream.Length > 18)
                             {
                                 BinaryReader binaryReader = new(memoryStream);
                                 _TransmitReceive = binaryReader.ReadChar();

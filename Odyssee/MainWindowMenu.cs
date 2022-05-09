@@ -19,6 +19,8 @@ namespace Odyssee
     /// </summary>
     public partial class MainWindow : Window
     {
+        System.Threading.Tasks.Task task;
+
         private void MenuItem_DetectReceiver_OnClick(object sender, RoutedEventArgs e)
         {
             if (cmbInterfaceComputer.SelectedItem != null)
@@ -133,7 +135,7 @@ namespace Odyssee
         public void AvrSnifferCallback(bool IsConnected, string Result)
         {
             audysseyMultEQAvr.SnifferAttach_IsChecked = IsConnected;
-            audysseyMultEQAvr.Serialized += Result;
+            audysseyMultEQAvr.StatusBar(Result);
         }
 
         private void MenuItem_AvrInfo_OnClick(object sender, RoutedEventArgs e)
@@ -210,7 +212,7 @@ namespace Odyssee
 
         private void MenuItem_SetAvrSetCoefDt_OnClick(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.SetCoefDt_IsChecked = audysseyMultEQAvrTcp.SetAvrSetCoefDt(OnCmdResponse);
+            task = System.Threading.Tasks.Task.Factory.StartNew(() => audysseyMultEQAvrTcp.SetAvrSetCoefDt(OnCmdResponse));
         }
 
         private void MenuItem_AudyFinFlag_OnClick(object sender, RoutedEventArgs e)
@@ -227,7 +229,7 @@ namespace Odyssee
             else
             {
                 audysseyMultEQAvr.AudyFinFlag_IsChecked = false;
-                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvr.StatusBar(Response);
             }
         }
 
@@ -238,7 +240,7 @@ namespace Odyssee
             }
             else
             {
-                audysseyMultEQAvr.Serialized += Response + "\n";
+                audysseyMultEQAvr.StatusBar(Response);
             }
         }
 

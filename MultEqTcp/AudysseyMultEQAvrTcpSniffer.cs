@@ -87,7 +87,7 @@ namespace Audyssey
                     _Socket.BeginReceive(_PacketData, 0, _PacketData.Length, SocketFlags.None, new AsyncCallback(OnSocketReceive), null);
 
                     //Log
-                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(true, "Attached " + _HostName + ":" + _HostPort + " to " + _ClientName + ":" + _ClientPort + "\n");
+                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(true, "Attached " + _HostName + ":" + _HostPort + " to " + _ClientName + ":" + _ClientPort);
                 }
                 catch (ObjectDisposedException)
                 {
@@ -105,7 +105,7 @@ namespace Audyssey
                     try
                     {
                         _Socket.Close();
-                        _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(false, "Detached " + _HostName + ":" + _HostPort + " from " + _ClientName + ":" + _ClientPort + "\n");
+                        _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(false, "Detached " + _HostName + ":" + _HostPort + " from " + _ClientName + ":" + _ClientPort);
                     }
                     catch (ObjectDisposedException)
                     {
@@ -169,7 +169,7 @@ namespace Audyssey
                         if (udpHeader.SourcePort == _ClientPort.ToString() ||
                             udpHeader.DestinationPort == _ClientPort.ToString())
                         {
-                            if (udpHeader.MessageLength > 1)
+                            if (udpHeader.MessageLength > 0)
                             {
                                 _AudysseyMultEQAvrTcpStream.Unpack(udpHeader.Data, udpHeader.MessageLength);
                             }

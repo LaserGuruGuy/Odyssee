@@ -201,7 +201,7 @@ namespace Audyssey
                     try
                     {
                         _TcpClient.Close();
-                        _AudysseyMultEQAvrConnectCallBack?.Invoke(false, "Disconnected from " + _HostName + ":" + _HostPort + "\n");
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(false, "Disconnected from " + _HostName + ":" + _HostPort);
                     }
                     catch (ObjectDisposedException)
                     {
@@ -230,7 +230,7 @@ namespace Audyssey
                     {
                         _Buffer = new byte[_TcpClient.ReceiveBufferSize];
                         _ReadResult = _NetworkStream.BeginRead(_Buffer, 0, _Buffer.Length, ReadCallback, _Buffer);
-                        _AudysseyMultEQAvrConnectCallBack?.Invoke(true, "Connected to " + _TcpClient.Client.RemoteEndPoint.ToString() + "\n");
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(true, "Connected to " + _TcpClient.Client.RemoteEndPoint.ToString());
                     }
                     catch (Exception ex)
                     {
@@ -265,9 +265,16 @@ namespace Audyssey
                 {
                     Console.WriteLine("More data available, that is weird...");
                 }
-                _AudysseyMultEQAvrTcpStream.Unpack(_Buffer, _numberOfBytesRead);
+                _AudysseyMultEQAvrTcpStream?.Unpack(_Buffer, _numberOfBytesRead);
                 _AudysseyMultEQAvrReceiveCallback?.Invoke(result.IsCompleted);
-                _ReadResult = _NetworkStream.BeginRead(_Buffer, 0, _Buffer.Length, ReadCallback, _Buffer);
+                try
+                {
+                    _ReadResult = _NetworkStream.BeginRead(_Buffer, 0, _Buffer.Length, ReadCallback, _Buffer);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             private void WriteCallback(IAsyncResult result)

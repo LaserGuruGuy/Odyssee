@@ -10,7 +10,7 @@ namespace Audyssey
     {
         public interface IFin
         {
-            public string AudyFinFlg { get; set; }
+            public string AudyFinFlg { get; }
         }
 
         /// <summary>
@@ -18,10 +18,12 @@ namespace Audyssey
         /// </summary>
         public interface IAmp
         {
-            public UniqueObservableCollection<Dictionary<string, int>> ChLevel { get; set; }
-            public UniqueObservableCollection<Dictionary<string, object>> Crossover { get; set; }
+            public string AmpAssign { get; set; }
+            public string AssignBin { get; set; }
             public UniqueObservableCollection<Dictionary<string, string>> SpConfig { get; set; }
             public UniqueObservableCollection<Dictionary<string, int>> Distance { get; set; }
+            public UniqueObservableCollection<Dictionary<string, int>> ChLevel { get; set; }
+            public UniqueObservableCollection<Dictionary<string, object>> Crossover { get; set; }
             public string AudyFinFlg { get; set; }
             public bool? AudyDynEq { get; set; }
             public int? AudyEqRef { get; set; }
@@ -40,105 +42,27 @@ namespace Audyssey
 
             #region Properties
             [JsonIgnore]
-            public UniqueObservableCollection<Dictionary<string, int>> ChLevel
+            public string AmpAssign
             {
                 get
                 {
-                    UniqueObservableCollection<Dictionary<string, int>> ChLevel = new();
-                    if (DetectedChannels != null)
-                    {
-                        foreach (var ch in DetectedChannels)
-                        {
-                            if (ch.Channel != null && ch.ChLevel != null && ch.Skip != null)
-                            {
-                                if (ch.Skip == false)
-                                {
-                                    ChLevel.Add(new Dictionary<string, int>() { { (string)ch.Channel, (int)((decimal)ch.ChLevel * 10m) } });
-                                }
-                            }
-                        }
-                    }
-                    return ChLevel;
+                    return AvrStatus.AmpAssign;
                 }
                 set
                 {
-                    if (DetectedChannels != null)
-                    {
-                        foreach (var ch in DetectedChannels)
-                        {
-                            if (string.IsNullOrEmpty(ch.Channel) == false)
-                            {
-                                foreach (var sp in value)
-                                {
-                                    foreach (var el in sp)
-                                    {
-                                        if (ch.Channel.Equals(el.Key))
-                                        {
-                                            try
-                                            {
-                                                ch.ChLevel = (decimal)el.Value / 10m;
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Serialized += ex.Message;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    AvrStatus.AmpAssign = value;
                 }
             }
             [JsonIgnore]
-            public UniqueObservableCollection<Dictionary<string, object>> Crossover
+            public string AssignBin
             {
                 get
                 {
-                    UniqueObservableCollection<Dictionary<string, object>> Crossover = new();
-                    if (DetectedChannels != null)
-                    {
-                        foreach (var ch in DetectedChannels)
-                        {
-                            if (ch.Channel != null && ch.Crossover != null && ch.Skip != null)
-                            {
-                                if (ch.Skip == false)
-                                {
-                                    Crossover.Add(new Dictionary<string, object>() { { ch.Channel, ch.Crossover.GetType() == typeof(string) ? ch.Crossover : (int.Parse(ch.Crossover.ToString()) / 10) } });
-                                }
-                            }
-                        }
-                    }
-                    return Crossover;
+                    return AvrStatus.AssignBin;
                 }
                 set
                 {
-                    if (DetectedChannels != null)
-                    {
-                        foreach (var ch in DetectedChannels)
-                        {
-                            if (string.IsNullOrEmpty(ch.Channel) == false)
-                            {
-                                foreach (var sp in value)
-                                {
-                                    foreach (var el in sp)
-                                    {
-                                        if (ch.Channel.Equals(el.Key))
-                                        {
-                                            try
-                                            {
-                                                ch.Crossover = el.Value;
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                                Serialized += ex.Message;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    AvrStatus.AssignBin = value;
                 }
             }
             [JsonIgnore]
@@ -151,16 +75,17 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.ChannelReport != null && ch.Skip != null)
+                            if (ch.ChannelReport != null)
                             {
                                 if (ch.ChannelReport.SpConnect != null)
                                 {
-                                    if (ch.Skip == false)
+                                    try
                                     {
-                                        if (ch.Skip == false)
-                                        {
-                                            SpConfig.Add(new Dictionary<string, string>() { { ch.Channel, ch.ChannelReport.SpConnect } });
-                                        }
+                                        SpConfig.Add(new Dictionary<string, string>() { { ch.Channel, ch.ChannelReport.SpConnect } });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        StatusBar(ex.Message);
                                     }
                                 }
                             }
@@ -188,7 +113,7 @@ namespace Audyssey
                                             }
                                             catch (Exception ex)
                                             {
-                                                Serialized += ex.Message;
+                                                StatusBar(ex.Message);
                                             }
                                         }
                                     }
@@ -208,13 +133,17 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.ChannelReport != null && ch.Skip != null)
+                            if (ch.ChannelReport != null)
                             {
                                 if (ch.ChannelReport.Distance != null)
                                 {
-                                    if (ch.Skip == false)
+                                    try
                                     {
                                         Distance.Add(new Dictionary<string, int>() { { ch.Channel, (int)ch.ChannelReport.Distance } });
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        StatusBar(ex.Message);
                                     }
                                 }
                             }
@@ -242,7 +171,117 @@ namespace Audyssey
                                             }
                                             catch (Exception ex)
                                             {
-                                                Serialized += ex.Message;
+                                                StatusBar(ex.Message);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            [JsonIgnore]
+            public UniqueObservableCollection<Dictionary<string, int>> ChLevel
+            {
+                get
+                {
+                    UniqueObservableCollection<Dictionary<string, int>> ChLevel = new();
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (ch.Channel != null && ch.ChLevel != null)
+                            {
+                                try
+                                {
+                                    ChLevel.Add(new Dictionary<string, int>() { { (string)ch.Channel, (int)((decimal)ch.ChLevel * 10m) } });
+                                }
+                                catch (Exception ex)
+                                {
+                                    StatusBar(ex.Message);
+                                }
+                            }
+                        }
+                    }
+                    return ChLevel;
+                }
+                set
+                {
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (string.IsNullOrEmpty(ch.Channel) == false)
+                            {
+                                foreach (var sp in value)
+                                {
+                                    foreach (var el in sp)
+                                    {
+                                        if (ch.Channel.Equals(el.Key))
+                                        {
+                                            try
+                                            {
+                                                ch.ChLevel = (decimal)el.Value / 10m;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                StatusBar(ex.Message);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            [JsonIgnore]
+            public UniqueObservableCollection<Dictionary<string, object>> Crossover
+            {
+                get
+                {
+                    UniqueObservableCollection<Dictionary<string, object>> Crossover = new();
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (ch.Channel != null && ch.Crossover != null)
+                            {
+                                try
+                                {
+                                    Crossover.Add(new Dictionary<string, object>() { { ch.Channel, ch.Crossover.GetType() == typeof(string) ? ch.Crossover : (int.Parse(ch.Crossover.ToString())) } });
+                                }
+                                catch (Exception ex)
+                                {
+                                    StatusBar(ex.Message);
+                                }
+                            }
+                        }
+                    }
+                    return Crossover;
+                }
+                set
+                {
+                    if (DetectedChannels != null)
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            if (string.IsNullOrEmpty(ch.Channel) == false)
+                            {
+                                foreach (var sp in value)
+                                {
+                                    foreach (var el in sp)
+                                    {
+                                        if (ch.Channel.Equals(el.Key))
+                                        {
+                                            try
+                                            {
+                                                ch.Crossover = el.Value;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                StatusBar(ex.Message);
                                             }
                                         }
                                     }
