@@ -728,11 +728,11 @@ namespace Audyssey
 
             public async Task SetAvrSetDisFil(CmdAckCallBack CallBack = null)
             {
-                int DisFilIndex = 0;
-                AudysseyMultEQAvr.SetDisFil_IsChecked = false;
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
+                    AudysseyMultEQAvr.SetDisFil_IsChecked = false;
                     int DisFilCount = AudysseyMultEQAvr.DisFilCount;
+                    int DisFilIndex = 0;
                     foreach (var eq in AudysseyMultEQAvr.AudyEqSetList)
                     {
                         AudysseyMultEQAvr.EqType = eq;
@@ -780,9 +780,11 @@ namespace Audyssey
 
             public async Task SetAvrSetCoefDt(CmdAckCallBack CallBack = null)
             {
-                AudysseyMultEQAvr.SetCoefDt_IsChecked = false;
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
+                    AudysseyMultEQAvr.SetCoefDt_IsChecked = false;
+                    int CoefDtCount = AudysseyMultEQAvr.CoefDtCount;
+                    int CoefDtIndex = 0;
                     foreach (var ch in AudysseyMultEQAvr.DetectedChannels)
                     {
                         AudysseyMultEQAvr.CoefChannel = MultEQList.CoefChannelList[ch.Channel];
@@ -792,7 +794,8 @@ namespace Audyssey
                             {
                                 AudysseyMultEQAvr.CoefCurve = 0x00;
                                 AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(coeff.Key);
-                                await PumpAvrSetCoefDt(CallBack);
+                                CoefDtIndex++;
+                                await PumpAvrSetCoefDt(CallBack, CoefDtIndex, CoefDtCount);
                             }
                         }
                         foreach (var coeff in ch.FlatCurveFilter)
@@ -801,15 +804,15 @@ namespace Audyssey
                             {
                                 AudysseyMultEQAvr.CoefCurve = 0x01;
                                 AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(coeff.Key);
-                                await PumpAvrSetCoefDt (CallBack);
+                                CoefDtIndex++;
+                                await PumpAvrSetCoefDt (CallBack, CoefDtIndex, CoefDtCount);
                             }
                         }
                     }
-                    AudysseyMultEQAvr.SetCoefDt_IsChecked = true;
                 }
             }
 
-            private async Task PumpAvrSetCoefDt(CmdAckCallBack CallBack = null)
+            private async Task PumpAvrSetCoefDt(CmdAckCallBack CallBack = null, int CoefDtIndex = 0, int CoefDtCount = 0)
             {
                 // get binary datablob
                 byte[] Data = AudysseyMultEQAvr.CoefData;
@@ -855,7 +858,8 @@ namespace Audyssey
                     byte[] CopyData = current_packet < total_byte_packets - 1 ? new byte[512] : new byte[last_packet_length];
                     Array.Copy(Data, current_packet * 512, CopyData, 0, current_packet < total_byte_packets - 1 ? 512 : last_packet_length);
                     string CmdString = "SET_COEFDT";
-                    AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + (current_packet + 1) + " of " + total_byte_packets + " with " + CopyData.Length + " bytes");
+                    AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + (current_packet + 1) + " of " + total_byte_packets + " with " + CopyData.Length + " bytes   index " + CoefDtIndex + " count " + CoefDtCount);
+                    if (CoefDtIndex >= CoefDtCount && current_packet + 1 >= total_byte_packets) AudysseyMultEQAvr.SetCoefDt_IsChecked = true;
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, CopyData, current_packet, total_byte_packets - 1);
                     // command ack request pending, clear ack request after timeout
                     await Task.Run(() => cmdAck.Rqst(CallBack));

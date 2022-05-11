@@ -166,6 +166,42 @@ namespace Audyssey
                     return _DisFilCount / AudysseyMultEQAvr.DispDataList.Count;
                 }
             }
+            public int CoefDtCount
+            {
+                get
+                {
+                    int _CoefDtCount = 0;
+                    try
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            foreach (var eq in AudysseyMultEQAvr.SampleRateList)
+                            {
+                                foreach (var cv in ch.AudyCurveFilter)
+                                {
+                                    if (cv.Key.Equals(eq))
+                                    {
+                                        _CoefDtCount++;
+                                        break;
+                                    }
+                                }
+                                foreach (var cv in ch.FlatCurveFilter)
+                                {
+                                    if (cv.Key.Equals(eq))
+                                    {
+                                        _CoefDtCount++;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    return _CoefDtCount;
+                }
+            }
             public UniqueObservableCollection<DetectedChannel> DetectedChannels
             {
                 get
