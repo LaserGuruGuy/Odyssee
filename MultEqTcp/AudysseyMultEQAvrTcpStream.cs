@@ -8,19 +8,23 @@ namespace Audyssey
 {
     namespace MultEQTcpStream
     {
-        public delegate void AudysseyMultEQAvrTcpStreamParseCallback(char TransmitReceiveChar, string CmdString, byte[] DataByte, byte CurrentPacket, byte TotalPackets, bool TransferComplete);
+        public delegate void AudysseyMultEQAvrTcpStreamParseCallback(char TransmitReceiveChar, string CmdString, byte[] DataByte, byte CurrentSegment, byte TotalSegments, bool SegmentComplete);
 
         public class AudysseyMultEQAvrTcpStream
         {
             private char _TransmitReceive;
             private UInt16 _TotalLength;
-            private byte _CurrentPacket;
-            private byte _TotalPackets;
+            private byte _CurrentSegment;
+            private byte _TotalSegments;
             private UInt16 _DataLength;
 
             private byte[][] DataByteJaggedArray = null;
             private int DataByteJaggedArrayTotalLength;
             private int CountedPackets;
+
+            private const byte ESC = 27;
+            private const byte EOT = 4;
+            private const byte NUL = 0;
 
             private AudysseyMultEQAvrTcpStreamParseCallback _AudysseyMultEQAvrTcpStreamParseCallback = null;
 
@@ -50,25 +54,25 @@ namespace Audyssey
                                 BinaryReader binaryReader = new(memoryStream);
                                 _TransmitReceive = binaryReader.ReadChar();
                                 _TotalLength = BinaryPrimitives.ReverseEndianness(binaryReader.ReadUInt16());
-                                _CurrentPacket = binaryReader.ReadByte();
-                                _TotalPackets = binaryReader.ReadByte();
+                                _CurrentSegment = binaryReader.ReadByte();
+                                _TotalSegments = binaryReader.ReadByte();
                                 string Command = Encoding.ASCII.GetString(binaryReader.ReadBytes(10));
                                 byte Reserved = binaryReader.ReadByte();
                                 _DataLength = BinaryPrimitives.ReverseEndianness(binaryReader.ReadUInt16());
                                 byte[] Data = binaryReader.ReadBytes(_DataLength);
                                 if (CheckSum == binaryReader.ReadByte())
                                 {
-                                    bool TransferComplete = true;
+                                    bool SegmentComplete = true;
                                     // binary transfers have multiple segmemts
-                                    if (_TotalPackets != 0)
+                                    if (_TotalSegments != 0)
                                     {
                                         // for multi segment transfers we need to report if we received all (possible out-of-order) segments
-                                        TransferComplete = false;
+                                        SegmentComplete = false;
                                         // upon receiving the first segment (who can be out of order!)
-                                        if (_CurrentPacket == 0)
+                                        if (_CurrentSegment == 0)
                                         {
                                             // we know how many segments there are
-                                            DataByteJaggedArray = new byte[_TotalPackets + 1][];
+                                            DataByteJaggedArray = new byte[_TotalSegments + 1][];
                                             // accumulate length for later unpacking
                                             DataByteJaggedArrayTotalLength = 0;
                                             // count the segments, they can be out of order, so we even might receive the last one premature
@@ -81,7 +85,7 @@ namespace Audyssey
                                             if (DataByteJaggedArray == null)
                                             {
                                                 // but we know how many segments there are
-                                                DataByteJaggedArray = new byte[_TotalPackets + 1][];
+                                                DataByteJaggedArray = new byte[_TotalSegments + 1][];
                                                 // accumulate length for later unpacking
                                                 DataByteJaggedArrayTotalLength = 0;
                                                 // count the segments, they can be out of order, so we even might receive the last one premature
@@ -93,13 +97,13 @@ namespace Audyssey
                                             }
                                         }
                                         // we know the length of this segment (however they likely are all of equal length)
-                                        DataByteJaggedArray[_CurrentPacket] = new byte[Data.Length];
+                                        DataByteJaggedArray[_CurrentSegment] = new byte[Data.Length];
                                         // copy the current segment at its sequence number
-                                        DataByteJaggedArray[_CurrentPacket] = Data;
+                                        DataByteJaggedArray[_CurrentSegment] = Data;
                                         // and of course update the total length
                                         DataByteJaggedArrayTotalLength += Data.Length;
                                         // upon receiving the final segment
-                                        if (CountedPackets == _TotalPackets) //((CurrentPacket == TotalPackets) && (DataByteJaggedArrayTotalLength == TotalPackets * DataByte.Length))
+                                        if (CountedPackets == _TotalSegments) //((CurrentPacket == TotalPackets) && (DataByteJaggedArrayTotalLength == TotalPackets * DataByte.Length))
                                         {
                                             // we know the total length of all segments
                                             Data = new byte[DataByteJaggedArrayTotalLength];
@@ -124,7 +128,7 @@ namespace Audyssey
                                             // count the segments, they can be out of order, so we even might receive the last one premature
                                             CountedPackets = 0;
                                             // pass assemled packet with data
-                                            TransferComplete = true;
+                                            SegmentComplete = true;
                                         }
                                         else
                                         {
@@ -133,7 +137,7 @@ namespace Audyssey
                                         }
                                     }
                                     // callback to populate function
-                                    _AudysseyMultEQAvrTcpStreamParseCallback?.Invoke(_TransmitReceive, Command, Data, _CurrentPacket, _TotalPackets, TransferComplete);
+                                    _AudysseyMultEQAvrTcpStreamParseCallback?.Invoke(_TransmitReceive, Command, Data, _CurrentSegment, _TotalSegments, SegmentComplete);
                                 }
                             }
                         }
@@ -145,6 +149,23 @@ namespace Audyssey
                     {
                         Console.WriteLine(ex);
                     }
+                }
+                else if (packetLength == 1)
+                {
+                    Console.Write(packetData[0].ToString());
+                    switch (packetData[0])
+                    {
+                        case ESC:
+                            break;
+                        case EOT:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    ;
                 }
             }
 

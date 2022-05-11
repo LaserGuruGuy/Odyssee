@@ -379,10 +379,8 @@
                 </Grid>
             </DockPanel>
             <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
-            <ScrollViewer Grid.Row="4" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto" SizeChanged="ScrollViewer_Serialized_SizeChanged">
-                <StackPanel>
-                    <TextBlock Text="{Binding Serialized}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent"/>
-                </StackPanel>
+            <ScrollViewer Grid.Row="4" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto">
+                <TextBlock Text="{Binding Serialized, NotifyOnTargetUpdated=True}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent" TargetUpdated="TextBlock_TargetUpdated"/>
             </ScrollViewer>
         </Grid>
     </Border>

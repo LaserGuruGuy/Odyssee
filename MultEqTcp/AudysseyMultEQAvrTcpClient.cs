@@ -12,7 +12,6 @@ namespace Audyssey
     {
         public delegate void AudysseyMultEQAvrTcpClientConnectCallback(bool IsConnected, string Result);
         public delegate void AudysseyMultEQAvrTcpClientTransmitCallback(bool IsCompleted);
-        public delegate void AudysseyMultEQAvrTcpClientReceiveCallback(bool IsCompleted);
 
         public class AudysseyMultEQAvrTcpClient
         {
@@ -28,7 +27,6 @@ namespace Audyssey
 
             private AudysseyMultEQAvrTcpClientConnectCallback _AudysseyMultEQAvrConnectCallBack = null;
             private AudysseyMultEQAvrTcpClientTransmitCallback _AudysseyMultEQAvrTransmitCallBack = null;
-            private AudysseyMultEQAvrTcpClientReceiveCallback _AudysseyMultEQAvrReceiveCallback = null;
 
             private AudysseyMultEQAvrTcpStream _AudysseyMultEQAvrTcpStream = null;
 
@@ -36,17 +34,16 @@ namespace Audyssey
             public AudysseyMultEQAvrTcpClient(string HostName, int HostPort, int TimeoutMilliseconds,
                     AudysseyMultEQAvrTcpClientConnectCallback AudysseyMultEQAvrConnectCallBack = null,
                     AudysseyMultEQAvrTcpClientTransmitCallback AudysseyMultEQAvrTransmitCallBack = null,
-                    AudysseyMultEQAvrTcpClientReceiveCallback AudysseyMultEQAvrReceiveCallback = null,
-                    AudysseyMultEQAvrTcpStreamParseCallback AudysseyMultEQAvrTcpStreamParseCallback = null)
+                    AudysseyMultEQAvrTcpStreamParseCallback AudysseyMultEQAvrReceiveCallback = null)
             {
                 _AudysseyMultEQAvrConnectCallBack = AudysseyMultEQAvrConnectCallBack;
                 _AudysseyMultEQAvrTransmitCallBack = AudysseyMultEQAvrTransmitCallBack;
-                _AudysseyMultEQAvrReceiveCallback = AudysseyMultEQAvrReceiveCallback;
 
-                _AudysseyMultEQAvrTcpStream = new(AudysseyMultEQAvrTcpStreamParseCallback);
+                _AudysseyMultEQAvrTcpStream = new(AudysseyMultEQAvrReceiveCallback);
 
                 _HostName = HostName;
                 _HostPort = HostPort;
+
                 _TimeoutMilliseconds = TimeoutMilliseconds;
             }
 
@@ -252,6 +249,7 @@ namespace Audyssey
                     Console.WriteLine(ex.Message);
                     return;
                 }
+
                 try
                 {
                     _numberOfBytesRead = (ushort)_NetworkStream.EndRead(result);
@@ -261,12 +259,16 @@ namespace Audyssey
                 {
                     Console.WriteLine(ex.Message);
                 }
-                if (_NetworkStream.DataAvailable)
+
+                try
                 {
-                    Console.WriteLine("More data available, that is weird...");
+                    _AudysseyMultEQAvrTcpStream.Unpack(_Buffer, _numberOfBytesRead);
                 }
-                _AudysseyMultEQAvrTcpStream?.Unpack(_Buffer, _numberOfBytesRead);
-                _AudysseyMultEQAvrReceiveCallback?.Invoke(result.IsCompleted);
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
                 try
                 {
                     _ReadResult = _NetworkStream.BeginRead(_Buffer, 0, _Buffer.Length, ReadCallback, _Buffer);

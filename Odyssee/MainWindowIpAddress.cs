@@ -19,6 +19,7 @@ namespace Odyssee
             var HostEntry = await System.Net.Dns.GetHostEntryAsync(HostName);
 
             audysseyMultEQAvr.ComputerDeviceInfo = new();
+            audysseyMultEQAvr.ReceiverDeviceInfo = new();
 
             if (HostEntry.AddressList.Length > 0)
             {

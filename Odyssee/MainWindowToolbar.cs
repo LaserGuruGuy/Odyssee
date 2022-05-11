@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading.Tasks;
+using System.Windows;
 
 namespace Odyssee
 {
@@ -87,9 +88,9 @@ namespace Odyssee
         /// <param name="sender"></param>
         /// <param name="e"></param>
 
-        private void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
+        private async void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
         {
-            task = System.Threading.Tasks.Task.Run(() => audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseMicrophone_EnterAudysseyMode));
+            await Task.Run(() => audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseMicrophone_EnterAudysseyMode));
         }
 
         private void OnCmdResponseMicrophone_EnterAudysseyMode(string Response)
@@ -166,9 +167,9 @@ namespace Odyssee
         /// <param name="sender"></param>
         /// <param name="e"></param>
 
-        private void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
+        private async void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.AvrStatus_IsChecked = audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponseSpeaker_GetAvrStatus);
+            await Task.Run(() => audysseyMultEQAvr.AvrStatus_IsChecked = audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponseSpeaker_GetAvrStatus));
         }
 
         private void OnCmdResponseSpeaker_GetAvrStatus(string Response)
