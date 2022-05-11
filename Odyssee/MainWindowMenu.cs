@@ -20,8 +20,6 @@ namespace Odyssee
     /// </summary>
     public partial class MainWindow : Window
     {
-        System.Threading.Tasks.Task task;
-
         private void MenuItem_DetectReceiver_OnClick(object sender, RoutedEventArgs e)
         {
             if (cmbInterfaceComputer.SelectedItem != null)
@@ -116,7 +114,7 @@ namespace Odyssee
                     audysseyMultEQTcpSniffer = new AudysseyMultEQTcpSniffer(
                         (cmbInterfaceComputer.SelectedItem as ComputerDeviceInfo).IpAddress,
                         (cmbInterfaceReceiver.SelectedItem as ReceiverDeviceInfo).IpAddress,
-                        0, 1256, 0, 0, AvrSnifferConnectedCallback, audysseyMultEQAvrTcp.AvrTransmitCallBack, audysseyMultEQAvrTcp.AvrReceiveCallback);
+                        0, 1256, 0, 0, AvrSnifferConnectedCallback, audysseyMultEQAvrTcp.AvrReceiveCallback);
                     // open sniffer connection to receiver
                     audysseyMultEQTcpSniffer.Open();
                     // close TCP traffic
@@ -139,76 +137,74 @@ namespace Odyssee
             audysseyMultEQAvr.StatusBar(Result);
         }
 
-        private async void MenuItem_AvrInfo_OnClick(object sender, RoutedEventArgs e)
-        {    
-            await Task.Run (()=> audysseyMultEQAvr.AvrInfo_IsChecked = audysseyMultEQAvrTcp.GetAvrInfo(OnCmdResponse));
+        private void MenuItem_AvrInfo_OnClick(object sender, RoutedEventArgs e)
+        {
+            audysseyMultEQAvrTcp.GetAvrInfo(OnCmdResponse);
         }
 
-        private async void MenuItem_AvrStatus_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_AvrStatus_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.AvrStatus_IsChecked = audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponse));
+            audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponse);
         }
 
-        private async void MenuItem_AudysseyMode_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_EnterAudysseyMode_OnClick(object sender, RoutedEventArgs e)
         {
-            if (audysseyMultEQAvr.AudysseyMode_IsChecked)
-            {
-                await Task.Run(() => audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponse));
-            }
-            else
-            {
-                await Task.Run(() => audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse));
-            }
+            audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponse);
         }
 
-        private async void MenuItem_AvrLvLm_SW1_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_ExitAudysseyMode_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.AvrLvlm_SW1_IsChecked = audysseyMultEQAvrTcp.StartLvLmSw1(OnCmdResponse));
+            audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse);
         }
 
-        private async void MenuItem_AvrLvLm_SW2_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_AvrLvLm_SW1_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.AvrLvlm_SW2_IsChecked = audysseyMultEQAvrTcp.StartLvLmSw2(OnCmdResponse)) ;
+            audysseyMultEQAvrTcp.StartLvLmSw1(OnCmdResponse);
         }
 
-        private async void MenuItem_Abort_Oprt_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_AvrLvLm_SW2_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvrTcp.AbortOprt(OnCmdResponse));
+            audysseyMultEQAvrTcp.StartLvLmSw2(OnCmdResponse);
         }
 
-        private async void MenuItem_SetAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_Abort_Oprt_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.SetPosNum_IsChecked = audysseyMultEQAvrTcp.SetPosNum(OnCmdResponse)) ;
+            audysseyMultEQAvrTcp.AbortOprt(OnCmdResponse);
         }
 
-        private async void MenuItem_SetAvrStartChnl_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrSetPosNum_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.StartChnl_IsChecked = audysseyMultEQAvrTcp.StartChnl(OnCmdResponse));
+            audysseyMultEQAvrTcp.SetPosNum(OnCmdResponse);
         }
 
-        private async void MenuItem_SetAvrGetRespon_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrStartChnl_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.GetRespon_IsChecked = audysseyMultEQAvrTcp.GetRespon(OnCmdResponse)) ;
+            audysseyMultEQAvrTcp.StartChnl(OnCmdResponse);
         }
 
-        private async void MenuItem_SetAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrGetRespon_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.SetAmp_IsChecked = audysseyMultEQAvrTcp.SetAmp(OnCmdResponse)) ;
+            audysseyMultEQAvrTcp.GetRespon(OnCmdResponse);
         }
 
-        private async void MenuItem_SetAvrSetAudy_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrSetAmp_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.SetAudy_IsChecked = audysseyMultEQAvrTcp.SetAudy(OnCmdResponse)) ;
+            audysseyMultEQAvrTcp.SetAmp(OnCmdResponse);
+        } 
+
+        private void MenuItem_SetAvrSetAudy_OnClick(object sender, RoutedEventArgs e)
+        {
+            audysseyMultEQAvrTcp.SetAudy(OnCmdResponse);
         }
 
         private async void MenuItem_SetAvrSetDisFil_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.SetDisFil_IsChecked = audysseyMultEQAvrTcp.SetAvrSetDisFil(OnCmdResponse)) ;
+            await Task.Run(() => audysseyMultEQAvrTcp.SetAvrSetDisFil(OnCmdResponse));
         }
 
-        private async void MenuItem_SetAvrInitCoefs_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_SetAvrInitCoefs_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.InitCoefs_IsChecked = audysseyMultEQAvrTcp.SetAvrInitCoefs(OnCmdResponse)) ;
+            audysseyMultEQAvrTcp.SetAvrInitCoefs(OnCmdResponse);
         }
 
         private async void MenuItem_SetAvrSetCoefDt_OnClick(object sender, RoutedEventArgs e)
@@ -216,9 +212,9 @@ namespace Odyssee
             await Task.Run(() => audysseyMultEQAvrTcp.SetAvrSetCoefDt(OnCmdResponse));
         }
 
-        private async void MenuItem_AudyFinFlag_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItem_AudyFinFlag_OnClick(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.AudyFinFlag_IsChecked = audysseyMultEQAvrTcp.AudyFinFlag(OnCmdResponseAudyFinFlag));
+            audysseyMultEQAvrTcp.AudyFinFlag(OnCmdResponseAudyFinFlag);
         }
 
         private void OnCmdResponseAudyFinFlag(string Response)

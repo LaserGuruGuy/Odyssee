@@ -130,6 +130,42 @@ namespace Audyssey
                     RaisePropertyChanged("AvrStatus");
                 }
             }
+            public int DisFilCount
+            {
+                get
+                {
+                    int _DisFilCount = 0;
+                    try
+                    {
+                        foreach (var ch in DetectedChannels)
+                        {
+                            foreach (var eq in AudysseyMultEQAvr.DispDataList)
+                            {
+                                foreach (var cv in ch.AudyCurveFilter)
+                                {
+                                    if (cv.Key.Equals(eq))
+                                    {
+                                        _DisFilCount++;
+                                        break;
+                                    }
+                                }
+                                foreach (var cv in ch.FlatCurveFilter)
+                                {
+                                    if (cv.Key.Equals(eq))
+                                    {
+                                        _DisFilCount++;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    return _DisFilCount / AudysseyMultEQAvr.DispDataList.Count;
+                }
+            }
             public UniqueObservableCollection<DetectedChannel> DetectedChannels
             {
                 get
@@ -490,7 +526,8 @@ namespace Audyssey
             private bool _AvrLvlm_SW2_IsChecked;
             private bool _AvrInfo_IsChecked;
             private bool _AvrStatus_IsChecked;
-            private bool _AudysseyMode_IsChecked;
+            private bool _EnterAudysseyMode_IsChecked;
+            private bool _ExitAudysseyMode_IsChecked;
             private bool _AudyFinFlag_IsChecked;
             private bool _SetPosNum_IsChecked;
             private bool _StartChnl_IsChecked;
@@ -531,14 +568,15 @@ namespace Audyssey
             [JsonIgnore]
             public bool Inspector_IsChecked { get { return _AvrInfo_IsChecked & _AvrStatus_IsChecked; } }
             [JsonIgnore]
-            public bool AudysseyMode_IsChecked { get { return _AudysseyMode_IsChecked; } set { _AudysseyMode_IsChecked = value; RaisePropertyChanged("AudysseyMode_IsChecked"); } }
+            public bool EnterAudysseyMode_IsChecked { get { return _EnterAudysseyMode_IsChecked; } set { _EnterAudysseyMode_IsChecked = value; RaisePropertyChanged("EnterAudysseyMode_IsChecked"); } }
+            [JsonIgnore]
+            public bool ExitAudysseyMode_IsChecked { get { return _ExitAudysseyMode_IsChecked; } set { _ExitAudysseyMode_IsChecked = value; RaisePropertyChanged("ExitAudysseyMode_IsChecked"); } }
             [JsonIgnore]
             public bool AudyFinFlag_IsChecked { get { return _AudyFinFlag_IsChecked; } set { _AudyFinFlag_IsChecked = value; RaisePropertyChanged("AudyFinFlag_IsChecked"); } }
             [JsonIgnore]
             public bool SetPosNum_IsChecked { get { return _SetPosNum_IsChecked; } set { _SetPosNum_IsChecked = value; RaisePropertyChanged("SetPosNum_IsChecked"); } }
             [JsonIgnore]
             public bool StartChnl_IsChecked { get { return _StartChnl_IsChecked; } set { _StartChnl_IsChecked = value; RaisePropertyChanged("StartChnl_IsChecked"); } }
-
             [JsonIgnore]
             public bool GetRespon_IsChecked { get { return _GetRespon_IsChecked; } set { _GetRespon_IsChecked = value; RaisePropertyChanged("GetRespon_IsChecked"); } }
             [JsonIgnore]
@@ -561,7 +599,8 @@ namespace Audyssey
             private void ResetAvrLvlm_SW2_IsChecked() { _AvrLvlm_SW2_IsChecked = false; }
             private void ResetAvrInfo_IsChecked() { _AvrInfo_IsChecked = false; }
             private void ResetAvrStatus_IsChecked() { _AvrStatus_IsChecked = false; }
-            private void ResetAudysseyMode_IsChecked() { _AudysseyMode_IsChecked = false; }
+            private void ResetEnterAudysseyMode_IsChecked() { _EnterAudysseyMode_IsChecked = false; }
+            private void ResetExitAudysseyMode_IsChecked() { _ExitAudysseyMode_IsChecked = false; }
             private void ResetAudyFinFlag_IsChecked() { _AudyFinFlag_IsChecked = false; }
             private void ResetSetPosNum_IsChecked() { _SetPosNum_IsChecked = false; }
             private void ResetStartChnl_IsChecked() { _StartChnl_IsChecked = false; }

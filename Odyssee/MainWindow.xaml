@@ -67,7 +67,8 @@
                         <MenuItem Header="Get Receiver _Info" Name="MenuItem_ReceiverInfo" Click="MenuItem_AvrInfo_OnClick" IsCheckable="True" IsChecked="{Binding AvrInfo_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Get Receiver _Status" Name="MenuItemReceiverStatus" Click="MenuItem_AvrStatus_OnClick" IsCheckable="True" IsChecked="{Binding AvrStatus_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
-                        <MenuItem Header="Enter _Audyssey" Name="MenuItem_AudysseyMode" Click="MenuItem_AudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Enter _Audyssey" Name="MenuItem_EnterAudysseyMode" Click="MenuItem_EnterAudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding EnterAudysseyMode_IsChecked, Mode=TwoWay}"/>
+                        <MenuItem Header="Exit _Audyssey" Name="MenuItem_ExitAudysseyMode" Click="MenuItem_ExitAudysseyMode_OnClick" IsCheckable="True" IsChecked="{Binding ExitAudysseyMode_IsChecked, Mode=TwoWay}"/>
                         <Separator/>
                         <MenuItem Header="Set LvLm SW1" Name="MenuItem_AvrLvLm_SW1" Click="MenuItem_AvrLvLm_SW1_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_SW1_IsChecked, Mode=TwoWay}"/>
                         <MenuItem Header="Set LvLm SW2" Name="MenuItem_AvrLvLm_SW2" Click="MenuItem_AvrLvLm_SW2_OnClick" IsCheckable="True" IsChecked="{Binding AvrLvlm_SW2_IsChecked, Mode=TwoWay}"/>

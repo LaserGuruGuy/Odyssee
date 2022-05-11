@@ -24,19 +24,19 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvrTcp.GetAvrStatus();
+                audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponse);
             }
         }
 
         private void OnButtonClick_Audyssey(object sender, RoutedEventArgs e)
         {
-            if (audysseyMultEQAvr.AudysseyMode_IsChecked)
+            if (audysseyMultEQAvr.EnterAudysseyMode_IsChecked)
             {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.EnterAudysseyMode();
+                audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponse);
             }
             else
             {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = !audysseyMultEQAvrTcp.ExitAudysseyMode();
+                audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse);
             }
         }
 
@@ -44,41 +44,35 @@ namespace Odyssee
         {
             if (audysseyMultEQAvr.AvrLvlm_SW1_IsChecked)
             {
-                if (audysseyMultEQAvrTcp.StartLvLmSw1())
-                {
-                    Label_SmoothingFactor.Visibility = Visibility.Hidden;
-                    Slider_SmoothingFactor.Visibility = Visibility.Hidden;
+                audysseyMultEQAvrTcp.StartLvLmSw1(OnCmdResponse);
 
-                    CheckBox_LogarithmicAxis.Visibility = Visibility.Hidden;
-                    RadioButton_RangeChirp.Visibility = Visibility.Hidden;
-                    RadioButton_RangeSubwoofer.Visibility = Visibility.Hidden;
-                    RadioButton_RangeFull.Visibility = Visibility.Hidden;
+                Label_SmoothingFactor.Visibility = Visibility.Hidden;
+                Slider_SmoothingFactor.Visibility = Visibility.Hidden;
 
-                    CheckBox_CurveFilter.Visibility = Visibility.Hidden;
-                    RadioButton_FlatCurveFilter.Visibility = Visibility.Hidden;
-                    RadioButton_AudyCurveFilter.Visibility = Visibility.Hidden;
-                }
-                else
-                {
-                    audysseyMultEQAvr.AvrLvlm_SW1_IsChecked = false;
-                }
+                CheckBox_LogarithmicAxis.Visibility = Visibility.Hidden;
+                RadioButton_RangeChirp.Visibility = Visibility.Hidden;
+                RadioButton_RangeSubwoofer.Visibility = Visibility.Hidden;
+                RadioButton_RangeFull.Visibility = Visibility.Hidden;
+
+                CheckBox_CurveFilter.Visibility = Visibility.Hidden;
+                RadioButton_FlatCurveFilter.Visibility = Visibility.Hidden;
+                RadioButton_AudyCurveFilter.Visibility = Visibility.Hidden;
             }
             else
             {
-                if (audysseyMultEQAvrTcp.AbortOprt())
-                {
-                    Label_SmoothingFactor.Visibility = Visibility.Visible;
-                    Slider_SmoothingFactor.Visibility = Visibility.Visible;
+                audysseyMultEQAvrTcp.AbortOprt(OnCmdResponse);
 
-                    CheckBox_LogarithmicAxis.Visibility = Visibility.Visible;
-                    RadioButton_RangeChirp.Visibility = Visibility.Visible;
-                    RadioButton_RangeSubwoofer.Visibility = Visibility.Visible;
-                    RadioButton_RangeFull.Visibility = Visibility.Visible;
+                Label_SmoothingFactor.Visibility = Visibility.Visible;
+                Slider_SmoothingFactor.Visibility = Visibility.Visible;
 
-                    CheckBox_CurveFilter.Visibility = Visibility.Visible;
-                    RadioButton_FlatCurveFilter.Visibility = Visibility.Visible;
-                    RadioButton_AudyCurveFilter.Visibility = Visibility.Visible;
-                }
+                CheckBox_LogarithmicAxis.Visibility = Visibility.Visible;
+                RadioButton_RangeChirp.Visibility = Visibility.Visible;
+                RadioButton_RangeSubwoofer.Visibility = Visibility.Visible;
+                RadioButton_RangeFull.Visibility = Visibility.Visible;
+
+                CheckBox_CurveFilter.Visibility = Visibility.Visible;
+                RadioButton_FlatCurveFilter.Visibility = Visibility.Visible;
+                RadioButton_AudyCurveFilter.Visibility = Visibility.Visible;
             }
         }
 
@@ -88,9 +82,9 @@ namespace Odyssee
         /// <param name="sender"></param>
         /// <param name="e"></param>
 
-        private async void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
+        private void OnButtonClick_Microphone(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseMicrophone_EnterAudysseyMode));
+            audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseMicrophone_EnterAudysseyMode);
         }
 
         private void OnCmdResponseMicrophone_EnterAudysseyMode(string Response)
@@ -167,16 +161,16 @@ namespace Odyssee
         /// <param name="sender"></param>
         /// <param name="e"></param>
 
-        private async void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
+        private void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
         {
-            await Task.Run(() => audysseyMultEQAvr.AvrStatus_IsChecked = audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponseSpeaker_GetAvrStatus));
+            audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponseSpeaker_GetAvrStatus);
         }
 
         private void OnCmdResponseSpeaker_GetAvrStatus(string Response)
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.AvrInfo_IsChecked = audysseyMultEQAvrTcp.GetAvrInfo(OnCmdResponseSpeaker_GetAvrInfo);
+                audysseyMultEQAvrTcp.GetAvrInfo(OnCmdResponseSpeaker_GetAvrInfo);
             }
             else
             {
@@ -188,7 +182,7 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseSpeaker_EnterAudysseyMode);
+                audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseSpeaker_EnterAudysseyMode);
             }
             else
             {
@@ -200,7 +194,7 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.SetAmp_IsChecked = audysseyMultEQAvrTcp.SetAmp(OnCmdResponseSpeaker_SetAmp);
+                audysseyMultEQAvrTcp.SetAmp(OnCmdResponseSpeaker_SetAmp);
             }
             else
             {
@@ -212,7 +206,7 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.SetAudy_IsChecked = audysseyMultEQAvrTcp.SetAudy(OnCmdResponseSpeaker_SetAudy);
+                audysseyMultEQAvrTcp.SetAudy(OnCmdResponseSpeaker_SetAudy);
             }
             else
             {
@@ -224,7 +218,7 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.SetDisFil_IsChecked = audysseyMultEQAvrTcp.SetAvrSetDisFil(OnCmdResponseSpeaker_SetAvrSetDisFil);
+                Task.Run(() => audysseyMultEQAvrTcp.SetAvrSetDisFil(OnCmdResponseSpeaker_SetAvrSetDisFil));
             }
             else
             {
@@ -236,7 +230,10 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.InitCoefs_IsChecked = audysseyMultEQAvrTcp.SetAvrInitCoefs(OnCmdResponseSpeaker_SetAvrInitCoefs);
+                if (audysseyMultEQAvr.SetDisFil_IsChecked)
+                {
+                    audysseyMultEQAvrTcp.SetAvrInitCoefs(OnCmdResponseSpeaker_SetAvrInitCoefs);
+                }
             }
             else
             {
@@ -248,7 +245,7 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.SetCoefDt_IsChecked = audysseyMultEQAvrTcp.SetAvrSetCoefDt(OnCmdResponseSpeaker_SetAvrSetCoefDt);
+                Task.Run(() => audysseyMultEQAvrTcp.SetAvrSetCoefDt(OnCmdResponseSpeaker_SetAvrSetCoefDt));
             }
             else
             {
@@ -260,7 +257,10 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.AudyFinFlag_IsChecked = audysseyMultEQAvrTcp.AudyFinFlag(OnCmdResponseSpeaker_AudyFinFlag);
+                if(audysseyMultEQAvr.SetCoefDt_IsChecked)
+                {
+                    audysseyMultEQAvrTcp.AudyFinFlag(OnCmdResponseSpeaker_AudyFinFlag);
+                }
             }
             else
             {
@@ -272,7 +272,7 @@ namespace Odyssee
         {
             if (Response.Equals("ACK"))
             {
-                audysseyMultEQAvr.AudysseyMode_IsChecked = audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse);
+                audysseyMultEQAvrTcp.ExitAudysseyMode(OnCmdResponse);
             }
             else
             {

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Buffers.Binary;
 using Audyssey.MultEQTcpStream;
+using System.Threading.Tasks;
 
 namespace Audyssey
 {
     namespace MultEQTcpClient
     {
         public delegate void AudysseyMultEQAvrTcpClientConnectCallback(bool IsConnected, string Result);
-        public delegate void AudysseyMultEQAvrTcpClientTransmitCallback(bool IsCompleted);
 
         public class AudysseyMultEQAvrTcpClient
         {
@@ -26,19 +26,15 @@ namespace Audyssey
             private byte[] _Buffer;
 
             private AudysseyMultEQAvrTcpClientConnectCallback _AudysseyMultEQAvrConnectCallBack = null;
-            private AudysseyMultEQAvrTcpClientTransmitCallback _AudysseyMultEQAvrTransmitCallBack = null;
 
             private AudysseyMultEQAvrTcpStream _AudysseyMultEQAvrTcpStream = null;
 
             //METHODS           
             public AudysseyMultEQAvrTcpClient(string HostName, int HostPort, int TimeoutMilliseconds,
                     AudysseyMultEQAvrTcpClientConnectCallback AudysseyMultEQAvrConnectCallBack = null,
-                    AudysseyMultEQAvrTcpClientTransmitCallback AudysseyMultEQAvrTransmitCallBack = null,
                     AudysseyMultEQAvrTcpStreamParseCallback AudysseyMultEQAvrReceiveCallback = null)
             {
                 _AudysseyMultEQAvrConnectCallBack = AudysseyMultEQAvrConnectCallBack;
-                _AudysseyMultEQAvrTransmitCallBack = AudysseyMultEQAvrTransmitCallBack;
-
                 _AudysseyMultEQAvrTcpStream = new(AudysseyMultEQAvrReceiveCallback);
 
                 _HostName = HostName;
@@ -50,51 +46,20 @@ namespace Audyssey
             ~AudysseyMultEQAvrTcpClient()
             {
             }
-
-            public bool TransmitTcpAvrStream(byte[] Data)
+                    
+            public void TransmitTcpAvrStream(byte Data)
             {
                 try
                 {
-                    _NetworkStream.Write(Data, 0, 1);
-                    return true;
+                    _NetworkStream.WriteAsync(new byte[] { Data }, 0, 1);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return false;
-                }
-            }
-            
-            public bool TransmitTcpAvrStream(string CmdStr, string DataStr)
-            {
-                return TransmitTcpAvrStream(CmdStr, Encoding.ASCII.GetBytes(DataStr));
-            }
-            
-            public bool TransmitTcpAvrStream(byte[] Data, string CmdStr, string DataStr)
-            {
-                if (Data != null)
-                {
-                    try
-                    {
-                        _NetworkStream.Write(Data, 0, 1);
-                        return true;
-                    }
-                    catch
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return TransmitTcpAvrStream(CmdStr, Encoding.ASCII.GetBytes(DataStr));
+                    Console.WriteLine(ex.Message);
                 }
             }
 
-            public bool TransmitTcpAvrStream(string Cmd, Int32[] Data, int CurrentPacket = 0, int TotalPackets = 0)
-            {
-                return TransmitTcpAvrStream(Cmd, Int32ToByte(Data), CurrentPacket, TotalPackets);
-            }
-
-            public bool TransmitTcpAvrStream(string Cmd, byte[] Data, int CurrentPacket = 0, int TotalPackets = 0)
+            public void TransmitTcpAvrStream(string Cmd, byte[] Data = null, int CurrentPacket = 0, int TotalPackets = 0)
             {
                 const UInt16 HeaderLength = 9;
                 byte[] Command;
@@ -139,13 +104,11 @@ namespace Audyssey
 
                 try
                 {
-                    _NetworkStream.BeginWrite(memoryStream.GetBuffer(), 0, (int)memoryStream.Length, WriteCallback, null);
-                    return true;
+                    _NetworkStream.WriteAsync(memoryStream.GetBuffer(), 0, (int)memoryStream.Length);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return false;
                 }
             }
 
@@ -277,11 +240,6 @@ namespace Audyssey
                 {
                     Console.WriteLine(ex.Message);
                 }
-            }
-
-            private void WriteCallback(IAsyncResult result)
-            {
-                _AudysseyMultEQAvrTransmitCallBack?.Invoke(result.IsCompleted);
             }
 
             private byte CalculateChecksum(byte[] dataToCalculate)

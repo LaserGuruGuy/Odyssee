@@ -9,7 +9,6 @@ namespace Audyssey
     namespace MultEQTcpSniffer
     {
         public delegate void AudysseyMultEQAvrTcpSnifferConnectCallback(bool IsConnected, string Result);
-        public delegate void AudysseyMultEQAvrTcpSnifferTransmitCallback(bool IsCompleted);
         public delegate void AudysseyMultEQAvrTcpSnifferReceiveCallback(bool IsCompleted);
 
         public class AudysseyMultEQTcpSniffer
@@ -25,18 +24,13 @@ namespace Audyssey
             private byte[] _PacketData = new byte[8192];
 
             AudysseyMultEQAvrTcpSnifferConnectCallback _AudysseyMultEQAvrTcpSnifferConnectCallback = null;
-            AudysseyMultEQAvrTcpSnifferTransmitCallback _AudysseyMultEQAvrTcpSnifferTransmitCallback = null;
-
             private AudysseyMultEQAvrTcpStream _AudysseyMultEQAvrTcpStream = null;
 
             public AudysseyMultEQTcpSniffer(string HostName, string ClientName, int HostPort = 0, int ClientPort = 1256, int HostTimeout = 0, int ClientTimeout = 0,
                     AudysseyMultEQAvrTcpSnifferConnectCallback AudysseyMultEQAvrTcpSnifferConnectCallback = null,
-                    AudysseyMultEQAvrTcpSnifferTransmitCallback AudysseyMultEQAvrTcpSnifferTransmitCallback = null,
                     AudysseyMultEQAvrTcpStreamParseCallback AudysseyMultEQAvrTcpSnifferReceiveCallback = null)
             {
                 _AudysseyMultEQAvrTcpSnifferConnectCallback = AudysseyMultEQAvrTcpSnifferConnectCallback;
-                _AudysseyMultEQAvrTcpSnifferTransmitCallback = AudysseyMultEQAvrTcpSnifferTransmitCallback;
-
                 _AudysseyMultEQAvrTcpStream = new(AudysseyMultEQAvrTcpSnifferReceiveCallback);
 
                 _HostName = HostName;
