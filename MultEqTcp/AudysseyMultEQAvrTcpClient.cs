@@ -205,11 +205,14 @@ namespace Audyssey
                 ushort _numberOfBytesRead = 0;
                 try
                 {
-                    _NetworkStream = _TcpClient.GetStream();
+                    if (_TcpClient.Connected)
+                    {
+                        _NetworkStream = _TcpClient.GetStream();
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                     return;
                 }
 
@@ -220,7 +223,7 @@ namespace Audyssey
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    _AudysseyMultEQAvrConnectCallBack?.Invoke(false, ex.Message);
                 }
 
                 try
@@ -234,7 +237,15 @@ namespace Audyssey
 
                 try
                 {
-                    _ReadResult = _NetworkStream.BeginRead(_Buffer, 0, _Buffer.Length, ReadCallback, _Buffer);
+                    if (_numberOfBytesRead > 0)
+                    {
+                        _ReadResult = _NetworkStream.BeginRead(_Buffer, 0, _Buffer.Length, ReadCallback, _Buffer);
+                    }
+                    else
+                    {
+                        _NetworkStream.Close();
+                        _AudysseyMultEQAvrConnectCallBack?.Invoke(false, _ReadResult.ToString());
+                    }
                 }
                 catch (Exception ex)
                 {

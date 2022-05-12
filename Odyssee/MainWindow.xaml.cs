@@ -34,7 +34,6 @@ namespace Odyssee
         private AudysseyMultEQTcpSniffer audysseyMultEQTcpSniffer = null;
         private AudysseyMultEQAvrAdapter audysseyMultEQAvrAdapter = null;
 
-
         public MainWindow()
         {
             InitializeComponent();

@@ -1035,8 +1035,8 @@ namespace Audyssey
             /// Start the timer, set the command pending flag and load the callback function.
             /// </summary>
             /// <param name="CallBack">The timeout or acknowledge funtion (default null)</param>
-            /// <param name="TimerInterval">The timeout period in ms (default 100)</param>
-            public void Rqst(CmdAckCallBack CallBack = null, int TimerInterval = 100)
+            /// <param name="TimerInterval">The timeout period in ms (default 1000)</param>
+            public void Rqst(CmdAckCallBack CallBack = null, int TimerInterval = 1000)
             {
                 Timer.Stop();
                 Pending = true;

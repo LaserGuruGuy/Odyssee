@@ -602,8 +602,6 @@ namespace Audyssey
             [JsonIgnore]
             public bool AvrStatus_IsChecked { get { return _AvrStatus_IsChecked; } set { _AvrStatus_IsChecked = value; RaisePropertyChanged("AvrStatus_IsChecked"); RaisePropertyChanged("Inspector_IsChecked"); } }
             [JsonIgnore]
-            public bool Inspector_IsChecked { get { return _AvrInfo_IsChecked & _AvrStatus_IsChecked; } }
-            [JsonIgnore]
             public bool EnterAudysseyMode_IsChecked { get { return _EnterAudysseyMode_IsChecked; } set { _EnterAudysseyMode_IsChecked = value; RaisePropertyChanged("EnterAudysseyMode_IsChecked"); } }
             [JsonIgnore]
             public bool ExitAudysseyMode_IsChecked { get { return _ExitAudysseyMode_IsChecked; } set { _ExitAudysseyMode_IsChecked = value; RaisePropertyChanged("ExitAudysseyMode_IsChecked"); } }

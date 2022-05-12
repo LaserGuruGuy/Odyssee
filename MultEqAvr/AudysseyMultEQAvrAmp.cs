@@ -35,9 +35,9 @@ namespace Audyssey
         public partial class AudysseyMultEQAvr : IFin, IAmp, INotifyPropertyChanged
         {
             #region BackingField
-            private string _AudyFinFlg;// = "NotFin";
-            private bool? _AudyDynEq;// = true;
-            private int? _AudyEqRef;// = 0;
+            private string _AudyFinFlg;
+            private bool? _AudyDynEq;
+            private int? _AudyEqRef;
             #endregion
 
             #region Properties
@@ -341,7 +341,7 @@ namespace Audyssey
             }
             public void ResetAudyEqRef()
             {
-                _AudyEqRef = null;
+                _AudyEqRef = 0;
             }
             #endregion
         }

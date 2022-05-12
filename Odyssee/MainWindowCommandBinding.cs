@@ -90,6 +90,8 @@ namespace Odyssee
             {
                 string Serialized = File.ReadAllText(FileName);
 
+                audysseyMultEQAvr.Reset();
+
                 JsonConvert.PopulateObject(Serialized, audysseyMultEQAvr, new JsonSerializerSettings
                 {
                     ObjectCreationHandling = ObjectCreationHandling.Replace
@@ -105,6 +107,7 @@ namespace Odyssee
                 {
                     NullValueHandling = NullValueHandling.Ignore
                 });
+
                 if ((Serialized != null) && (!string.IsNullOrEmpty(FileName)))
                 {
                     File.WriteAllText(FileName, Serialized);
@@ -117,6 +120,9 @@ namespace Odyssee
             if (File.Exists(FileName))
             {
                 string Serialized = File.ReadAllText(FileName);
+
+                audysseyMultEQAvr.Reset();
+
                 JsonConvert.PopulateObject(Serialized, audysseyMultEQAvrAdapter, new JsonSerializerSettings
                 {
                     ObjectCreationHandling = ObjectCreationHandling.Replace,

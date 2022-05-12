@@ -15,8 +15,6 @@ namespace Odyssee
 
         private void OnButtonClick_Inspector(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvr.AvrInfo_IsChecked = false;
-            audysseyMultEQAvr.AvrStatus_IsChecked = false;
             audysseyMultEQAvrTcp.GetAvrInfo(OnInspectorCmdResponseAvrInfo);
         }
 
@@ -30,7 +28,7 @@ namespace Odyssee
 
         private void OnButtonClick_Audyssey(object sender, RoutedEventArgs e)
         {
-            if (audysseyMultEQAvr.EnterAudysseyMode_IsChecked)
+            if (ToggleButton_Audyssey.IsChecked == true)
             {
                 audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponse);
             }

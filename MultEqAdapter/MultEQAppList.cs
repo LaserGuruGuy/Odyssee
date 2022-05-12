@@ -38,5 +38,12 @@ namespace MultEQAvrAdapter
             public static ObservableCollection<string> MultEQTypeList { get; } = new()
             { "MultEQ", "MultEQXT", "MultEQXT32" };
         }
+
+        public class ChannelList
+        {
+            [JsonIgnore]
+            public static ObservableCollection<string> SpeakerTypeList { get; } = new()
+            { " ", "S", "L" };
+        }
     }
 }

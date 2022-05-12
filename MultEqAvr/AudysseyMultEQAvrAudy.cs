@@ -113,11 +113,11 @@ namespace Audyssey
             }
             public void ResetAudyDynSet()
             {
-                _AudyDynSet = string.Empty;
+                _AudyDynSet = "L";
             }
             public void ResetAudyMultEq()
             {
-                _AudyMultEq = null;
+                _AudyMultEq = true;
             }
             public void ResetAudyEqSet()
             {
@@ -129,7 +129,7 @@ namespace Audyssey
             }
             public void ResetAudyLfcLev()
             {
-                _AudyLfcLev = null;
+                _AudyLfcLev = 1;
             }
             #endregion
         }

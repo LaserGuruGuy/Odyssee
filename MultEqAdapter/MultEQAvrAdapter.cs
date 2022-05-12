@@ -227,9 +227,9 @@ namespace MultEQAvrAdapter
                                 channel = new Audyssey.MultEQAvr.DetectedChannel();
                                 channel.Channel = ch.CommandId;
                                 channel.Skip = ch.IsSkipMeasurement;
-                                channel.Crossover = ch.CustomCrossover;
-                                channel.ChLevel = Convert.ToDecimal(ch.CustomLevel);
-                                channel.ChannelReport.SpConnect = ChannelReportList.SetupList[(Int32)ch.ChannelReport.EnSpeakerConnect];
+                                channel.Crossover = ch.CustomCrossover == null ? "F" : 10l * Convert.ToInt64(ch.CustomCrossover, CultureInfo.InvariantCulture);
+                                channel.ChLevel = Convert.ToDecimal(ch.CustomLevel, CultureInfo.InvariantCulture );
+                                channel.ChannelReport.SpConnect = AdapterList.ChannelList.SpeakerTypeList[(Int32)ch.ChannelReport.EnSpeakerConnect];
                                 channel.ChannelReport.Distance = Convert.ToInt32(100m * ch.ChannelReport.Distance);
                                 channel.ChannelReport.Polarity = ChannelReportList.PolarityList[Convert.ToInt32((bool)ch.ChannelReport.IsReversePolarity)];
                                 channel.Setup = ch.CustomSpeakerType;

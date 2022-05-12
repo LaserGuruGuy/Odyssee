@@ -89,10 +89,10 @@
                 <ToggleButton Name="ToggleButton_ConnectReceiver" Click="OnButtonClick_ConnectReceiver" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrConnect_IsChecked, Mode=TwoWay}" ToolTip="Connect to the Receiver">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Icons/Ethernet.png"/>
                 </ToggleButton>
-                <ToggleButton Name="ToggleButton_Inspector" Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding Inspector_IsChecked, Mode=OneWay}"  ToolTip="Get receiver Info and Status">
+                <Button Name="ToggleButton_Inspector" Click="OnButtonClick_Inspector" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Get receiver Info and Status">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Icons/Inspector.png"/>
-                </ToggleButton>
-                <ToggleButton Click="OnButtonClick_Audyssey" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}" ToolTip="Enter Receiver remote control">
+                </Button>
+                <ToggleButton Name="ToggleButton_Audyssey" Click="OnButtonClick_Audyssey" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AudysseyMode_IsChecked, Mode=TwoWay}" ToolTip="Enter Receiver remote control">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Icons/Audyssey.png"/>
                 </ToggleButton>
                 <ToggleButton Click="OnButtonClick_SubwooferOneLevel" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrLvlm_SW1_IsChecked, Mode=TwoWay}" ToolTip="Adjust Subwoofer 1 Level">
