@@ -21,7 +21,7 @@ namespace Audyssey
 
             private Socket _Socket = null;
 
-            private byte[] _PacketData = new byte[8192];
+            private byte[] _PacketData = new byte[65536];
 
             AudysseyMultEQAvrTcpSnifferConnectCallback _AudysseyMultEQAvrTcpSnifferConnectCallback = null;
             private AudysseyMultEQAvrTcpStream _AudysseyMultEQAvrTcpStream = null;
@@ -82,6 +82,7 @@ namespace Audyssey
                 }
                 catch (ObjectDisposedException)
                 {
+                    // Handle the socket being closed with an async receive pending
                 }
                 catch (Exception ex)
                 {
@@ -100,6 +101,7 @@ namespace Audyssey
                     }
                     catch (ObjectDisposedException)
                     {
+                        // Handle the socket being closed with an async receive pending
                     }
                     catch (Exception ex)
                     {
@@ -110,12 +112,13 @@ namespace Audyssey
 
             private void OnSocketReceive(IAsyncResult ar)
             {
+                int NumberOfBytesReceived = 0;
                 try
                 {
-                    int nReceived = _Socket.EndReceive(ar);
-                    if (nReceived > 0)
+                    NumberOfBytesReceived = _Socket.EndReceive(ar);
+                    if (NumberOfBytesReceived > 0)
                     {
-                        FilterTcpIPPacket(_PacketData, nReceived);
+                        FilterTcpIPPacket(_PacketData, NumberOfBytesReceived);
                         _Socket.BeginReceive(_PacketData, 0, _PacketData.Length, SocketFlags.None, new AsyncCallback(OnSocketReceive), null);
                     }
                     else
@@ -126,11 +129,11 @@ namespace Audyssey
                 }
                 catch (ObjectDisposedException)
                 {
-                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(false, "ObjectDisposedException");
+                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(false, "Socket being closed whilst an async receive pending");
                 }
                 catch (Exception ex)
                 {
-                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(true, ex.Message);
+                    _AudysseyMultEQAvrTcpSnifferConnectCallback?.Invoke(true, ex.Message + ", received " + NumberOfBytesReceived + ", available " + _Socket.Available + ", buffer " + _PacketData.Length);
                 }
             }
 

@@ -23,6 +23,8 @@ namespace Audyssey
             private object _Crossover;// = "F"
             #endregion
 
+            private static System.Threading.Mutex mutex = new();
+
             #region Properties
             [JsonIgnore]
             public string Name
@@ -194,6 +196,7 @@ namespace Audyssey
                 set
                 {
                     _SelectedResponseData = value;
+                    RaisePropertyChanged("SelectedResponseData");
                 }
             }
             [JsonIgnore]
@@ -206,6 +209,7 @@ namespace Audyssey
                 set
                 {
                     _StickyResponseData = value;
+                    RaisePropertyChanged("StickyResponseData");
                 }
             }
             [JsonIgnore]
@@ -218,6 +222,7 @@ namespace Audyssey
                 set
                 {
                     _AverageResponseData = value;
+                    RaisePropertyChanged("AverageResponseData");
                 }
             }
             [JsonIgnore]
@@ -230,6 +235,7 @@ namespace Audyssey
                 set
                 {
                     _SelectedAudyCurveFilter = value;
+                    RaisePropertyChanged("SelectedAudyCurveFilter");
                 }
             }
             [JsonIgnore]
@@ -242,6 +248,7 @@ namespace Audyssey
                 set
                 {
                     _SelectedFlatCurveFilter = value;
+                    RaisePropertyChanged("SelectedFlatCurveFilter");
                 }
             }
             [JsonIgnore]

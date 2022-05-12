@@ -74,21 +74,45 @@ namespace Audyssey
                                 {
                                     if (EqType.Equals(AudyEqSetList[0]))
                                     {
-                                        if (ch.AudyCurveFilter == null)
+                                        try
                                         {
-                                            ch.AudyCurveFilter = new();
+                                            ch.SelectedAudyCurveFilter = new(DispDataList[0], value);
+                                            if (ch.AudyCurveFilter == null)
+                                            {
+                                                ch.AudyCurveFilter = new();
+                                            }
+                                            else
+                                            {
+                                                ch.AudyCurveFilter.Remove(DispDataList[0]);
+                                            }
+                                            ch.AudyCurveFilter.Add(DispDataList[0], value);
+                                            SelectedChannel = ch;
                                         }
-                                        ch.AudyCurveFilter.Remove(DispDataList[0]);
-                                        ch.AudyCurveFilter.Add(DispDataList[0], value);
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
                                     }
                                     else if (EqType.Equals(AudyEqSetList[1]))
                                     {
-                                        if (ch.FlatCurveFilter == null)
+                                        try
                                         {
-                                            ch.FlatCurveFilter = new();
+                                            ch.SelectedFlatCurveFilter = new(DispDataList[0], value);
+                                            if (ch.FlatCurveFilter == null)
+                                            {
+                                                ch.FlatCurveFilter = new();
+                                            }
+                                            else
+                                            {
+                                                ch.FlatCurveFilter.Remove(DispDataList[0]);
+                                            }
+                                            ch.FlatCurveFilter.Add(DispDataList[0], value);
+                                            SelectedChannel = ch;
                                         }
-                                        ch.FlatCurveFilter.Remove(DispDataList[0]);
-                                        ch.FlatCurveFilter.Add(DispDataList[0], value);
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
                                     }
                                     break;
                                 }
@@ -144,21 +168,45 @@ namespace Audyssey
                                 {
                                     if (EqType.Equals(AudyEqSetList[0]))
                                     {
-                                        if (ch.AudyCurveFilter == null)
+                                        ch.SelectedAudyCurveFilter = new(DispDataList[1], value);
+                                        try
                                         {
-                                            ch.AudyCurveFilter = new();
+                                            if (ch.AudyCurveFilter == null)
+                                            {
+                                                ch.AudyCurveFilter = new();
+                                            }
+                                            else
+                                            {
+                                                ch.AudyCurveFilter.Remove(DispDataList[1]);
+                                            }
+                                            ch.AudyCurveFilter.Add(DispDataList[1], value);
+                                            SelectedChannel = ch;
                                         }
-                                        ch.AudyCurveFilter.Remove(DispDataList[1]);
-                                        ch.AudyCurveFilter.Add(DispDataList[1], value);
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
                                     }
                                     else if (EqType.Equals(AudyEqSetList[1]))
                                     {
-                                        if (ch.FlatCurveFilter == null)
+                                        ch.SelectedFlatCurveFilter = new(DispDataList[1], value);
+                                        try
                                         {
-                                            ch.FlatCurveFilter = new();
+                                            if (ch.FlatCurveFilter == null)
+                                            {
+                                                ch.FlatCurveFilter = new();
+                                            }
+                                            else
+                                            {
+                                                ch.FlatCurveFilter.Remove(DispDataList[1]);
+                                            }
+                                            ch.FlatCurveFilter.Add(DispDataList[1], value);
+                                            SelectedChannel = ch;
                                         }
-                                        ch.FlatCurveFilter.Remove(DispDataList[1]);
-                                        ch.FlatCurveFilter.Add(DispDataList[1], value);
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
                                     }
                                     break;
                                 }

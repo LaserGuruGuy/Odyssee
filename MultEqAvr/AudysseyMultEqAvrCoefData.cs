@@ -93,26 +93,51 @@ namespace Audyssey
                             {
                                 if (CoefChannelList[ch.Channel] == CoefChannel)
                                 {
-                                    if (CoefCurve == 0x00)
+                                    if (CoefCurve == CurveFilterList.IndexOf("referenceCurveFilter"))
                                     {
-                                        if (ch.AudyCurveFilter == null)
+                                        try
                                         {
-                                            ch.AudyCurveFilter = new();
+                                            if (ch.AudyCurveFilter == null)
+                                            {
+                                                ch.AudyCurveFilter = new();
+                                            }
+                                            else
+                                            {
+                                                ch.AudyCurveFilter.Remove(SampleRateList[CoefSampleRate]);
+                                            }
+                                            ch.AudyCurveFilter.Add(SampleRateList[CoefSampleRate], Coef);
+                                            ch.SelectedAudyCurveFilter = new(SampleRateList[CoefSampleRate], Coef);
+                                            ch.SelectedFlatCurveFilter = new();
+                                            SelectedChannel = ch;
                                         }
-                                        ch.AudyCurveFilter.Add(SampleRateList[CoefSampleRate], Coef);
-                                        RaisePropertyChanged("AudyCurveFilter");
-                                        break;
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
                                     }
-                                    else if (CoefCurve == 0x01)
+                                    else if (CoefCurve == CurveFilterList.IndexOf("flatCurveFilter"))
                                     {
-                                        if (ch.FlatCurveFilter == null)
+                                        try
                                         {
-                                            ch.FlatCurveFilter = new();
+                                            if (ch.FlatCurveFilter == null)
+                                            {
+                                                ch.FlatCurveFilter = new();
+                                            }
+                                            else
+                                            {
+                                                ch.FlatCurveFilter.Remove(SampleRateList[CoefSampleRate]);
+                                            }
+                                            ch.FlatCurveFilter.Add(SampleRateList[CoefSampleRate], Coef);
+                                            ch.SelectedAudyCurveFilter = new();
+                                            ch.SelectedFlatCurveFilter = new(SampleRateList[CoefSampleRate], Coef);
+                                            SelectedChannel = ch;
                                         }
-                                        ch.FlatCurveFilter.Add(SampleRateList[CoefSampleRate], Coef);
-                                        RaisePropertyChanged("FlatCurveFilter");
-                                        break;
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
                                     }
+                                    break;
                                 }
                             }
                         }

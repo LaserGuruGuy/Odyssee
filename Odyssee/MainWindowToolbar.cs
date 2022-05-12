@@ -163,12 +163,24 @@ namespace Odyssee
 
         private void OnButtonClick_Speaker(object sender, RoutedEventArgs e)
         {
-            audysseyMultEQAvrTcp.GetAvrStatus(OnCmdResponseSpeaker_GetAvrStatus);
+            audysseyMultEQAvrTcp.EnterAudysseyMode(OnCmdResponseSpeaker_EnterAudysseyModeEscape);
         }
 
-        private void OnCmdResponseSpeaker_GetAvrStatus(string Response)
+        private void OnCmdResponseSpeaker_EnterAudysseyModeEscape(string Response)
         {
             if (Response.Equals("ACK"))
+            {
+                audysseyMultEQAvrTcp.Escape(OnCmdResponseSpeaker_Escape);
+            }
+            else
+            {
+                audysseyMultEQAvr.StatusBar(Response);
+            }
+        }
+
+        private void OnCmdResponseSpeaker_Escape(string Response)
+        {
+            if (Response.Equals("NACK"))
             {
                 audysseyMultEQAvrTcp.GetAvrInfo(OnCmdResponseSpeaker_GetAvrInfo);
             }

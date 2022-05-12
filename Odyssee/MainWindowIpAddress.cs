@@ -18,8 +18,11 @@ namespace Odyssee
             var HostName = System.Net.Dns.GetHostName();
             var HostEntry = await System.Net.Dns.GetHostEntryAsync(HostName);
 
-            audysseyMultEQAvr.ComputerDeviceInfo = new();
+            cmbInterfaceReceiver.SelectedIndex = -1;
             audysseyMultEQAvr.ReceiverDeviceInfo = new();
+
+            cmbInterfaceComputer.SelectedIndex = -1;
+            audysseyMultEQAvr.ComputerDeviceInfo = new();
 
             if (HostEntry.AddressList.Length > 0)
             {
@@ -64,6 +67,7 @@ namespace Odyssee
             // Can pass search arguments here (device type, uuid). No arguments means all devices.
             var foundDevices = await deviceLocator.SearchAsync("upnp:rootdevice");
 
+            cmbInterfaceReceiver.SelectedIndex = -1;
             audysseyMultEQAvr.ReceiverDeviceInfo = new();
 
             foreach (var foundDevice in foundDevices)

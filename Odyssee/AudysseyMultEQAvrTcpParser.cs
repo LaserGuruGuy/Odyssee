@@ -441,20 +441,27 @@ namespace Audyssey
                             case "SET_COEFDT":
                                 if (TransmitReceiveChar == 'T')
                                 {
-                                    AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + CurrentSegment + " of " + TotalSegments + " with " + DataByte.Length + " bytes");
+                                    AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + CurrentSegment + " of " + TotalSegments);
                                     if (TransferComplete)
                                     {
-                                        AudysseyMultEQAvr.CoefData = DataByte;
-                                        string Channel;
-                                        string Curve;
-                                        string SampleRate;
+                                        string Channel = string.Empty;
+                                        string Curve = string.Empty;
+                                        string SampleRate = string.Empty;
+                                        try
+                                        {
+                                            AudysseyMultEQAvr.CoefData = DataByte;
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            AudysseyMultEQAvr.StatusBar(ex.Message);
+                                        }
                                         try
                                         {
                                             Channel = AudysseyMultEQAvr.CoefChannelList.SmartReverseLookup(DataByte[2], "Unknown");
                                         }
                                         catch (Exception ex)
                                         {
-                                            Channel = ex.Message;
+                                            AudysseyMultEQAvr.StatusBar(ex.Message);
                                         }
                                         try
                                         {
@@ -462,7 +469,7 @@ namespace Audyssey
                                         }
                                         catch (Exception ex)
                                         {
-                                            Curve = ex.Message;
+                                            AudysseyMultEQAvr.StatusBar(ex.Message);
                                         }
                                         try
                                         {
@@ -470,16 +477,15 @@ namespace Audyssey
                                         }
                                         catch (Exception ex)
                                         {
-                                            SampleRate = ex.Message;
+                                            AudysseyMultEQAvr.StatusBar(ex.Message);
                                         }
-                                        AudysseyMultEQAvr.StatusBar(CmdString + " " + Channel + " (" + DataByte[2] + ") " + Curve + " (" + DataByte[0] + ") " + SampleRate + " (" + DataByte[1] + ") Spare (" + DataByte[3] + ") with " + (AudysseyMultEQAvr.CoefData.Length / 4 - 1) + " FIR Coefficients");
+                                        AudysseyMultEQAvr.StatusBar(CmdString + " " + Channel + " (" + DataByte[2] + ") " + Curve + " (" + DataByte[0] + ") " + SampleRate + " (" + DataByte[1] + ") Spare (" + DataByte[3] + ") with " + (DataByte.Length / 4 - 1) + " FIR Coefficients");
                                     }
                                 }
                                 break;
                             case "GET_RESPON":
                                 if (TransmitReceiveChar == 'R')
                                 {
-                                    AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + CurrentSegment + " of " + TotalSegments + " with " + DataByte.Length + " bytes");
                                     if (TransferComplete)
                                     {
                                         _ResponseData.RspData = DataByte;
@@ -491,11 +497,12 @@ namespace Audyssey
                                     {
                                         AudysseyMultEQAvr.GetRespon_IsChecked = false;
                                         cmdAck.Progress();
+                                        AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + CurrentSegment + " of " + TotalSegments);
                                     }
                                 }
                                 break;
                             default:
-                                AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + (CurrentSegment + 1) + " of " + TotalSegments + " with " + Encoding.ASCII.GetString(DataByte) + " bytes");
+                                AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + (CurrentSegment + 1) + " of " + TotalSegments);
                                 if (TransferComplete)
                                 {
                                     cmdAck.Ack();
@@ -558,6 +565,14 @@ namespace Audyssey
                     // command ack request pending, clear ack request after timeout
                     cmdAck.Rqst(CallBack);
                 }
+            }
+
+            public void Escape(CmdAckCallBack CallBack = null)
+            {
+                // transmit
+                AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(ESC);
+                // command ack request pending, clear ack request after timeout
+                cmdAck.Rqst(CallBack);
             }
 
             public void ExitAudysseyMode(CmdAckCallBack CallBack = null)
@@ -691,7 +706,7 @@ namespace Audyssey
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     // clear finflag
-                    AudysseyMultEQAvr.AudyFinFlg = "NotFin";  //TODO what does this flag do?
+                    AudysseyMultEQAvr.AudyFinFlg = "NotFin";
                     string CmdString = "SET_SETDAT";
                     // build JSON for class Dat on interface Iamp
                     string AvrString = JsonConvert.SerializeObject(AudysseyMultEQAvr, new JsonSerializerSettings
@@ -774,7 +789,7 @@ namespace Audyssey
                     // transmit request
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString);
                     // command ack request pending, clear ack request after timeout
-                    cmdAck.Rqst(CallBack);
+                    cmdAck.Rqst(CallBack, 4000);
                 }
             }
 
@@ -783,29 +798,54 @@ namespace Audyssey
                 if ((AudysseyMultEQAvrTcpClient != null) && (AudysseyMultEQAvr != null) && (cmdAck.Pending == false))
                 {
                     AudysseyMultEQAvr.SetCoefDt_IsChecked = false;
+
                     int CoefDtCount = AudysseyMultEQAvr.CoefDtCount;
                     int CoefDtIndex = 0;
-                    foreach (var ch in AudysseyMultEQAvr.DetectedChannels)
+
+                    foreach (var sr in MultEQList.SampleRateList)
                     {
-                        AudysseyMultEQAvr.CoefChannel = MultEQList.CoefChannelList[ch.Channel];
-                        foreach (var coeff in ch.AudyCurveFilter)
+                        foreach (var cf in MultEQList.CurveFilterList)
                         {
-                            if (coeff.Key.StartsWith("coefficient"))
+                            foreach (var ch in AudysseyMultEQAvr.DetectedChannels)
                             {
-                                AudysseyMultEQAvr.CoefCurve = 0x00;
-                                AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(coeff.Key);
-                                CoefDtIndex++;
-                                await PumpAvrSetCoefDt(CallBack, CoefDtIndex, CoefDtCount);
-                            }
-                        }
-                        foreach (var coeff in ch.FlatCurveFilter)
-                        {
-                            if (coeff.Key.StartsWith("coefficient"))
-                            {
-                                AudysseyMultEQAvr.CoefCurve = 0x01;
-                                AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(coeff.Key);
-                                CoefDtIndex++;
-                                await PumpAvrSetCoefDt (CallBack, CoefDtIndex, CoefDtCount);
+                                if (cf.Equals(MultEQList.CurveFilterList[0]))
+                                {
+                                    foreach (var ac in ch.AudyCurveFilter)
+                                    {
+                                        if (ac.Key.Equals(sr))
+                                        {
+                                            AudysseyMultEQAvr.CoefChannel = MultEQList.CoefChannelList[ch.Channel];
+                                            AudysseyMultEQAvr.CoefCurve = 0x00;
+                                            AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(sr);
+
+                                            CoefDtIndex++;
+
+                                            await PumpAvrSetCoefDt(CallBack, CoefDtIndex, CoefDtCount);
+
+                                            ch.SelectedAudyCurveFilter = new(sr, ch.AudyCurveFilter[sr]);
+                                            AudysseyMultEQAvr.SelectedChannel = ch;
+                                        }
+                                    }
+                                }
+                                else if (cf.Equals(MultEQList.CurveFilterList[1]))
+                                {
+                                    foreach (var fc in ch.FlatCurveFilter)
+                                    {
+                                        if (fc.Key.Equals(sr))
+                                        {
+                                            AudysseyMultEQAvr.CoefChannel = MultEQList.CoefChannelList[ch.Channel];
+                                            AudysseyMultEQAvr.CoefCurve = 0x01;
+                                            AudysseyMultEQAvr.CoefSampleRate = (byte)MultEQList.SampleRateList.IndexOf(sr);
+
+                                            CoefDtIndex++;
+
+                                            await PumpAvrSetCoefDt(CallBack, CoefDtIndex, CoefDtCount);
+
+                                            ch.SelectedFlatCurveFilter = new(sr, ch.FlatCurveFilter[sr]);
+                                            AudysseyMultEQAvr.SelectedChannel = ch;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -858,13 +898,13 @@ namespace Audyssey
                     byte[] CopyData = current_packet < total_byte_packets - 1 ? new byte[512] : new byte[last_packet_length];
                     Array.Copy(Data, current_packet * 512, CopyData, 0, current_packet < total_byte_packets - 1 ? 512 : last_packet_length);
                     string CmdString = "SET_COEFDT";
-                    AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + (current_packet + 1) + " of " + total_byte_packets + " with " + CopyData.Length + " bytes   index " + CoefDtIndex + " count " + CoefDtCount);
+                    AudysseyMultEQAvr.StatusBar(CmdString + " Segment " + current_packet + " of " + (total_byte_packets - 1) + " with " + CopyData.Length + " bytes");
                     if (CoefDtIndex >= CoefDtCount && current_packet + 1 >= total_byte_packets) AudysseyMultEQAvr.SetCoefDt_IsChecked = true;
                     AudysseyMultEQAvrTcpClient.TransmitTcpAvrStream(CmdString, CopyData, current_packet, total_byte_packets - 1);
                     // command ack request pending, clear ack request after timeout
                     await Task.Run(() => cmdAck.Rqst(CallBack));
                     // TODO: ASYNC wait...
-                    while (cmdAck.Pending) ;
+                    while (cmdAck.Pending) System.Threading.Thread.Sleep(0);
                 }
             }
 
@@ -983,7 +1023,7 @@ namespace Audyssey
 
             public CmdAck()
             {
-                Timer = new System.Timers.Timer();
+                Timer = new System.Timers.Timer() { AutoReset = false };
                 Timer.AutoReset = false;
                 Timer.Elapsed += TimerElapsed;
                 Pending = false;
@@ -995,8 +1035,8 @@ namespace Audyssey
             /// Start the timer, set the command pending flag and load the callback function.
             /// </summary>
             /// <param name="CallBack">The timeout or acknowledge funtion (default null)</param>
-            /// <param name="TimerInterval">The timeout period in ms (default 3000)</param>
-            public void Rqst(CmdAckCallBack CallBack = null, int TimerInterval = 3000)
+            /// <param name="TimerInterval">The timeout period in ms (default 100)</param>
+            public void Rqst(CmdAckCallBack CallBack = null, int TimerInterval = 100)
             {
                 Timer.Stop();
                 Pending = true;

@@ -654,13 +654,23 @@ namespace Audyssey
             }
             #endregion
 
+            private static System.Threading.Mutex mutex = new();
+
             #region Methods
             public void StatusBar(string LogString)
             {
-#if DEBUG
-                //System.IO.File.AppendAllText(System.Environment.CurrentDirectory + "\\debuglog.txt", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt") + " " + LogString + "\n");
-#endif
-                Serialized += DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt") + " " + LogString + "\n";
+                try
+                {
+                    if (mutex.WaitOne())
+                    {
+                        Serialized += DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt") + " " + LogString + "\n";
+                        System.IO.File.AppendAllText(System.Environment.CurrentDirectory + "\\debuglog.txt", DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss.fff tt") + " " + LogString + "\n");
+                    }
+                }
+                finally
+                {
+                    mutex.ReleaseMutex();
+                }
             }
             public void Reset()
             {
