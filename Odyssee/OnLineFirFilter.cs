@@ -51,6 +51,9 @@ namespace MathNet.Filtering.FIR
 
         /// <summary>
         /// Finite Impulse Response (FIR) Filter.
+        /// The sum of the filter coefficients should be 1.
+        /// To ensure a filter gain of 1 the gain is calculated.
+        /// The reciproce is aplied when filtering to achieve unity gain.
         /// </summary>
         public OnlineFirFilter(IList<double> coefficients)
         {
@@ -63,6 +66,7 @@ namespace MathNet.Filtering.FIR
                 _gain += coefficients[i];
                 _coefficients[i] = _coefficients[_size + i] = coefficients[i];
             }
+            _gain = 1.0d / _gain;
         }
 
         /// <summary>

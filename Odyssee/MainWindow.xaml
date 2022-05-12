@@ -340,7 +340,7 @@
                             </GridView>
                         </ListView.View>
                     </ListView>
-                        <ListView ItemsSource="{Binding FlatCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedFlatCurveFilter, IsAsync=True}"  TextElement.Foreground="BlueViolet" SelectionChanged="ListView_FlatCurveFilter_SelectionChanged" KeyUp="ListView_FlatCurveFilter_KeyUp" Foreground="Black">
+                        <ListView ItemsSource="{Binding FlatCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedFlatCurveFilter, IsAsync=True}" TextElement.Foreground="BlueViolet" SelectionChanged="ListView_FlatCurveFilter_SelectionChanged" KeyUp="ListView_FlatCurveFilter_KeyUp">
                         <ListView.View>
                             <GridView>
                                     <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>

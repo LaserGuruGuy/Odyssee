@@ -190,6 +190,7 @@ namespace Odyssee
 
         private void DrawChart()
         {
+            PlotModel.EdgeRenderingMode = EdgeRenderingMode.PreferSpeed;
             PlotModel.Series.Clear();
             PlotModel.Axes.Clear();
             if (audysseyMultEQAvr != null)
@@ -264,17 +265,20 @@ namespace Odyssee
                     PlotCurve(SampleRate48KHz, selectedChannel.SelectedResponseData.Value, SmoothingFactor, CurveColor, DotNotSolid ? LineStyle.Dot : LineStyle.Solid, 1);
                 }
 
-                /* Iterate over all the sticky positions */
-                foreach (var stickyResponseData in selectedChannel.StickyResponseData)
+                if (selectedChannel.StickyResponseData != null)
                 {
-                    /* Sticky channel response data key and value are null if there is no channel selected in the GUI */
-                    if ((stickyResponseData.Key != null) && (stickyResponseData.Value != null))
+                    /* Iterate over all the sticky positions */
+                    foreach (var stickyResponseData in selectedChannel.StickyResponseData)
                     {
-                        /* Avoid duplication of response data if the sticky channel was also a selected channel */
-                        if (!stickyResponseData.Equals(selectedChannel.SelectedResponseData))
+                        /* Sticky channel response data key and value are null if there is no channel selected in the GUI */
+                        if ((stickyResponseData.Key != null) && (stickyResponseData.Value != null))
                         {
-                            CurveColor = OxyColor.Parse(ResponseDataTraceColor[stickyResponseData.Key].ToString());
-                            PlotCurve(SampleRate48KHz, stickyResponseData.Value, SmoothingFactor, CurveColor, DotNotSolid ? LineStyle.Dot : LineStyle.Solid, 1);
+                            /* Avoid duplication of response data if the sticky channel was also a selected channel */
+                            if (!stickyResponseData.Equals(selectedChannel.SelectedResponseData))
+                            {
+                                CurveColor = OxyColor.Parse(ResponseDataTraceColor[stickyResponseData.Key].ToString());
+                                PlotCurve(SampleRate48KHz, stickyResponseData.Value, SmoothingFactor, CurveColor, DotNotSolid ? LineStyle.Dot : LineStyle.Solid, 1);
+                            }
                         }
                     }
                 }
