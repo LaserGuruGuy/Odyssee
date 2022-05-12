@@ -475,7 +475,7 @@ namespace Odyssee
                             DataFieldY = "Y",
                             StrokeThickness = 2,
                             MarkerSize = 0,
-                            LineStyle = LineStyle.Dot,
+                            LineStyle = LineStyle.Solid,
                             Color = OxyColor.Parse(Brushes.DarkRed.ToString()),
                             MarkerType = MarkerType.None,
                         };
@@ -489,52 +489,56 @@ namespace Odyssee
         private void PlotCurve(double sampleRate, double[] responseData, int smoothingFactor, OxyColor oxyColor, LineStyle lineStyle, double strokeThickness)
         {
             Collection<DataPoint> dataPoint = new Collection<DataPoint>();
-            if (selectedAxisLimits.Contains("Chirp"))
+
+            if (responseData != null)
             {
-                for (int j = 0; j < responseData.Length; j++)
+                if (selectedAxisLimits.Contains("Chirp"))
                 {
-                    dataPoint.Add(new DataPoint(SecondsToMilliseconds * j / sampleRate, responseData[j]));
-                }
-            }
-            else
-            {
-                AxisLimit axisLimits = AxisLimits[selectedAxisLimits];
-
-                double[] Frequency = new double[responseData.Length];
-                MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[responseData.Length];
-
-                for (int j = 0; j < responseData.Length; j++)
-                {
-                    Frequency[j] = (double)j / responseData.Length * sampleRate;
-                    complexData[j] = (MathNet.Numerics.Complex32)(responseData[j]);
-                }
-                Frequency[0] = 0.5 / responseData.Length * sampleRate;
-
-                MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
-
-                if (smoothingFactor != 0)
-                {
-                    double[] smoothed = new double[responseData.Length];
                     for (int j = 0; j < responseData.Length; j++)
                     {
-                        /* MagnitudeSquared if we take 10*log10 later */
-                        smoothed[j] = complexData[j].MagnitudeSquared;
-                    }
-
-                    LinSpacedFracOctaveSmooth(49 - smoothingFactor, ref smoothed, 1, 1d / 48);
-
-                    for (int x = 0; x < responseData.Length / 2; x++)
-                    {
-                        /* 10*log10 for previously MagnitudeSquared */
-                        dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(smoothed[x])));
+                        dataPoint.Add(new DataPoint(SecondsToMilliseconds * j / sampleRate, responseData[j]));
                     }
                 }
                 else
                 {
-                    for (int x = 0; x < responseData.Length / 2; x++)
+                    AxisLimit axisLimits = AxisLimits[selectedAxisLimits];
+
+                    double[] Frequency = new double[responseData.Length];
+                    MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[responseData.Length];
+
+                    for (int j = 0; j < responseData.Length; j++)
                     {
-                        /* 10*log10 for previously MagnitudeSquared */
-                        dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(complexData[x].MagnitudeSquared)));
+                        Frequency[j] = (double)j / responseData.Length * sampleRate;
+                        complexData[j] = (MathNet.Numerics.Complex32)(responseData[j]);
+                    }
+                    Frequency[0] = 0.5 / responseData.Length * sampleRate;
+
+                    MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
+
+                    if (smoothingFactor != 0)
+                    {
+                        double[] smoothed = new double[responseData.Length];
+                        for (int j = 0; j < responseData.Length; j++)
+                        {
+                            /* MagnitudeSquared if we take 10*log10 later */
+                            smoothed[j] = complexData[j].MagnitudeSquared;
+                        }
+
+                        LinSpacedFracOctaveSmooth(49 - smoothingFactor, ref smoothed, 1, 1d / 48);
+
+                        for (int x = 0; x < responseData.Length / 2; x++)
+                        {
+                            /* 10*log10 for previously MagnitudeSquared */
+                            dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(smoothed[x])));
+                        }
+                    }
+                    else
+                    {
+                        for (int x = 0; x < responseData.Length / 2; x++)
+                        {
+                            /* 10*log10 for previously MagnitudeSquared */
+                            dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(complexData[x].MagnitudeSquared)));
+                        }
                     }
                 }
             }

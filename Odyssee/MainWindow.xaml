@@ -319,14 +319,14 @@
                                 <GridViewColumn Header="Stick" Width="auto" >
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized"/>
+                                            <CheckBox Name="Sticky" Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized"/>
                                          </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Average" Width="auto" >
                                         <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <CheckBox Checked="ListView_CheckBox_ResponseDataAverage_Checked" Unchecked="ListView_CheckBox_ResponseDataAverage_Unchecked" Initialized="ListView_CheckBox_ResponseDataAverage_Initialized"/>
+                                            <CheckBox Name="Average" Checked="ListView_CheckBox_ResponseDataAverage_Checked" Unchecked="ListView_CheckBox_ResponseDataAverage_Unchecked" Initialized="ListView_CheckBox_ResponseDataAverage_Initialized"/>
                                          </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>

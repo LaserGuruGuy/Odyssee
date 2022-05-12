@@ -16,15 +16,64 @@ namespace Odyssee
             DrawChart();
         }
 
+        // find all T in the VisualTree
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject parent) where T : DependencyObject
+        {
+            List<T> foundChilds = new List<T>();
+
+            int childrenCount = System.Windows.Media.VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(parent, i);
+
+                T childType = child as T;
+                if (childType == null)
+                {
+                    foreach (var other in FindVisualChildren<T>(child))
+                        yield return other;
+                }
+                else
+                {
+                    yield return (T)child;
+                }
+            }
+        }
+
         private void ListView_ResponseData_KeyUp(object sender, KeyEventArgs e)
         {
             ListBox listBox = sender as ListBox;
-            if (e.Key.Equals(Key.Escape))
+
+            if (e.Key.Equals(Key.Space))
+            {
+                if (listBox.SelectedItem != null)
+                {
+                    IEnumerable<CheckBox> ChildCheckBoxes = FindVisualChildren<CheckBox>(listBox);
+                    foreach (CheckBox cb in ChildCheckBoxes)
+                    {
+                        if (cb.Name == "Average")
+                        {
+                            if (((KeyValuePair<string, double[]>)cb.DataContext).Equals((KeyValuePair<string, double[]>)listBox.SelectedItem))
+                            {
+                                if (cb.IsChecked == true)
+                                {
+                                    cb.IsChecked = false;
+                                }
+                                else
+                                {
+                                    cb.IsChecked = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else if (e.Key.Equals(Key.Escape))
             {
                 listBox.SelectedIndex = -1;
                 listBox.SelectedItem = new KeyValuePair<string, double[]>();
                 DrawChart();
             }
+
         }
 
         private void ListView_CheckBox_ResponseDataSticky_Initialized(object sender, EventArgs e)
