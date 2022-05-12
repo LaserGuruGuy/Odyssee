@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Windows;
 using System.Windows.Media;
+using Audyssey.MultEQ.List;
 using Audyssey.MultEQAvr;
 using MathNet.Filtering.FIR;
 using OxyPlot;
@@ -284,8 +285,8 @@ namespace Odyssee
                     PlotCurveFilter(selectedChannel.SelectedAudyCurveFilter,
                     OxyColor.Parse(Brushes.Teal.ToString()),
                     SmoothingFactor,
-                    selectedChannel.FilterFrequencies,
-                    selectedChannel.DisplayFrequencies);
+                    ChannelList.FilterFrequencies,
+                    ChannelList.DisplayFrequencies);
                 }
 
                 /* Selected flat curve filter key and value are null if there is no channel selected in the GUI */
@@ -294,8 +295,8 @@ namespace Odyssee
                     PlotCurveFilter(selectedChannel.SelectedFlatCurveFilter,
                     OxyColor.Parse(Brushes.BlueViolet.ToString()),
                     SmoothingFactor,
-                    selectedChannel.FilterFrequencies,
-                    selectedChannel.DisplayFrequencies);
+                    ChannelList.FilterFrequencies,
+                    ChannelList.DisplayFrequencies);
                 }
 
                 if (CheckBox_CurveFilter.IsChecked == true)
