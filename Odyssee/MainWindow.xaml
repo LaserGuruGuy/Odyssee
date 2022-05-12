@@ -380,9 +380,16 @@
                 </Grid>
             </DockPanel>
             <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" />
-            <ScrollViewer Grid.Row="4" VerticalAlignment="Bottom" VerticalScrollBarVisibility="Auto">
-                <TextBlock Text="{Binding Serialized, NotifyOnTargetUpdated=True}" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Background="Transparent" TargetUpdated="TextBlock_TargetUpdated"/>
-            </ScrollViewer>
+            <TextBox Grid.Row="4" VerticalAlignment="Bottom" 
+                BorderBrush="Transparent"
+                IsReadOnly="True" SelectionBrush="Transparent" 
+                Text="{Binding Serialized, NotifyOnTargetUpdated=True}"
+                VerticalContentAlignment="Stretch"
+                ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                ScrollViewer.CanContentScroll="True"
+                TextWrapping="WrapWithOverflow"
+                TargetUpdated="TextBox_TargetUpdated" SizeChanged="TextBox_SizeChanged"/>
         </Grid>
     </Border>
 </Window>

@@ -94,11 +94,16 @@ namespace Odyssee
             }
         }
 
-        private void TextBlock_TargetUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
+        private void TextBox_TargetUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
         {
-            var TextBlock = sender as TextBlock;
-            var scrollViewer = TextBlock.Parent as ScrollViewer;
-            scrollViewer.ScrollToEnd();
+            var TextBox = sender as TextBox;
+            TextBox.ScrollToEnd();
+        }
+
+        private void TextBox_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var TextBox = sender as TextBox;
+            TextBox.ScrollToEnd();
         }
 
         private void PropertyChanged(object sender, PropertyChangedEventArgs e)
