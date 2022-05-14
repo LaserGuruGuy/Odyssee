@@ -43,11 +43,13 @@ namespace MathNet.Filtering.FIR
     /// </remarks>
     public class OnlineFirFilter
     {
-        readonly double[] _coefficients;
-        readonly double[] _buffer;
-        int _offset;
-        readonly double _gain;
-        readonly int _size;
+        private readonly double[] _Coefficients;
+        private readonly double[] _Buffer;
+        private readonly double _Gain;
+        private readonly int _Size;
+        private int _Offset;
+
+        public double Gain { get { return 1.0/_Gain; } }
 
         /// <summary>
         /// Finite Impulse Response (FIR) Filter.
@@ -57,16 +59,16 @@ namespace MathNet.Filtering.FIR
         /// </summary>
         public OnlineFirFilter(IList<double> coefficients)
         {
-            _size = coefficients.Count;
-            _gain = 0;
-            _buffer = new double[_size];
-            _coefficients = new double[_size << 1];
-            for (int i = 0; i < _size; i++)
+            _Size = coefficients.Count;
+            _Gain = 0;
+            _Buffer = new double[_Size];
+            _Coefficients = new double[_Size << 1];
+            for (int i = 0; i < _Size; i++)
             {
-                _gain += coefficients[i];
-                _coefficients[i] = _coefficients[_size + i] = coefficients[i];
+                _Gain += coefficients[i];
+                _Coefficients[i] = _Coefficients[_Size + i] = coefficients[i];
             }
-            _gain = 1.0d / _gain;
+            _Gain = 1.0d / _Gain;
         }
 
         /// <summary>
@@ -74,16 +76,16 @@ namespace MathNet.Filtering.FIR
         /// </summary>
         public double ProcessSample(double sample)
         {
-            _offset = (_offset != 0) ? _offset - 1 : _size - 1;
-            _buffer[_offset] = sample;
+            _Offset = (_Offset != 0) ? _Offset - 1 : _Size - 1;
+            _Buffer[_Offset] = sample;
 
             double acc = 0;
-            for (int i = 0, j = _size - _offset; i < _size; i++, j++)
+            for (int i = 0, j = _Size - _Offset; i < _Size; i++, j++)
             {
-                acc += _buffer[i] * _coefficients[j];
+                acc += _Buffer[i] * _Coefficients[j];
             }
 
-            return _gain * acc;
+            return _Gain * acc;
         }
 
         /// <summary>
@@ -91,11 +93,11 @@ namespace MathNet.Filtering.FIR
         /// </summary>
         public void Reset()
         {
-            for (int i = 0; i < _buffer.Length; i++)
+            for (int i = 0; i < _Buffer.Length; i++)
             {
-                _buffer[i] = 0d;
+                _Buffer[i] = 0d;
             }
-            _offset = 0;
+            _Offset = 0;
         }
     }
 }

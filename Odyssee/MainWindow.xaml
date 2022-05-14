@@ -350,14 +350,14 @@
                         <ListView ItemsSource="{Binding AudyCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedAudyCurveFilter, IsAsync=True}" TextElement.Foreground="Teal"  SelectionChanged="ListView_AudyCurveFilter_SelectionChanged" KeyUp="ListView_AudyCurveFilter_KeyUp">
                             <ListView.View>
                                 <GridView>
-                                        <GridViewColumn Header="Audy Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
+                                    <GridViewColumn Header="Audy Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
                         <ListView ItemsSource="{Binding FlatCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedFlatCurveFilter, IsAsync=True}" TextElement.Foreground="BlueViolet" SelectionChanged="ListView_FlatCurveFilter_SelectionChanged" KeyUp="ListView_FlatCurveFilter_KeyUp">
                             <ListView.View>
                                 <GridView>
-                                        <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
+                                    <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>
@@ -386,7 +386,8 @@
                         <RadioButton Name="RadioButton_RangeSubwoofer" Content="10-1000Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
                         <RadioButton Name="RadioButton_RangeFull" Content="10Hz-24kHz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,5">
+                        <Label Content="{Binding SelectedChannel.FirFilterGain}" Margin="0,-6,10,0"></Label>
                         <CheckBox Name="CheckBox_CurveFilter" Content="Apply Curve Filter" Checked="CheckBox_CurveFilter_Checked" Unchecked="CheckBox_CurveFilter_Unchecked" Margin="0,0,10,0" IsChecked="False"/>
                         <RadioButton Name="RadioButton_FlatCurveFilter" Content="Flat Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0"/>
                         <RadioButton Name="RadioButton_AudyCurveFilter" Content="Audy Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0" IsChecked="True"/>

@@ -213,6 +213,7 @@ namespace Audyssey
             private List<KeyValuePair<string, double[]>> _AverageResponseData = new();
             private KeyValuePair<string, double[]> _SelectedAudyCurveFilter = new();
             private KeyValuePair<string, double[]> _SelectedFlatCurveFilter = new();
+            private double? _FirFilterGain;
             #endregion
 
             #region Properties
@@ -279,6 +280,19 @@ namespace Audyssey
                 {
                     _SelectedFlatCurveFilter = value;
                     RaisePropertyChanged("SelectedFlatCurveFilter");
+                }
+            }
+            [JsonIgnore]
+            public double? FirFilterGain
+            {
+                get
+                {
+                    return _FirFilterGain;
+                }
+                set
+                {
+                    _FirFilterGain = value;
+                    RaisePropertyChanged("FirFilterGain");
                 }
             }
             #endregion

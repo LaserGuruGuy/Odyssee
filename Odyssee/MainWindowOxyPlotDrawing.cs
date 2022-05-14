@@ -173,7 +173,7 @@ namespace Odyssee
         const double SampleRate48KHz = 48000;
         const double SampleSize = 16384;
 
-        OnlineFirFilter onlineCurveFirFilter = null;
+        OnlineFirFilter FirFilter = null;
 
         private string selectedCurveFilter = string.Empty;
         bool LogarithmicAxis = false;
@@ -311,7 +311,8 @@ namespace Odyssee
                         /* Load 48kHz audy FIR filter coefficients */
                         try
                         {
-                            onlineCurveFirFilter = new(selectedChannel.AudyCurveFilter[AudysseyMultEQAvr.SampleRateList[2]]);
+                            FirFilter = new(selectedChannel.AudyCurveFilter[AudysseyMultEQAvr.SampleRateList[2]]);
+                            selectedChannel.FirFilterGain = FirFilter.Gain;
                         }
                         catch
                         {
@@ -323,7 +324,8 @@ namespace Odyssee
                         /* Load 48kHz flat FIR filter coefficients */
                         try
                         {
-                            onlineCurveFirFilter = new(selectedChannel.FlatCurveFilter[AudysseyMultEQAvr.SampleRateList[2]]);
+                            FirFilter = new(selectedChannel.FlatCurveFilter[AudysseyMultEQAvr.SampleRateList[2]]);
+                            selectedChannel.FirFilterGain = FirFilter.Gain;
                         }
                         catch
                         {
@@ -332,12 +334,14 @@ namespace Odyssee
                     }
                     else
                     {
-                        onlineCurveFirFilter = null;
+                        FirFilter = null;
+                        selectedChannel.FirFilterGain = null;
                     }
                 }
                 else
                 {
-                    onlineCurveFirFilter = null;
+                    FirFilter = null;
+                    selectedChannel.FirFilterGain = null;
                 }
 
                 PlotAverageCurve(selectedChannel.AverageResponseData, SmoothingFactor);
@@ -422,14 +426,14 @@ namespace Odyssee
                         {
                             MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[Length];
 
-                            if (CheckBox_CurveFilter.IsChecked == true && onlineCurveFirFilter != null)
+                            if (CheckBox_CurveFilter.IsChecked == true && FirFilter != null)
                             {
                                 /* reset FIR filter state */
-                                onlineCurveFirFilter.Reset();
+                                FirFilter.Reset();
                                 /* FIR filter respnse */
                                 for (int i = 0; i < Length; i++)
                                 {
-                                    complexData[i] = (MathNet.Numerics.Complex32)onlineCurveFirFilter.ProcessSample(ResponseData.Value[i]);
+                                    complexData[i] = (MathNet.Numerics.Complex32)FirFilter.ProcessSample(ResponseData.Value[i]);
                                 }
                             }
                             else
