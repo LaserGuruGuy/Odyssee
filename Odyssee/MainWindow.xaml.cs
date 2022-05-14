@@ -118,6 +118,11 @@ namespace Odyssee
             {
                 audysseyMultEQAvr.DetectedChannels = null;
             }
+            if (e.PropertyName.Equals("SelectedAudyCurveFilter") ||
+                e.PropertyName.Equals("SelectedFlatCurveFilter"))
+            {
+                DrawChart();
+            }
         }
     }
 }

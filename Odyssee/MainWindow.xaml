@@ -149,6 +149,20 @@
                                 </Grid.ColumnDefinitions>
                                 <GroupBox Grid.Column="0" Header="Channel Setup">
                                     <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, AsyncState=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="False">
+                                        <ListView.ContextMenu>
+                                            <ContextMenu Selector.IsSelected="True">
+                                                <MenuItem
+                                                    Header="New CurveFilters"
+                                                    Command="{Binding NewCurveFilters}"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                                                </MenuItem>
+                                                <MenuItem
+                                                    Header="Clear CurveFilters"
+                                                    Command="{Binding ClearCurveFilters}"
+                                                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </ListView.ContextMenu>
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="Channel" Width="auto" DisplayMemberBinding="{Binding Channel}"/>
@@ -311,43 +325,43 @@
                     </Grid>
                 </Grid>
                 <GroupBox Header="Graph Filter" DockPanel.Dock="Right">
-                <StackPanel Orientation="Vertical" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
+                    <StackPanel Orientation="Vertical" DataContext="{Binding SelectedValue, ElementName=ChannelsView}">
                         <ListView ItemsSource="{Binding ResponseData, IsAsync=True}" SelectedItem="{Binding SelectedResponseData, IsAsync=True}" SelectionChanged="ListView_ResponseData_SelectionChanged" KeyUp="ListView_ResponseData_KeyUp">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Response" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
-                                <GridViewColumn Header="Stick" Width="auto" >
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Name="Sticky" Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized"/>
-                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn Header="Average" Width="auto" >
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Response" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
+                                    <GridViewColumn Header="Stick" Width="auto" >
                                         <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Name="Average" Checked="ListView_CheckBox_ResponseDataAverage_Checked" Unchecked="ListView_CheckBox_ResponseDataAverage_Unchecked" Initialized="ListView_CheckBox_ResponseDataAverage_Initialized"/>
-                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                                            <DataTemplate>
+                                                <CheckBox Name="Sticky" Checked="ListView_CheckBox_ResponseDataSticky_Checked" Unchecked="ListView_CheckBox_ResponseDataSticky_Unchecked" Initialized="ListView_CheckBox_ResponseDataSticky_Initialized"/>
+                                             </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Average" Width="auto" >
+                                            <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Name="Average" Checked="ListView_CheckBox_ResponseDataAverage_Checked" Unchecked="ListView_CheckBox_ResponseDataAverage_Unchecked" Initialized="ListView_CheckBox_ResponseDataAverage_Initialized"/>
+                                             </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                         <ListView ItemsSource="{Binding AudyCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedAudyCurveFilter, IsAsync=True}" TextElement.Foreground="Teal"  SelectionChanged="ListView_AudyCurveFilter_SelectionChanged" KeyUp="ListView_AudyCurveFilter_KeyUp">
-                        <ListView.View>
-                            <GridView>
-                                    <GridViewColumn Header="Audy Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                            <ListView.View>
+                                <GridView>
+                                        <GridViewColumn Header="Audy Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                         <ListView ItemsSource="{Binding FlatCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedFlatCurveFilter, IsAsync=True}" TextElement.Foreground="BlueViolet" SelectionChanged="ListView_FlatCurveFilter_SelectionChanged" KeyUp="ListView_FlatCurveFilter_KeyUp">
-                        <ListView.View>
-                            <GridView>
-                                    <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </StackPanel>
+                            <ListView.View>
+                                <GridView>
+                                        <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
                 </GroupBox>
                 <Grid>
                     <Grid.ColumnDefinitions>

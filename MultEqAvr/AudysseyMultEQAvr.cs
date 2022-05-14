@@ -219,7 +219,13 @@ namespace Audyssey
                             {
                                 foreach (var Item in Element)
                                 {
-                                    _DetectedChannels.Add(new() { Channel = Item.Key.Replace("MIX", ""), Setup = Item.Value, Skip = Item.Value == "N" ? true : false });
+                                    int size = Item.Key.Contains("MIX") ? 704 : 1024;
+                                    _DetectedChannels.Add(new()
+                                    {
+                                        Channel = Item.Key.Replace("MIX", ""),
+                                        Setup = Item.Value,
+                                        Skip = Item.Value == "N" ? true : false,
+                                    });
                                 }
                             }
                         }
@@ -533,6 +539,73 @@ namespace Audyssey
             #endregion
 
             #region Methods
+            private System.Windows.Input.ICommand _ClearCurveFilters;
+            private System.Windows.Input.ICommand _NewCurveFilters;
+            public System.Windows.Input.ICommand ClearCurveFilters => _ClearCurveFilters ?? (_ClearCurveFilters = new CommunityToolkit.Mvvm.Input.RelayCommand<DetectedChannel>(ClearCurveFiltersCommand));
+            public System.Windows.Input.ICommand NewCurveFilters => _NewCurveFilters ?? (_NewCurveFilters = new CommunityToolkit.Mvvm.Input.RelayCommand<DetectedChannel>(NewCurveFiltersCommand));
+            public void ClearCurveFiltersCommand(DetectedChannel ch)
+            {
+                if (ch != null)
+                {
+                    foreach (var cf in ch.AudyCurveFilter)
+                    {
+                        Array.Clear(cf.Value, 0, cf.Value.Length);
+                        if (cf.Key.Contains("coefficient"))
+                        {
+                            cf.Value[0] = 1.0d / 3.0d;
+                        }
+                    }                    
+                    RaisePropertyChanged("AudyCurveFilter");
+                    RaisePropertyChanged("SelectedAudyCurveFilter");
+                    foreach (var cf in ch.FlatCurveFilter)
+                    {
+                        Array.Clear(cf.Value, 0, cf.Value.Length);
+                        if (cf.Key.Contains("coefficient"))
+                        {
+                            cf.Value[0] = 1.0d / 3.0d;
+                        }
+                    }
+                    RaisePropertyChanged("FlatCurveFilter");
+                    RaisePropertyChanged("SelectedFlatCurveFilter");
+                }
+            }
+            public void NewCurveFiltersCommand(DetectedChannel ch)
+            {
+                if (ch != null)
+                {
+                    int size = ch.Channel.Contains("SW") ? 704 : 1024;
+                    ch.AudyCurveFilter = new()
+                    {
+                        { "dispSmallData", new double[9] },
+                        { "dispLargeData", new double[61] },
+                        { "coefficient48kHz", new double[size] },
+                        { "coefficient441kHz", new double[size] },
+                        { "coefficient32kHz", new double[size] }
+                    };
+                    foreach (var cf in ch.AudyCurveFilter)
+                    {
+                        if (cf.Key.Contains("coefficient"))
+                        {
+                            cf.Value[0] = 1.0d / 3.0d;
+                        }
+                    }
+                    ch.FlatCurveFilter = new()
+                    {
+                        { "dispSmallData", new double[9] },
+                        { "dispLargeData", new double[61] },
+                        { "coefficient48kHz", new double[size] },
+                        { "coefficient441kHz", new double[size] },
+                        { "coefficient32kHz", new double[size] }
+                    };
+                    foreach (var cf in ch.FlatCurveFilter)
+                    {
+                        if (cf.Key.Contains("coefficient"))
+                        {
+                            cf.Value[0] = 1.0d / 3.0d;
+                        }
+                    }
+                }
+            }
             private double[] ByteToDoubleArray(byte[] Bytes, double ResponseCoef = 1.0d)
             {
                 if (Bytes.Length % 4 != 0) throw new ArgumentException();
