@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text;
 using Newtonsoft.Json;
 using Audyssey.MultEQ.List;
+using System;
 
 namespace Audyssey
 {
@@ -293,6 +294,37 @@ namespace Audyssey
                 {
                     _FirFilterGain = value;
                     RaisePropertyChanged("FirFilterGain");
+                }
+            }
+            #endregion
+
+            #region Methods
+            private System.Windows.Input.ICommand _ClearAudyCurveFilter;
+            private System.Windows.Input.ICommand _ClearFlatCurveFilter;
+            public System.Windows.Input.ICommand ClearAudyCurveFilter => _ClearAudyCurveFilter ?? (_ClearAudyCurveFilter = new CommunityToolkit.Mvvm.Input.RelayCommand<object>(ClearAudyCurveFilterCommand));
+            public System.Windows.Input.ICommand ClearFlatCurveFilter => _ClearFlatCurveFilter ?? (_ClearFlatCurveFilter = new CommunityToolkit.Mvvm.Input.RelayCommand<object>(ClearFlatCurveFilterCommand));
+            public void ClearAudyCurveFilterCommand(object Object)
+            {
+                KeyValuePair<string, double[]> CurveFilter = (KeyValuePair<string, double[]>)Object;
+                if (CurveFilter.Key != null && CurveFilter.Value != null)
+                {
+                    Array.Clear(CurveFilter.Value, 0, CurveFilter.Value.Length);
+                    if (CurveFilter.Key.Contains("coefficient"))
+                    {
+                        CurveFilter.Value[0] = 1.0d / 3.0d;
+                    }
+                }
+            }
+            public void ClearFlatCurveFilterCommand(object Object)
+            {
+                KeyValuePair<string, double[]> CurveFilter = (KeyValuePair<string, double[]>)Object;
+                if (CurveFilter.Key != null && CurveFilter.Value != null)
+                {
+                    Array.Clear(CurveFilter.Value, 0, CurveFilter.Value.Length);
+                    if (CurveFilter.Key.Contains("coefficient"))
+                    {
+                        CurveFilter.Value[0] = 1.0d / 3.0d;
+                    }
                 }
             }
             #endregion

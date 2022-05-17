@@ -606,6 +606,9 @@ namespace Audyssey
                     }
                 }
             }
+            #endregion
+
+            #region Methods
             private double[] ByteToDoubleArray(byte[] Bytes, double ResponseCoef = 1.0d)
             {
                 if (Bytes.Length % 4 != 0) throw new ArgumentException();

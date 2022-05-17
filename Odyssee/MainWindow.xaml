@@ -348,6 +348,15 @@
                             </ListView.View>
                         </ListView>
                         <ListView ItemsSource="{Binding AudyCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedAudyCurveFilter, IsAsync=True}" TextElement.Foreground="Teal"  SelectionChanged="ListView_AudyCurveFilter_SelectionChanged" KeyUp="ListView_AudyCurveFilter_KeyUp">
+                            <ListView.ContextMenu>
+                                <ContextMenu Selector.IsSelected="True">
+                                    <MenuItem
+                                        Header="Clear CurveFilter"
+                                        Command="{Binding ClearAudyCurveFilter}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                                    </MenuItem>
+                                </ContextMenu>
+                            </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Audy Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
@@ -355,6 +364,15 @@
                             </ListView.View>
                         </ListView>
                         <ListView ItemsSource="{Binding FlatCurveFilter, IsAsync=True}" SelectedItem="{Binding SelectedFlatCurveFilter, IsAsync=True}" TextElement.Foreground="BlueViolet" SelectionChanged="ListView_FlatCurveFilter_SelectionChanged" KeyUp="ListView_FlatCurveFilter_KeyUp">
+                            <ListView.ContextMenu>
+                                <ContextMenu Selector.IsSelected="True">
+                                    <MenuItem
+                                        Header="Clear FlatFilter"
+                                        Command="{Binding ClearFlatCurveFilter}"
+                                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}">
+                                    </MenuItem>
+                                </ContextMenu>
+                            </ListView.ContextMenu>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Flat Curve Filter" Width="auto" DisplayMemberBinding="{Binding Key, IsAsync=True}"/>
