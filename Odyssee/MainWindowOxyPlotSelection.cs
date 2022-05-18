@@ -293,7 +293,6 @@ namespace Odyssee
                 //Update the coordinate
                 audysseyMultEQAvr.CurvePoint.Y = DataPoint.Y;
 
-
                 //Audy
                 if (audysseyMultEQAvr.CurvePoint.AudyEqSet.Equals(MultEQList.AudyEqSetList[0]))
                 {

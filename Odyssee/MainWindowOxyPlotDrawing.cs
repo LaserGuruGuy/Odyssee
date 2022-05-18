@@ -373,18 +373,21 @@ namespace Odyssee
                 if (CurveFilter.Value.Length == FilterFrequencies.Length)
                 {
                     Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+
                     for (int j = 0; j < CurveFilter.Value.Length; j++)
                     {
                         dataPoint.Add(new DataPoint(FilterFrequencies[j], CurveFilter.Value[j]));
                     }
+
                     var sinStemSeries = new StemSeries
                     {
+                        ItemsSource = dataPoint,
                         Title = AudyEqSet + CurveFilter.Key,
                         Color = CurveColor,
                         MarkerStroke = CurveColor,
                         MarkerType = MarkerType.Circle
                     };
-                    sinStemSeries.Points.AddRange(dataPoint);
+
                     PlotModel.Series.Add(sinStemSeries);
                 }
             }
@@ -394,12 +397,15 @@ namespace Odyssee
                 if (CurveFilter.Value.Length == DisplayFrequencies.Length)
                 {
                     Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+
                     for (int j = 0; j < CurveFilter.Value.Length; j++)
                     {
                         dataPoint.Add(new DataPoint(DisplayFrequencies[j], CurveFilter.Value[j]));
                     }
+
                     var sinStemSeries = new StemSeries
                     {
+                        ItemsSource = dataPoint,
                         Title = AudyEqSet + CurveFilter.Key,
                         Color = CurveColor,
                         StrokeThickness = 2,
@@ -407,7 +413,7 @@ namespace Odyssee
                         MarkerStroke = CurveColor,
                         MarkerStrokeThickness = 2
                     };
-                    sinStemSeries.Points.AddRange(dataPoint);
+
                     PlotModel.Series.Add(sinStemSeries);
                 }
             }
