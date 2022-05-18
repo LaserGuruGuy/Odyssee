@@ -92,7 +92,6 @@ namespace Audyssey
                     RaisePropertyChanged("ComputerDeviceInfo");
                 }
             }
-
             [JsonIgnore]
             public UniqueObservableCollection<ReceiverDeviceInfo> ReceiverDeviceInfo
             {
@@ -536,6 +535,8 @@ namespace Audyssey
                     RaisePropertyChanged("SmoothingFactor");
                 }
             }
+            [JsonIgnore]
+            public CurvePoint CurvePoint { get; set; }
             #endregion
 
             #region Methods
@@ -764,5 +765,29 @@ namespace Audyssey
             public event PropertyChangedEventHandler PropertyChanged = delegate { };
             #endregion
         }
+
+
+
+        public class CurvePoint
+        {
+            public static readonly CurvePoint Undefined;
+
+            public CurvePoint(string _AudyEqSet, string _DispData, double _X, double _Y)
+            {
+                AudyEqSet = _AudyEqSet;
+                DispData = _DispData;
+                X = _X;
+                Y = _Y;
+            }
+
+            public double X { get; }
+
+            public double Y { get; set; }
+
+            public string AudyEqSet { get; }
+
+            public string DispData { get; }
+        }
+
     }
 }

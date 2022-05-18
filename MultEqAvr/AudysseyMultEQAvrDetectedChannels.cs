@@ -4,6 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Audyssey.MultEQ.List;
 using System;
+using Remez.Filtering;
 
 namespace Audyssey
 {
@@ -326,6 +327,27 @@ namespace Audyssey
                         CurveFilter.Value[0] = 1.0d / 3.0d;
                     }
                 }
+
+                if (CurveFilter.Key.Equals(MultEQList.SampleRateList[2]))
+                {
+                    double ratio = AverageResponseData[0].Value.Length / CurveFilter.Value.Length;
+
+                    MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[AverageResponseData[0].Value.Length];
+
+                    for (int i = 0; i < complexData.Length; i++)
+                    {
+                        complexData[i] = (MathNet.Numerics.Complex32)AverageResponseData[0].Value[i];
+                    }
+
+                    MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
+
+                    for (int i = 0; i < complexData.Length; i++)
+                    {
+                        complexData[i] = new MathNet.Numerics.Complex32(1.0f / complexData[i].Magnitude, 0.0f);
+                    }
+                }
+
+
             }
             #endregion
 

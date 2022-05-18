@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Audyssey.MultEQ.List;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
+
 
 namespace Odyssee
 {
@@ -129,7 +134,6 @@ namespace Odyssee
             DrawChart();
         }
 
-
         private void ListView_FlatCurveFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DrawChart();
@@ -201,6 +205,133 @@ namespace Odyssee
         {
             LogarithmicAxis = false;
             DrawChart();
+        }
+
+        private void Plot_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            //Get the PlotView
+            OxyPlot.Wpf.PlotView PlotView = sender as OxyPlot.Wpf.PlotView;
+
+            //Get the plot point
+            Point point = e.GetPosition(PlotView);
+
+            //Get the axis point from the plot point
+            DataPoint DataPoint = PlotView.ActualModel.DefaultXAxis.InverseTransform(point.X, point.Y, PlotView.ActualModel.DefaultYAxis);
+
+            //Get the screen point
+            ScreenPoint ScreenPoint = new ScreenPoint(point.X, point.Y);
+            //Get the series
+            Series Series = PlotView.ActualModel.GetSeriesFromPoint(ScreenPoint);
+
+            if (Series != null)
+            {
+                TrackerHitResult TrackerHitResult = Series.GetNearestPoint(ScreenPoint, false);
+                if (TrackerHitResult != null)
+                {
+                    // data point nearest to the click
+                    DataPoint = new(TrackerHitResult.DataPoint.X, DataPoint.Y);
+
+                    //Audy
+                    if (Series.Title.Contains(MultEQList.AudyEqSetList[0]))
+                    {
+                        //dispLargeData
+                        if (Series.Title.Contains(MultEQList.DispDataList[0]))
+                        {
+                            //Store curvepoint
+                            audysseyMultEQAvr.CurvePoint = new(MultEQList.AudyEqSetList[0], MultEQList.DispDataList[0], DataPoint.X, DataPoint.Y);
+                        }
+                        //dispSmallData
+                        if (Series.Title.Contains(MultEQList.DispDataList[1]))
+                        {
+                            //Store curvepoint
+                            audysseyMultEQAvr.CurvePoint = new(MultEQList.AudyEqSetList[0], MultEQList.DispDataList[1], DataPoint.X, DataPoint.Y);
+                        }
+                    }
+
+                    //Flat
+                    if (Series.Title.Contains(MultEQList.AudyEqSetList[1]))
+                    {
+                        //dispLargeData
+                        if (Series.Title.Contains(MultEQList.DispDataList[0]))
+                        {
+                            //Store curvepoint
+                            audysseyMultEQAvr.CurvePoint = new(MultEQList.AudyEqSetList[1], MultEQList.DispDataList[0], DataPoint.X, DataPoint.Y);
+                        }
+                        //dispSmallData
+                        if (Series.Title.Contains(MultEQList.DispDataList[1]))
+                        {
+                            //Store curvepoint
+                            audysseyMultEQAvr.CurvePoint = new(MultEQList.AudyEqSetList[1], MultEQList.DispDataList[1], DataPoint.X, DataPoint.Y);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                audysseyMultEQAvr.CurvePoint = null;
+            }
+        }
+
+        private void Plot_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            audysseyMultEQAvr.CurvePoint = null;
+        }
+
+        private void plot_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (audysseyMultEQAvr.CurvePoint != null)
+            {
+                //Get the PlotView
+                OxyPlot.Wpf.PlotView PlotView = sender as OxyPlot.Wpf.PlotView;
+
+                //Get the plot point
+                Point point = e.GetPosition(PlotView);
+
+                //Get the axis point from the plot point
+                DataPoint DataPoint = PlotView.ActualModel.DefaultXAxis.InverseTransform(point.X, point.Y, PlotView.ActualModel.DefaultYAxis);
+
+                //Update the coordinate
+                audysseyMultEQAvr.CurvePoint.Y = DataPoint.Y;
+
+
+                //Audy
+                if (audysseyMultEQAvr.CurvePoint.AudyEqSet.Equals(MultEQList.AudyEqSetList[0]))
+                {
+                    //dispLargeData
+                    if (audysseyMultEQAvr.CurvePoint.DispData.Equals(MultEQList.DispDataList[0]))
+                    {
+                        int index = ChannelList.FilterFrequencies.IndexOf(audysseyMultEQAvr.CurvePoint.X);
+                        audysseyMultEQAvr.SelectedChannel.AudyCurveFilter[MultEQList.DispDataList[0]].SetValue(audysseyMultEQAvr.CurvePoint.Y, index);
+                        DrawChart();
+                    }
+                    //dispSmallData
+                    if (audysseyMultEQAvr.CurvePoint.DispData.Equals(MultEQList.DispDataList[1]))
+                    {
+                        int index = ChannelList.DisplayFrequencies.IndexOf(audysseyMultEQAvr.CurvePoint.X);
+                        audysseyMultEQAvr.SelectedChannel.AudyCurveFilter[MultEQList.DispDataList[1]].SetValue(audysseyMultEQAvr.CurvePoint.Y, index);
+                        DrawChart();
+                    }
+                }
+
+                //Flat
+                if (audysseyMultEQAvr.CurvePoint.AudyEqSet.Equals(MultEQList.AudyEqSetList[1]))
+                {
+                    //dispLargeData
+                    if (audysseyMultEQAvr.CurvePoint.DispData.Equals(MultEQList.DispDataList[0]))
+                    {
+                        int index = ChannelList.FilterFrequencies.IndexOf(audysseyMultEQAvr.CurvePoint.X);
+                        audysseyMultEQAvr.SelectedChannel.FlatCurveFilter[MultEQList.DispDataList[0]].SetValue(audysseyMultEQAvr.CurvePoint.Y, index);
+                        DrawChart();
+                    }
+                    //dispSmallData
+                    if (audysseyMultEQAvr.CurvePoint.DispData.Equals(MultEQList.DispDataList[1]))
+                    {
+                        int index = ChannelList.DisplayFrequencies.IndexOf(audysseyMultEQAvr.CurvePoint.X);
+                        audysseyMultEQAvr.SelectedChannel.FlatCurveFilter[MultEQList.DispDataList[1]].SetValue(audysseyMultEQAvr.CurvePoint.Y, index);
+                        DrawChart();
+                    }
+                }
+            }
         }
     }
 }

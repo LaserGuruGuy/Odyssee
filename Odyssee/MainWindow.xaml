@@ -398,7 +398,7 @@
                     <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0">
                         <CheckBox Name="CheckBox_LogarithmicAxis" Content="Logarithmic Axis" IsChecked="true"  Checked="CheckBox_LogarithmicAxis_Checked" Unchecked="CheckBox_LogarithmicAxis_Unchecked" />
                     </StackPanel>
-                    <oxy:PlotView Grid.Row="1" Grid.ColumnSpan="2" x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}"/>
+                    <oxy:PlotView Grid.Row="1" Grid.ColumnSpan="2" x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}" PreviewMouseLeftButtonDown="Plot_MouseLeftButtonDown" PreviewMouseLeftButtonUp="Plot_MouseLeftButtonUp" PreviewMouseMove="plot_MouseMove" Margin="0,4,0,16" Grid.RowSpan="2" />
                     <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
                         <RadioButton Name="RadioButton_RangeChirp" Content="0-350ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
                         <RadioButton Name="RadioButton_RangeSubwoofer" Content="10-1000Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>

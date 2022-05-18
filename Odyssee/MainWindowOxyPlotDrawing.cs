@@ -286,21 +286,23 @@ namespace Odyssee
                 /* Selected audy curve filter key and value are null if there is no channel selected in the GUI */
                 if ((selectedChannel.SelectedAudyCurveFilter.Key != null) && (selectedChannel.SelectedAudyCurveFilter.Value != null))
                 {
-                    PlotCurveFilter(selectedChannel.SelectedAudyCurveFilter,
-                    OxyColor.Parse(Brushes.Teal.ToString()),
-                    SmoothingFactor,
-                    ChannelList.FilterFrequencies,
-                    ChannelList.DisplayFrequencies);
+                    PlotCurveFilter(MultEQList.AudyEqSetList[0],
+                        selectedChannel.SelectedAudyCurveFilter,
+                        OxyColor.Parse(Brushes.Teal.ToString()),
+                        SmoothingFactor,
+                        ChannelList.FilterFrequencies.ToArray(),
+                        ChannelList.DisplayFrequencies.ToArray());
                 }
 
                 /* Selected flat curve filter key and value are null if there is no channel selected in the GUI */
                 if ((selectedChannel.SelectedFlatCurveFilter.Key != null) && (selectedChannel.SelectedFlatCurveFilter.Value != null))
                 {
-                    PlotCurveFilter(selectedChannel.SelectedFlatCurveFilter,
-                    OxyColor.Parse(Brushes.BlueViolet.ToString()),
-                    SmoothingFactor,
-                    ChannelList.FilterFrequencies,
-                    ChannelList.DisplayFrequencies);
+                    PlotCurveFilter(MultEQList.AudyEqSetList[1], 
+                        selectedChannel.SelectedFlatCurveFilter,
+                        OxyColor.Parse(Brushes.BlueViolet.ToString()),
+                        SmoothingFactor,
+                        ChannelList.FilterFrequencies.ToArray(),
+                        ChannelList.DisplayFrequencies.ToArray());
                 }
 
                 if (CheckBox_CurveFilter.IsChecked == true)
@@ -348,7 +350,7 @@ namespace Odyssee
             }
         }
 
-        private void PlotCurveFilter(KeyValuePair<string, double[]> CurveFilter, OxyColor CurveColor, int SmoothingFactor, double[] FilterFrequencies, double[] DisplayFrequencies)
+        private void PlotCurveFilter(string AudyEqSet, KeyValuePair<string, double[]> CurveFilter, OxyColor CurveColor, int SmoothingFactor, double[] FilterFrequencies, double[] DisplayFrequencies)
         {
             if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[0]))
             {
@@ -377,6 +379,7 @@ namespace Odyssee
                     }
                     var sinStemSeries = new StemSeries
                     {
+                        Title = AudyEqSet + CurveFilter.Key,
                         Color = CurveColor,
                         MarkerStroke = CurveColor,
                         MarkerType = MarkerType.Circle
@@ -397,6 +400,7 @@ namespace Odyssee
                     }
                     var sinStemSeries = new StemSeries
                     {
+                        Title = AudyEqSet + CurveFilter.Key,
                         Color = CurveColor,
                         StrokeThickness = 2,
                         MarkerType = MarkerType.Circle,
