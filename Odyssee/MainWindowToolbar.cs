@@ -48,8 +48,8 @@ namespace Odyssee
                 Slider_SmoothingFactor.Visibility = Visibility.Hidden;
 
                 CheckBox_LogarithmicAxis.Visibility = Visibility.Hidden;
-                RadioButton_RangeChirp.Visibility = Visibility.Hidden;
-                RadioButton_RangeSubwoofer.Visibility = Visibility.Hidden;
+                RadioButton_ImpulseResponse.Visibility = Visibility.Hidden;
+                RadioButton_RangeSubw.Visibility = Visibility.Hidden;
                 RadioButton_RangeFull.Visibility = Visibility.Hidden;
 
                 CheckBox_CurveFilter.Visibility = Visibility.Hidden;
@@ -64,8 +64,8 @@ namespace Odyssee
                 Slider_SmoothingFactor.Visibility = Visibility.Visible;
 
                 CheckBox_LogarithmicAxis.Visibility = Visibility.Visible;
-                RadioButton_RangeChirp.Visibility = Visibility.Visible;
-                RadioButton_RangeSubwoofer.Visibility = Visibility.Visible;
+                RadioButton_ImpulseResponse.Visibility = Visibility.Visible;
+                RadioButton_RangeSubw.Visibility = Visibility.Visible;
                 RadioButton_RangeFull.Visibility = Visibility.Visible;
 
                 CheckBox_CurveFilter.Visibility = Visibility.Visible;

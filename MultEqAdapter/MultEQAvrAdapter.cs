@@ -13,7 +13,7 @@ namespace MultEQAvrAdapter
     {
         public class AudysseyMultEQAvrAdapter
         {
-            private Collection<DetectedChannel> _DetectedChannels;
+            private ObservableCollection<DetectedChannel> _DetectedChannels;
 
             #region Poperties
             private AudysseyMultEQAvr _AudysseyMultEQAvr;
@@ -203,7 +203,7 @@ namespace MultEQAvrAdapter
                 }
             }
 
-            public Collection<DetectedChannel> DetectedChannels
+            public ObservableCollection<DetectedChannel> DetectedChannels
             {
                 get
                 {
@@ -396,7 +396,7 @@ namespace MultEQAvrAdapter
             #endregion
 
             #region Methods
-            protected void RaisePropertyChanged(string propertyName = null)
+            private void RaisePropertyChanged(string propertyName = null)
             {
                 this?.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }

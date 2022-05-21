@@ -129,6 +129,7 @@ namespace Audyssey
                     RaisePropertyChanged("AvrStatus");
                 }
             }
+            [JsonIgnore]
             public int DisFilCount
             {
                 get
@@ -165,6 +166,7 @@ namespace Audyssey
                     return _DisFilCount / AudysseyMultEQAvr.DispDataList.Count;
                 }
             }
+            [JsonIgnore]
             public int CoefDtCount
             {
                 get

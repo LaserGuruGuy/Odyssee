@@ -114,7 +114,7 @@ namespace Audyssey
                     }
                 }
             }
-            protected void RaisePropertyChanged(string propertyName)
+            private void RaisePropertyChanged(string propertyName)
             {
                 if (this.PropertyChanged != null)
                 {

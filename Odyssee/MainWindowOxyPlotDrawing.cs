@@ -180,12 +180,12 @@ namespace Odyssee
 
         private Dictionary<string, Brush> ResponseDataTraceColor = new Dictionary<string, Brush> { { "0", Brushes.Black }, { "1", Brushes.Blue }, { "2", Brushes.Violet }, { "3", Brushes.Green }, { "4", Brushes.Orange }, { "5", Brushes.Red }, { "6", Brushes.Cyan }, { "7", Brushes.DeepPink } };
 
-        private string selectedAxisLimits = "RadioButton_RangeChirp";
+        private string selectedAxisLimits = "RadioButton_ImpulseResponse";
         private Dictionary<string, AxisLimit> AxisLimits = new Dictionary<string, AxisLimit>()
         {
             {"RadioButton_RangeFull", new AxisLimit { XMin = 10, XMax = SampleRate48KHz/2.0d, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
-            {"RadioButton_RangeSubwoofer", new AxisLimit { XMin = 10, XMax = 1000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
-            {"RadioButton_RangeChirp", new AxisLimit { XMin = 0, XMax = SecondsToMilliseconds*SampleSize/SampleRate48KHz, YMin = -0.1, YMax = 0.1, MajorStep = 0.01, MinorStep = 0.001 } }
+            {"RadioButton_RangeSubw", new AxisLimit { XMin = 10, XMax = 1000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
+            {"RadioButton_ImpulseResponse", new AxisLimit { XMin = 0, XMax = SecondsToMilliseconds*SampleSize/SampleRate48KHz, YMin = -0.1, YMax = 0.1, MajorStep = 0.01, MinorStep = 0.001 } }
         };
 
         private void DrawChart()
@@ -225,7 +225,7 @@ namespace Odyssee
         {
             AxisLimit Limits = AxisLimits[selectedAxisLimits];
 
-            if (selectedAxisLimits.Contains("Chirp"))
+            if (selectedAxisLimits.Contains("ImpulseResponse"))
             {
                 if (LogarithmicAxis)
                 {
@@ -262,7 +262,7 @@ namespace Odyssee
                 if ((selectedChannel.SelectedResponseData.Key != null) && (selectedChannel.SelectedResponseData.Value != null))
                 {
                     CurveColor = OxyColor.Parse(ResponseDataTraceColor[selectedChannel.SelectedResponseData.Key].ToString());
-                    PlotCurve(SampleRate48KHz, selectedChannel.SelectedResponseData.Value, SmoothingFactor, CurveColor, DotNotSolid ? LineStyle.Dot : LineStyle.Solid, 1);
+                    PlotCurve(SampleRate48KHz, selectedChannel.SelectedResponseData.Value, (double)selectedChannel.ChLevel, SmoothingFactor, CurveColor, DotNotSolid ? LineStyle.Dot : LineStyle.Solid, 1);
                 }
 
                 if (selectedChannel.StickyResponseData != null)
@@ -277,7 +277,7 @@ namespace Odyssee
                             if (!stickyResponseData.Equals(selectedChannel.SelectedResponseData))
                             {
                                 CurveColor = OxyColor.Parse(ResponseDataTraceColor[stickyResponseData.Key].ToString());
-                                PlotCurve(SampleRate48KHz, stickyResponseData.Value, SmoothingFactor, CurveColor, DotNotSolid ? LineStyle.Dot : LineStyle.Solid, 1);
+                                PlotCurve(SampleRate48KHz, stickyResponseData.Value, (double)selectedChannel.ChLevel, SmoothingFactor, CurveColor, DotNotSolid ? LineStyle.Dot : LineStyle.Solid, 1);
                             }
                         }
                     }
@@ -346,7 +346,7 @@ namespace Odyssee
                     selectedChannel.FirFilterGain = null;
                 }
 
-                PlotAverageCurve(selectedChannel.AverageResponseData, SmoothingFactor);
+                PlotAverageCurve(selectedChannel.AverageResponseData, (double)selectedChannel.ChLevel, SmoothingFactor);
             }
         }
 
@@ -355,17 +355,17 @@ namespace Odyssee
             if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[0]))
             {
                 /* 32 kHz 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 24d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 24d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[1]))
             {
                 /* 44.1 kHz 1024 filter coefficients (704 for subwoofer)*/
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 24d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 24d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[2]))
             {
                 /* 48 kHz 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 24d, CurveFilter.Value, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 24d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.DispDataList[0]))
             {
@@ -419,9 +419,9 @@ namespace Odyssee
             }
         }
 
-        private void PlotAverageCurve(List<KeyValuePair<string, double[]>> AverageResponseData, int smoothingFactor)
+        private void PlotAverageCurve(List<KeyValuePair<string, double[]>> AverageResponseData, double ChLevel, int smoothingFactor)
         {
-            if (selectedAxisLimits.Contains("Chirp") == false)
+            if (selectedAxisLimits.Contains("ImpulseResponse") == false)
             {
 
                 if (AverageResponseData != null)
@@ -479,7 +479,7 @@ namespace Odyssee
                         for (int i = 0; i < Length / 2; i++)
                         {
                             /* 20*log10(sqrt(MagnitudeSquared)) == 10*log10(MagnitudeSquared) */
-                            dataPoint.Add(new DataPoint(Frequency[i], 10 * Math.Log10(MagnitudeSquared[i])));
+                            dataPoint.Add(new DataPoint(Frequency[i], ChLevel + 10 * Math.Log10(MagnitudeSquared[i])));
                         }
 
                         LineSeries lineserie = new LineSeries
@@ -500,13 +500,13 @@ namespace Odyssee
             }
         }
 
-        private void PlotCurve(double sampleRate, double[] responseData, int smoothingFactor, OxyColor oxyColor, LineStyle lineStyle, double strokeThickness)
+        private void PlotCurve(double sampleRate, double[] responseData, double ChLevel, int smoothingFactor, OxyColor oxyColor, LineStyle lineStyle, double strokeThickness)
         {
             Collection<DataPoint> dataPoint = new Collection<DataPoint>();
 
             if (responseData != null)
             {
-                if (selectedAxisLimits.Contains("Chirp"))
+                if (selectedAxisLimits.Contains("ImpulseResponse"))
                 {
                     for (int j = 0; j < responseData.Length; j++)
                     {
@@ -543,7 +543,7 @@ namespace Odyssee
                         for (int x = 0; x < responseData.Length / 2; x++)
                         {
                             /* 10*log10 for previously MagnitudeSquared */
-                            dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(smoothed[x])));
+                            dataPoint.Add(new DataPoint(Frequency[x], ChLevel + 10 * Math.Log10(smoothed[x])));
                         }
                     }
                     else
@@ -551,7 +551,7 @@ namespace Odyssee
                         for (int x = 0; x < responseData.Length / 2; x++)
                         {
                             /* 10*log10 for previously MagnitudeSquared */
-                            dataPoint.Add(new DataPoint(Frequency[x], 10 * Math.Log10(complexData[x].MagnitudeSquared)));
+                            dataPoint.Add(new DataPoint(Frequency[x], ChLevel + 10 * Math.Log10(complexData[x].MagnitudeSquared)));
                         }
                     }
                 }

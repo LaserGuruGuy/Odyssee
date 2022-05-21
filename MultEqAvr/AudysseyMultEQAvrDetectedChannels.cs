@@ -367,7 +367,7 @@ namespace Audyssey
             private void ResetStickyResponseData() { _StickyResponseData = new(); }
             private void ResetSelectedAudyCurveFilter() { _SelectedAudyCurveFilter = new(); }
             private void ResetSelectedFlatCurveFilter() { _SelectedFlatCurveFilter = new(); }
-            protected void RaisePropertyChanged(string propertyName)
+            private void RaisePropertyChanged(string propertyName)
             {
                 if (this.PropertyChanged != null)
                 {

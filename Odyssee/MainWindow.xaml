@@ -98,7 +98,7 @@
                 <ToggleButton Click="OnButtonClick_SubwooferOneLevel" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" IsChecked="{Binding AvrLvlm_SW1_IsChecked, Mode=TwoWay}" ToolTip="Adjust Subwoofer 1 Level">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Icons/Subwoofer.png"/>
                 </ToggleButton>
-                <Button Click="OnButtonClick_Microphone" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Measure Chirp Response with Receiver Microphone">
+                <Button Click="OnButtonClick_Microphone" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Measure Impulse Response with Receiver Microphone">
                     <Image Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="/Icons/Microphone.png"/>
                 </Button>
                 <Button Click="OnButtonClick_Speaker" WindowChrome.IsHitTestVisibleInChrome="True" Padding="0" IsTabStop="False" BorderThickness="0" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" ToolTip="Send Coefficients to Receiver Speakers">
@@ -222,16 +222,21 @@
                                         <Grid >
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
                                                 <RowDefinition Height="*"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Row="0" Grid.Column="0" Content="Channel Level (dB)"></Label>
-                                            <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding ChLevel}" ItemsSource="{Binding ChLevelList}" VerticalAlignment="Center"/>
-                                            <Label Grid.Row="1" Grid.Column="0" Content="Channel Crossover (Hz)"></Label>
-                                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding Crossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
+                                            <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,0">
+                                                <Label  Name="Label_ChannelLevel" VerticalAlignment="Center" Content="Gain"></Label>
+                                                <Slider Name="Slider_ChannelLevel" VerticalAlignment="Center" Width="150" Value="{Binding ChLevel}" Minimum="-12" Maximum="12" TickFrequency="0.5" Orientation="Horizontal" TickPlacement="Both" LargeChange="3" SmallChange="0.5" IsSnapToTickEnabled="True" AutoToolTipPlacement="BottomRight" ValueChanged="Slider_ChannelLevel_ValueChanged" />
+                                            </StackPanel>
+                                            <Label Grid.Row="1" Grid.Column="0" Content="Channel Level (dB)"></Label>
+                                            <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding ChLevel}" ItemsSource="{Binding ChLevelList}" VerticalAlignment="Center"/>
+                                            <Label Grid.Row="2" Grid.Column="0" Content="Channel Crossover (Hz)"></Label>
+                                            <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding Crossover}" ItemsSource="{Binding CrossoverList}" VerticalAlignment="Center"/>
                                         </Grid>
                                     </GroupBox>
                                 </StackPanel>
@@ -400,9 +405,9 @@
                     </StackPanel>
                     <oxy:PlotView Grid.Row="1" Grid.ColumnSpan="2" x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}" PreviewMouseLeftButtonDown="Plot_MouseLeftButtonDown" PreviewMouseLeftButtonUp="Plot_MouseLeftButtonUp" PreviewMouseMove="plot_MouseMove" Margin="0,4,0,16" Grid.RowSpan="2" />
                     <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
-                        <RadioButton Name="RadioButton_RangeChirp" Content="0-350ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
-                        <RadioButton Name="RadioButton_RangeSubwoofer" Content="10-1000Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
-                        <RadioButton Name="RadioButton_RangeFull" Content="10Hz-24kHz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
+                    <RadioButton Name="RadioButton_ImpulseResponse" Content="0-350ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
+                    <RadioButton Name="RadioButton_RangeSubw" Content="10-1000Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
+                    <RadioButton Name="RadioButton_RangeFull" Content="10Hz-24kHz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,5">
                         <Label Content="{Binding SelectedChannel.FirFilterGain}" Margin="0,-6,10,0"></Label>

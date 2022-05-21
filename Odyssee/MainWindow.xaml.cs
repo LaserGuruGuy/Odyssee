@@ -109,20 +109,28 @@ namespace Odyssee
         private void PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Console.WriteLine(e.PropertyName);
+
             if (e.PropertyName.Equals("SPLValue"))
             {
                 InitOxyPlotLvlm();
                 AddOxyPlotLvlm();
             }
+            
             if (e.PropertyName.Equals("ChSetup"))
             {
                 audysseyMultEQAvr.DetectedChannels = null;
             }
+            
             if (e.PropertyName.Equals("SelectedAudyCurveFilter") ||
                 e.PropertyName.Equals("SelectedFlatCurveFilter"))
             {
                 DrawChart();
             }
+        }
+
+        private void Slider_ChannelLevel_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            DrawChart();
         }
     }
 }
