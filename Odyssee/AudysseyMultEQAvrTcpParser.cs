@@ -65,7 +65,7 @@ namespace Audyssey
                 AudysseyMultEQAvr.StatusBar(Result);
             }
 
-            public async void AvrReceiveCallback(char TransmitReceiveChar, string CmdString, byte[] DataByte, byte CurrentSegment, byte TotalSegments, bool TransferComplete)
+            public void AvrReceiveCallback(char TransmitReceiveChar, string CmdString, byte[] DataByte, byte CurrentSegment, byte TotalSegments, bool TransferComplete)
             {
                 if (AudysseyMultEQAvr != null)
                 {

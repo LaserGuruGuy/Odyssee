@@ -140,13 +140,13 @@ namespace Audyssey
             [JsonIgnore]
             public static Dictionary<string, byte> CoefChannelList { get; } = new()
             {
-                { "FL",  0x00 },
-                { "C",   0x01 },
-                { "FR",  0x02 },
-                { "SRA", 0x0C },
-                { "SBR", 0xFF }, /* TODO */
-                { "SBL", 0xFF }, /* TODO */
-                { "SLA", 0x03 },
+                { "FL",  0 },
+                { "C",   1 },
+                { "FR",  2 },
+                { "SRA", 12 },
+                { "SBR", 7 },
+                { "SBL", 8 },
+                { "SLA", 3 },
                 { "FHR", 0xFF }, /* TODO */
                 { "TFR", 0xFF }, /* TODO */
                 { "TMR", 0xFF }, /* TODO */
@@ -157,8 +157,8 @@ namespace Audyssey
                 { "TML", 0xFF }, /* TODO */
                 { "TFL", 0xFF }, /* TODO */
                 { "FHL", 0xFF }, /* TODO */
-                { "SW1", 0x0D },
-                { "SW2", 0xFF }  /* TODO */
+                { "SW1", 13 },
+                { "SW2", 14 }
             };
 
             [JsonIgnore]
