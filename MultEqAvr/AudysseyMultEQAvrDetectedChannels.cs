@@ -19,10 +19,10 @@ namespace Audyssey
             private bool? _Stick = false;
             private ChannelReport _ChannelReport = new();
             private Dictionary<string, double[]> _ResponseData = new();
-            private Dictionary<string, double[]> _AudyCurveFilter = new(); //{ { "dispSmallData", new float[9] }, { "dispLargeData", new float[61] }, { "coefficient48kHz", new float[704] }, { "coefficient441kHz", new float[704] }, { "coefficient32kHz", new float[704] } };
-            private Dictionary<string, double[]> _FlatCurveFilter = new(); //{ { "dispSmallData", new float[9] }, { "dispLargeData", new float[61] }, { "coefficient48kHz", new float[704] }, { "coefficient441kHz", new float[704] }, { "coefficient32kHz", new float[704] } };
-            private decimal? _ChLevel;// = 0m;
-            private object _Crossover;// = "F"
+            private Dictionary<string, double[]> _AudyCurveFilter = new();
+            private Dictionary<string, double[]> _FlatCurveFilter = new();
+            private decimal? _ChLevel = 0m;
+            private object _Crossover = "F";
             #endregion
 
             public double[] GetOctave(int Band)
@@ -312,8 +312,9 @@ namespace Audyssey
                     Array.Clear(CurveFilter.Value, 0, CurveFilter.Value.Length);
                     if (CurveFilter.Key.Contains("coefficient"))
                     {
-                        CurveFilter.Value[0] = 1.0d / 3.0d;
+                        CurveFilter.Value[0] = 1.0d /3.0d;
                     }
+                    RaisePropertyChanged("SelectedAudyCurveFilter");
                 }
             }
             public void ClearFlatCurveFilterCommand(object Object)
@@ -326,28 +327,8 @@ namespace Audyssey
                     {
                         CurveFilter.Value[0] = 1.0d / 3.0d;
                     }
+                    RaisePropertyChanged("SelectedFlatCurveFilter");
                 }
-
-                if (CurveFilter.Key.Equals(MultEQList.SampleRateList[2]))
-                {
-                    double ratio = AverageResponseData[0].Value.Length / CurveFilter.Value.Length;
-
-                    MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[AverageResponseData[0].Value.Length];
-
-                    for (int i = 0; i < complexData.Length; i++)
-                    {
-                        complexData[i] = (MathNet.Numerics.Complex32)AverageResponseData[0].Value[i];
-                    }
-
-                    MathNet.Numerics.IntegralTransforms.Fourier.Forward(complexData, MathNet.Numerics.IntegralTransforms.FourierOptions.NoScaling);
-
-                    for (int i = 0; i < complexData.Length; i++)
-                    {
-                        complexData[i] = new MathNet.Numerics.Complex32(1.0f / complexData[i].Magnitude, 0.0f);
-                    }
-                }
-
-
             }
             #endregion
 
@@ -366,6 +347,8 @@ namespace Audyssey
             public void ResetSelectedResponseData() { _SelectedResponseData = new();  }
             private void ResetStickyResponseData() { _StickyResponseData = new(); }
             private void ResetSelectedAudyCurveFilter() { _SelectedAudyCurveFilter = new(); }
+            private void ResetChLevel() { _ChLevel = 0m; }
+            private void ResetCrossover() { _Crossover = "F"; }
             private void ResetSelectedFlatCurveFilter() { _SelectedFlatCurveFilter = new(); }
             private void RaisePropertyChanged(string propertyName)
             {

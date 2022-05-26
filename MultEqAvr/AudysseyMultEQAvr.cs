@@ -538,7 +538,11 @@ namespace Audyssey
                 }
             }
             [JsonIgnore]
-            public CurvePoint CurvePoint { get; set; }
+            public CurvePoint CurvePoint
+            {
+                get;
+                set;
+            }
             #endregion
 
             #region Methods
@@ -552,24 +556,14 @@ namespace Audyssey
                 {
                     foreach (var cf in ch.AudyCurveFilter)
                     {
-                        Array.Clear(cf.Value, 0, cf.Value.Length);
-                        if (cf.Key.Contains("coefficient"))
-                        {
-                            cf.Value[0] = 1.0d / 3.0d;
-                        }
+                        ch.ClearAudyCurveFilterCommand(cf);
                     }                    
                     RaisePropertyChanged("AudyCurveFilter");
-                    RaisePropertyChanged("SelectedAudyCurveFilter");
                     foreach (var cf in ch.FlatCurveFilter)
                     {
-                        Array.Clear(cf.Value, 0, cf.Value.Length);
-                        if (cf.Key.Contains("coefficient"))
-                        {
-                            cf.Value[0] = 1.0d / 3.0d;
-                        }
+                        ch.ClearFlatCurveFilterCommand(cf);
                     }
                     RaisePropertyChanged("FlatCurveFilter");
-                    RaisePropertyChanged("SelectedFlatCurveFilter");
                 }
             }
             public void NewCurveFiltersCommand(DetectedChannel ch)
@@ -768,10 +762,9 @@ namespace Audyssey
             #endregion
         }
 
-
-
         public class CurvePoint
         {
+            private double _Y;
             public static readonly CurvePoint Undefined;
 
             public CurvePoint(string _AudyEqSet, string _DispData, double _X, double _Y)
@@ -784,12 +777,21 @@ namespace Audyssey
 
             public double X { get; }
 
-            public double Y { get; set; }
+            public double Y
+            {
+                get
+                {
+                    return _Y;
+                }
+                set
+                {
+                    _Y = value > 10.0 ? 10.0 : value < -20.0 ? -20.0: Math.Round(value * 2.0) / 2.0;
+                }
+            }
 
             public string AudyEqSet { get; }
 
             public string DispData { get; }
         }
-
     }
 }

@@ -327,12 +327,12 @@ namespace Odyssee
                                 {
                                     if (ch.AudyCurveFilter.Remove(SampleRate))
                                     {
-                                        ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                        ch.AudyCurveFilter.Add(SampleRate, ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)]));
                                     }
                                 }
                                 else
                                 {
-                                    ch.AudyCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                    ch.AudyCurveFilter.Add(SampleRate, ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)]));
                                 }
                             }
                             else if (CurveFilter.Equals(MultEQList.CurveFilterList[1]))
@@ -341,12 +341,12 @@ namespace Odyssee
                                 {
                                     if (ch.FlatCurveFilter.Remove(SampleRate))
                                     {
-                                        ch.FlatCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                        ch.FlatCurveFilter.Add(SampleRate, ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)]));
                                     }
                                 }
                                 else
                                 {
-                                    ch.FlatCurveFilter.Add(SampleRate, FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)])));
+                                    ch.FlatCurveFilter.Add(SampleRate, ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(SampleRate)]));
                                 }
                             }
                         }
@@ -365,7 +365,7 @@ namespace Odyssee
                     foreach (var rspd in ch.ResponseData)
                     {
                         string FileName = FilePath + "\\" + rspd.Value.Length + "_ImpulseResponse_" + SampleRate + "_" + ch.Channel + "_" + rspd.Key + "_" + ch.ChannelReport.Delay + ".wav";
-                        WriteWaveFile(FileName, DoubleToFloatArray(rspd.Value), SampleRate);
+                        WriteWaveFile(FileName, rspd.Value, SampleRate);
                     }
                 }
             }
@@ -380,7 +380,7 @@ namespace Odyssee
                 {
                     foreach (var rspd in ch.ResponseData)
                     {
-                        string FileName = FilePath + "\\" + rspd.Value.Length + "_ImpulseResponse_" + SampleRate + "_" + ch.Channel + "_" + rspd.Key + ".frd";
+                        string FileName = FilePath + "\\" + rspd.Value.Length + "_ImpulseResponse_" + SampleRate + "_" + ch.Channel + "_Position" + rspd.Key + ".frd";
                         WriteFrdFile(FileName, rspd.Value, SampleRate);
                     }
                 }
@@ -400,7 +400,7 @@ namespace Odyssee
                             if (samplerate.Equals(curve.Key))
                             {
                                 string FileName = FilePath + "\\" + curve.Key + "_" + MultEQList.CurveFilterList[0] + "_" + ch.Channel + ".wav";
-                                WriteWaveFile(FileName, DoubleToFloatArray(curve.Value), MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(curve.Key)]);
+                                WriteWaveFile(FileName, curve.Value, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(curve.Key)]);
                             }
                         }
                     }
@@ -411,7 +411,7 @@ namespace Odyssee
                             if (samplerate.Equals(curve.Key))
                             {
                                 string FileName = FilePath + "\\" + curve.Key + "_" + MultEQList.CurveFilterList[1] + "_" + ch.Channel + ".wav";
-                                WriteWaveFile(FileName, DoubleToFloatArray(curve.Value), MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(curve.Key)]);
+                                WriteWaveFile(FileName, curve.Value, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(curve.Key)]);
                             }
                         }
                     }
@@ -445,7 +445,7 @@ namespace Odyssee
 
                     }
 
-                    double[] Data = FloatToDoubleArray(ReadWaveFile(FileName, SampleRate));
+                    double[] Data = ReadWaveFile(FileName, SampleRate);
 
                     try
                     {
@@ -495,7 +495,7 @@ namespace Odyssee
                                     {
                                         if (samplerate.Equals(keywords[0]))
                                         {
-                                            double[] Coefficients = FloatToDoubleArray(ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(samplerate)]));
+                                            double[] Coefficients = ReadWaveFile(FileName, MultEQList.SampleFrequencyList[MultEQList.SampleRateList.IndexOf(samplerate)]);
                                             if (curve.Equals(MultEQList.CurveFilterList[0]))
                                             {
                                                 if (ch.AudyCurveFilter.ContainsKey(samplerate))
@@ -509,6 +509,8 @@ namespace Odyssee
                                                 {
                                                     ch.AudyCurveFilter.Add(samplerate, Coefficients);
                                                 }
+                                                audysseyMultEQAvr.SelectedChannel = ch;
+                                                ch.SelectedAudyCurveFilter = new(samplerate, Coefficients);
                                             }
                                             else if (curve.Equals(MultEQList.CurveFilterList[1]))
                                             {
@@ -523,6 +525,8 @@ namespace Odyssee
                                                 {
                                                     ch.FlatCurveFilter.Add(samplerate, Coefficients);
                                                 }
+                                                audysseyMultEQAvr.SelectedChannel = ch;
+                                                ch.SelectedFlatCurveFilter = new(samplerate, Coefficients);
                                             }
                                         }
                                     }
@@ -554,14 +558,14 @@ namespace Odyssee
             return result;
         }
 
-        private void WriteWaveFile(string FileName, float[] WaveData, int SampleRate, int Channels = 1)
+        private void WriteWaveFile(string FileName, double[] WaveData, int SampleRate, int Channels = 1)
         {
             WaveFormat WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(SampleRate, Channels);
             using (WaveFileWriter writer = new WaveFileWriter(FileName, WaveFormat))
             {
                 try
                 {
-                    writer.WriteSamples(WaveData, 0, WaveData.Length);
+                    writer.WriteSamples(DoubleToFloatArray(WaveData), 0, WaveData.Length);
                 }
                 catch
                 {
@@ -569,9 +573,8 @@ namespace Odyssee
             }
         }
 
-        private float[] ReadWaveFile(string FileName, int SampleRate)
+        private double[] ReadWaveFile(string FileName, int SampleRate)
         {
-            var readback = new List<float>();
             try
             {
                 using (WaveFileReader reader = new WaveFileReader(FileName))
@@ -583,6 +586,7 @@ namespace Odyssee
                         ((reader.SampleCount == MultEQList.SampleCountList[0]) || (reader.SampleCount == MultEQList.SampleCountList[1])))
                     {
                         float[] sampleframe;
+                        var readback = new List<float>();
                         do
                         {
                             sampleframe = reader.ReadNextSampleFrame();
@@ -591,15 +595,17 @@ namespace Odyssee
                                 readback.Add(sampleframe[0]);
                             }
                         } while (sampleframe != null);
+                        return FloatToDoubleArray(readback.ToArray());
                     }
                     else
                     {
-                        string Message = "Channels: " + reader.WaveFormat.Channels +
+                        string Message = "WAV format not supported:" +
+                                         "\nChannels: " + reader.WaveFormat.Channels +
                                          "\nBitsPerSample: " + reader.WaveFormat.BitsPerSample +
                                          "\nEncoding: " + reader.WaveFormat.Encoding.ToString() +
                                          "\nSampleRate: " + reader.WaveFormat.SampleRate +
                                          "\nSampleCount: " + reader.SampleCount;
-                        MessageBox.Show(Message, FileName.Substring(FileName.LastIndexOf('\\')), MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show(Message, FileName.Substring(FileName.LastIndexOf('\\')), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
@@ -607,7 +613,7 @@ namespace Odyssee
             {
                 MessageBox.Show(ex.Message, FileName, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
-            return readback.ToArray();
+            return null;
         }
 
         private void WriteFrdFile(string FileName, double[] WaveData, int SampleRate)
@@ -629,7 +635,7 @@ namespace Odyssee
                 StreamWriter sw = new StreamWriter(FileName, false, Encoding.ASCII);
                 for (int i = 0; i < Frequency.Length / 2; i++)
                 {
-                    sw.WriteLine(Frequency[i].ToString(CultureInfo.InvariantCulture) + "," + ComplexData[i].Magnitude.ToString(CultureInfo.InvariantCulture) + "," + ComplexData[i].Phase.ToString(CultureInfo.InvariantCulture));
+                    sw.WriteLine(Frequency[i].ToString(CultureInfo.InvariantCulture) + ";" + ComplexData[i].Magnitude.ToString(CultureInfo.InvariantCulture) + ";" + ComplexData[i].Phase.ToString(CultureInfo.InvariantCulture));
                 }
                 sw.Close();
             }

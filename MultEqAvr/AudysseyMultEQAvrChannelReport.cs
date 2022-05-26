@@ -18,9 +18,9 @@ namespace Audyssey
         public class ChannelReport : ChannelReportList, INotifyPropertyChanged
         {
             #region BackingField
-            private string _SpConnect;
-            private string _Polarity;
-            private int? _Distance;
+            private string _SpConnect = "N";
+            private string _Polarity = "N";
+            private int? _Distance = 0;
             [JsonIgnore]
             private double? _ResponseCoef;
             #endregion
@@ -99,9 +99,9 @@ namespace Audyssey
             #endregion
 
             #region Methods
-            private void ResetSpConnect() { _SpConnect = null; }
-            private void ResetPolarity() { _Polarity = null; }
-            private void ResetDistance() { _Distance = null; }
+            private void ResetSpConnect() { _SpConnect = "N"; }
+            private void ResetPolarity() { _Polarity = "N"; }
+            private void ResetDistance() { _Distance = 0; }
             private void ResetResponseCoef() { _ResponseCoef = null; }
             public void Reset()
             {

@@ -135,15 +135,18 @@ namespace Audyssey
                         {
                             if (ch.ChannelReport != null)
                             {
-                                if (ch.ChannelReport.Distance != null)
+                                if (ch.ChannelReport.SpConnect != null && ch.ChannelReport.Distance != null)
                                 {
-                                    try
+                                    if (ch.ChannelReport.SpConnect.Equals("N") == false)
                                     {
-                                        Distance.Add(new Dictionary<string, int>() { { ch.Channel, (int)ch.ChannelReport.Distance } });
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        StatusBar(ex.Message);
+                                        try
+                                        {
+                                            Distance.Add(new Dictionary<string, int>() { { ch.Channel, (int)ch.ChannelReport.Distance } });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
                                     }
                                 }
                             }
@@ -191,15 +194,21 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Channel != null && ch.ChLevel != null)
+                            if (ch.ChannelReport != null && ch.Channel != null && ch.ChLevel != null)
                             {
-                                try
+                                if (ch.ChannelReport.SpConnect != null)
                                 {
-                                    ChLevel.Add(new Dictionary<string, int>() { { (string)ch.Channel, (int)((decimal)ch.ChLevel * 10m) } });
-                                }
-                                catch (Exception ex)
-                                {
-                                    StatusBar(ex.Message);
+                                    if (ch.ChannelReport.SpConnect.Equals("N") == false)
+                                    {
+                                        try
+                                        {
+                                            ChLevel.Add(new Dictionary<string, int>() { { (string)ch.Channel, (int)((decimal)ch.ChLevel * 10m) } });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -246,15 +255,21 @@ namespace Audyssey
                     {
                         foreach (var ch in DetectedChannels)
                         {
-                            if (ch.Channel != null && ch.Crossover != null)
+                            if (ch.ChannelReport != null && ch.Channel != null && ch.Crossover != null)
                             {
-                                try
+                                if (ch.ChannelReport.SpConnect != null)
                                 {
-                                    Crossover.Add(new Dictionary<string, object>() { { ch.Channel, ch.Crossover.GetType() == typeof(string) ? ch.Crossover : (int.Parse(ch.Crossover.ToString())) } });
-                                }
-                                catch (Exception ex)
-                                {
-                                    StatusBar(ex.Message);
+                                    if (ch.ChannelReport.SpConnect.Equals("N") == false)
+                                    {
+                                        try
+                                        {
+                                            Crossover.Add(new Dictionary<string, object>() { { ch.Channel, ch.Crossover.GetType() == typeof(string) ? ch.Crossover : (int.Parse(ch.Crossover.ToString())) } });
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            StatusBar(ex.Message);
+                                        }
+                                    }
                                 }
                             }
                         }

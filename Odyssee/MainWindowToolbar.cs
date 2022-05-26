@@ -51,6 +51,7 @@ namespace Odyssee
                 RadioButton_ImpulseResponse.Visibility = Visibility.Hidden;
                 RadioButton_RangeSubw.Visibility = Visibility.Hidden;
                 RadioButton_RangeFull.Visibility = Visibility.Hidden;
+                RadioButton_RangeSamp.Visibility = Visibility.Hidden;
 
                 CheckBox_CurveFilter.Visibility = Visibility.Hidden;
                 RadioButton_FlatCurveFilter.Visibility = Visibility.Hidden;
@@ -67,6 +68,7 @@ namespace Odyssee
                 RadioButton_ImpulseResponse.Visibility = Visibility.Visible;
                 RadioButton_RangeSubw.Visibility = Visibility.Visible;
                 RadioButton_RangeFull.Visibility = Visibility.Visible;
+                RadioButton_RangeSamp.Visibility = Visibility.Visible;
 
                 CheckBox_CurveFilter.Visibility = Visibility.Visible;
                 RadioButton_FlatCurveFilter.Visibility = Visibility.Visible;

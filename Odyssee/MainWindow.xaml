@@ -49,7 +49,7 @@
                         <Separator/>
                         <MenuItem Header="_Import">
                             <MenuItem Header="Impulse Response from Wave File" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick" ToolTip="16384-sample 32-bit float 1-channel impulse response wav files (16384_ImpulseResponse_48000_FL_0_10,2.wav)"/>
-                            <MenuItem Header="FIR Coefficients from Wave File" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="1024-tap (704-tap for subwoofer) 32-bit float 1-channel FIR curvefilter coefficient wav files (coefficient48kHz_FlatCurveFilter_FL.wav)"/>
+                            <MenuItem Header="FIR Coefficients from Wave File" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="1024-tap (704-tap for subwoofer) 32-bits IEEE mono FIR coefficient wav files (coefficient48kHz_FlatCurveFilter_FL.wav)"/>
                         </MenuItem>
                         <MenuItem Header="_Export" ToolTip="Export 16384-sample 32-bit float 1-channel impulse response">
                             <MenuItem Header="Impulse Response to Wave File" Click="MenuItem_Export_ChannelResponseData_WaveFile_OnClick" ToolTip="Export all channels, all positions to wav files"/>
@@ -404,13 +404,14 @@
                         <CheckBox Name="CheckBox_LogarithmicAxis" Content="Logarithmic Axis" IsChecked="true"  Checked="CheckBox_LogarithmicAxis_Checked" Unchecked="CheckBox_LogarithmicAxis_Unchecked" />
                     </StackPanel>
                     <oxy:PlotView Grid.Row="1" Grid.ColumnSpan="2" x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}" PreviewMouseLeftButtonDown="Plot_MouseLeftButtonDown" PreviewMouseLeftButtonUp="Plot_MouseLeftButtonUp" PreviewMouseMove="plot_MouseMove" Margin="0,4,0,16" Grid.RowSpan="2" />
-                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">
-                    <RadioButton Name="RadioButton_ImpulseResponse" Content="0-350ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
-                    <RadioButton Name="RadioButton_RangeSubw" Content="10-1000Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
-                    <RadioButton Name="RadioButton_RangeFull" Content="10Hz-24kHz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
+                    <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,5">
+                        <RadioButton Name="RadioButton_ImpulseResponse" Content="0...340 ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
+                        <RadioButton Name="RadioButton_RangeSubw" Content="10...200 Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
+                        <RadioButton Name="RadioButton_RangeFull" Content="20...20.000 Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
+                        <RadioButton Name="RadioButton_RangeSamp" Content="2...24.000 Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,5">
-                        <Label Content="{Binding SelectedChannel.FirFilterGain}" Margin="0,-6,10,0"></Label>
+                        <Label Content="{Binding SelectedChannel.FirFilterGain}" VerticalContentAlignment="Center" VerticalAlignment="Center" FontStretch="Condensed" Margin="0,-5,0,-6"/>
                         <CheckBox Name="CheckBox_CurveFilter" Content="Apply Curve Filter" Checked="CheckBox_CurveFilter_Checked" Unchecked="CheckBox_CurveFilter_Unchecked" Margin="0,0,10,0" IsChecked="False"/>
                         <RadioButton Name="RadioButton_FlatCurveFilter" Content="Flat Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0"/>
                         <RadioButton Name="RadioButton_AudyCurveFilter" Content="Audy Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0" IsChecked="True"/>

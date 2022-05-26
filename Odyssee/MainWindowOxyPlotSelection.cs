@@ -226,7 +226,7 @@ namespace Odyssee
             if (Series != null)
             {
                 TrackerHitResult TrackerHitResult = Series.GetNearestPoint(ScreenPoint, false);
-                if (TrackerHitResult != null)
+                if (TrackerHitResult != null && Series.Title != null)
                 {
                     // data point nearest to the click
                     DataPoint = new(TrackerHitResult.DataPoint.X, DataPoint.Y);
@@ -289,6 +289,11 @@ namespace Odyssee
 
                 //Get the axis point from the plot point
                 DataPoint DataPoint = PlotView.ActualModel.DefaultXAxis.InverseTransform(point.X, point.Y, PlotView.ActualModel.DefaultYAxis);
+
+                //Get the screen point
+                ScreenPoint ScreenPoint = new ScreenPoint(point.X, point.Y);
+                //Get the series
+                Series Series = PlotView.ActualModel.GetSeriesFromPoint(ScreenPoint);
 
                 //Update the coordinate
                 audysseyMultEQAvr.CurvePoint.Y = DataPoint.Y;

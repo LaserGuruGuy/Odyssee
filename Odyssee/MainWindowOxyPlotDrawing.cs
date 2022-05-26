@@ -183,9 +183,10 @@ namespace Odyssee
         private string selectedAxisLimits = "RadioButton_ImpulseResponse";
         private Dictionary<string, AxisLimit> AxisLimits = new Dictionary<string, AxisLimit>()
         {
-            {"RadioButton_RangeFull", new AxisLimit { XMin = 10, XMax = SampleRate48KHz/2.0d, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
-            {"RadioButton_RangeSubw", new AxisLimit { XMin = 10, XMax = 1000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
-            {"RadioButton_ImpulseResponse", new AxisLimit { XMin = 0, XMax = SecondsToMilliseconds*SampleSize/SampleRate48KHz, YMin = -0.1, YMax = 0.1, MajorStep = 0.01, MinorStep = 0.001 } }
+            {"RadioButton_RangeSamp", new AxisLimit { XMin = 2, XMax = 24000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
+            {"RadioButton_RangeFull", new AxisLimit { XMin = 20, XMax = 20000, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
+            {"RadioButton_RangeSubw", new AxisLimit { XMin = 10, XMax = 200, YMin = -35, YMax = 20, MajorStep = 5, MinorStep = 1 } },
+            {"RadioButton_ImpulseResponse", new AxisLimit { XMin = 0, XMax = SecondsToMilliseconds*SampleSize/SampleRate48KHz, YMin = -0.3, YMax = +0.3, MajorStep = 0.1, MinorStep = 0.01 } }
         };
 
         private void DrawChart()
@@ -354,67 +355,75 @@ namespace Odyssee
         {
             if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[0]))
             {
-                /* 32 kHz 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 24d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                /* 32 kHz 1024 filter coefficients (2666 Hz 704 filter coefficients for subwoofer) */
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[0] : AudysseyMultEQAvr.SampleFrequencyList[0] / 12d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[1]))
             {
-                /* 44.1 kHz 1024 filter coefficients (704 for subwoofer)*/
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 24d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                /* 44.1 kHz 1024 filter coefficients (3675 Hz  704 filter coefficients for subwoofer)*/
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[1] : AudysseyMultEQAvr.SampleFrequencyList[1] / 12d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.SampleRateList[2]))
             {
-                /* 48 kHz 1024 filter coefficients (704 for subwoofer) */
-                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 24d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
+                /* 48 kHz 1024 filter coefficients (4000 Hz 704 filter coefficients for subwoofer) */
+                PlotCurve(CurveFilter.Value.Length == 1024 ? AudysseyMultEQAvr.SampleFrequencyList[2] : AudysseyMultEQAvr.SampleFrequencyList[2] / 12d, CurveFilter.Value, 0, SmoothingFactor, CurveColor, LineStyle.Solid, 2);
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.DispDataList[0]))
             {
-                /* 61 equalizer bands */
-                if (CurveFilter.Value.Length == FilterFrequencies.Length)
+                // only show frequencyplot
+                if (selectedAxisLimits.Contains("ImpulseResponse") == false)
                 {
-                    Collection<DataPoint> dataPoint = new Collection<DataPoint>();
-
-                    for (int j = 0; j < CurveFilter.Value.Length; j++)
+                    /* 61 equalizer bands */
+                    if (CurveFilter.Value.Length == FilterFrequencies.Length)
                     {
-                        dataPoint.Add(new DataPoint(FilterFrequencies[j], CurveFilter.Value[j]));
+                        Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+
+                        for (int j = 0; j < CurveFilter.Value.Length; j++)
+                        {
+                            dataPoint.Add(new DataPoint(FilterFrequencies[j], CurveFilter.Value[j]));
+                        }
+
+                        var sinStemSeries = new StemSeries
+                        {
+                            ItemsSource = dataPoint,
+                            Title = AudyEqSet + CurveFilter.Key,
+                            Color = CurveColor,
+                            MarkerStroke = CurveColor,
+                            MarkerType = MarkerType.Circle
+                        };
+
+                        PlotModel.Series.Add(sinStemSeries);
                     }
-
-                    var sinStemSeries = new StemSeries
-                    {
-                        ItemsSource = dataPoint,
-                        Title = AudyEqSet + CurveFilter.Key,
-                        Color = CurveColor,
-                        MarkerStroke = CurveColor,
-                        MarkerType = MarkerType.Circle
-                    };
-
-                    PlotModel.Series.Add(sinStemSeries);
                 }
             }
             else if (CurveFilter.Key.Equals(AudysseyMultEQAvr.DispDataList[1]))
             {
-                /* 9 equalizer bands */
-                if (CurveFilter.Value.Length == DisplayFrequencies.Length)
+                // only show frequencyplot
+                if (selectedAxisLimits.Contains("ImpulseResponse") == false)
                 {
-                    Collection<DataPoint> dataPoint = new Collection<DataPoint>();
-
-                    for (int j = 0; j < CurveFilter.Value.Length; j++)
+                    /* 9 equalizer bands */
+                    if (CurveFilter.Value.Length == DisplayFrequencies.Length)
                     {
-                        dataPoint.Add(new DataPoint(DisplayFrequencies[j], CurveFilter.Value[j]));
+                        Collection<DataPoint> dataPoint = new Collection<DataPoint>();
+
+                        for (int j = 0; j < CurveFilter.Value.Length; j++)
+                        {
+                            dataPoint.Add(new DataPoint(DisplayFrequencies[j], CurveFilter.Value[j]));
+                        }
+
+                        var sinStemSeries = new StemSeries
+                        {
+                            ItemsSource = dataPoint,
+                            Title = AudyEqSet + CurveFilter.Key,
+                            Color = CurveColor,
+                            StrokeThickness = 2,
+                            MarkerType = MarkerType.Circle,
+                            MarkerStroke = CurveColor,
+                            MarkerStrokeThickness = 2
+                        };
+
+                        PlotModel.Series.Add(sinStemSeries);
                     }
-
-                    var sinStemSeries = new StemSeries
-                    {
-                        ItemsSource = dataPoint,
-                        Title = AudyEqSet + CurveFilter.Key,
-                        Color = CurveColor,
-                        StrokeThickness = 2,
-                        MarkerType = MarkerType.Circle,
-                        MarkerStroke = CurveColor,
-                        MarkerStrokeThickness = 2
-                    };
-
-                    PlotModel.Series.Add(sinStemSeries);
                 }
             }
         }
@@ -520,7 +529,7 @@ namespace Odyssee
                     double[] Frequency = new double[responseData.Length];
                     MathNet.Numerics.Complex32[] complexData = new MathNet.Numerics.Complex32[responseData.Length];
 
-                    for (int j = 0; j < responseData.Length; j++)
+                    for (int j = 0; j < Frequency.Length; j++)
                     {
                         Frequency[j] = (double)j / responseData.Length * sampleRate;
                         complexData[j] = (MathNet.Numerics.Complex32)(responseData[j]);
