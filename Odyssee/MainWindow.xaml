@@ -388,6 +388,7 @@
                 </GroupBox>
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
@@ -398,19 +399,23 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="30,0,0,0">
                         <Label  Name="Label_SmoothingFactor" VerticalAlignment="Center" Content="Smoothing"></Label>
-                        <Slider Name="Slider_SmoothingFactor" VerticalAlignment="Center" Width="300" Margin="10,0,0,0" Value="{Binding SmoothingFactor}" Minimum="0" Maximum="48" Orientation="Horizontal" TickPlacement="Both" LargeChange="5" SmallChange="1" AutoToolTipPlacement="BottomRight" ValueChanged="Slider_SmoothingFactor_ValueChanged"/>
+                        <Slider Name="Slider_SmoothingFactor" VerticalAlignment="Center" Width="280" Margin="10,0,10,0" Value="{Binding SmoothingFactor}" Minimum="0" Maximum="48" Orientation="Horizontal" TickPlacement="Both" LargeChange="5" SmallChange="1" AutoToolTipPlacement="BottomRight" ValueChanged="Slider_SmoothingFactor_ValueChanged"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center"  Margin="0,0,10,0">
-                        <CheckBox Name="CheckBox_LogarithmicAxis" Content="Logarithmic Axis" IsChecked="true"  Checked="CheckBox_LogarithmicAxis_Checked" Unchecked="CheckBox_LogarithmicAxis_Unchecked" />
+                    <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Label Content="AssignBin" VerticalAlignment="Center"/>
+                        <Label Content="{Binding AvrStatus.AssignBin}" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <oxy:PlotView Grid.Row="1" Grid.ColumnSpan="2" x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}" PreviewMouseLeftButtonDown="Plot_MouseLeftButtonDown" PreviewMouseLeftButtonUp="Plot_MouseLeftButtonUp" PreviewMouseMove="plot_MouseMove" Margin="0,4,0,16" Grid.RowSpan="2" />
+                    <oxy:PlotView Grid.Row="1" Grid.ColumnSpan="3" x:Name="plot" DataContext="{Binding ElementName=_this}" Model="{Binding PlotModel}" PreviewMouseLeftButtonDown="Plot_MouseLeftButtonDown" PreviewMouseLeftButtonUp="Plot_MouseLeftButtonUp" PreviewMouseMove="plot_MouseMove" Margin="0,4,0,16" Grid.RowSpan="2" />
                     <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,5">
                         <RadioButton Name="RadioButton_ImpulseResponse" Content="0...340 ms" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
                         <RadioButton Name="RadioButton_RangeSubw" Content="10...200 Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
                         <RadioButton Name="RadioButton_RangeFull" Content="20...20.000 Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0" IsChecked="True"/>
                         <RadioButton Name="RadioButton_RangeSamp" Content="2...24.000 Hz" Checked="RadioButton_Range_Checked" Margin="0,0,10,0"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,5">
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="10,0,10,0">
+                        <CheckBox Name="CheckBox_LogarithmicAxis" Content="Logarithmic Axis" IsChecked="true"  Checked="CheckBox_LogarithmicAxis_Checked" Unchecked="CheckBox_LogarithmicAxis_Unchecked" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,5">
                         <Label Content="{Binding SelectedChannel.FirFilterGain}" VerticalContentAlignment="Center" VerticalAlignment="Center" FontStretch="Condensed" Margin="0,-5,0,-6"/>
                         <CheckBox Name="CheckBox_CurveFilter" Content="Apply Curve Filter" Checked="CheckBox_CurveFilter_Checked" Unchecked="CheckBox_CurveFilter_Unchecked" Margin="0,0,10,0" IsChecked="False"/>
                         <RadioButton Name="RadioButton_FlatCurveFilter" Content="Flat Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0"/>
