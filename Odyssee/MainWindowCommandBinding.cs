@@ -16,16 +16,23 @@ namespace Odyssee
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 
             // Set filter for file extension and default file extension 
-            dlg.FileName = "Odyssee.ody";
+            dlg.FileName = "*.ody";
             dlg.DefaultExt = ".ody";
-            dlg.Filter = "Odyssee (*.ody)|*.ody";
+            dlg.Filter = "Odyssee (*.ody)|*.ody |Legacy (*.ady)|*.ady";
 
             // Show open file dialog box
             Nullable<bool> result = dlg.ShowDialog();
 
             if (result == true)
             {
-                ParseOdyFileToAudysseyMultEQAvr(dlg.FileName);
+                if (dlg.FileName.EndsWith(".ody"))
+                {
+                    ParseOdyFileToAudysseyMultEQAvr(dlg.FileName);
+                }
+                else if (dlg.FileName.EndsWith(".ady"))
+                {
+                    ParseAdyFileToAudysseyMultEQAvrAdapter(dlg.FileName);
+                }
             }
         }
 
@@ -91,8 +98,6 @@ namespace Odyssee
                 string Serialized = File.ReadAllText(FileName);
 
                 audysseyMultEQAvr.Reset();
-                audysseyMultEQAvr.AvrStatus.Reset();
-                audysseyMultEQAvr.AvrInfo.Reset();
 
                 JsonConvert.PopulateObject(Serialized, audysseyMultEQAvr, new JsonSerializerSettings
                 {

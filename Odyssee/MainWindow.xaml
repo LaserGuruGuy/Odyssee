@@ -43,18 +43,18 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Stretch">
                 <Menu Name="Menu" WindowChrome.IsHitTestVisibleInChrome="True" DockPanel.Dock="Left" VerticalAlignment="Stretch" Background="Transparent" FontSize="13">
                     <MenuItem Header="_File" Height="30">
-                        <MenuItem Name="menuNew" Header="_New" Command="New" InputGestureText="Ctrl+N"/>
-                        <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O"/>
-                        <MenuItem Name="menuSaveAs" Header="_Save as..." Command="SaveAs" InputGestureText="Ctrl+S"/>
+                        <MenuItem Name="menuNew" Header="_New" Command="New" InputGestureText="Ctrl+N" ToolTip="Clear all data to start new measurement"/>
+                        <MenuItem Name="menuOpen" Header="_Open..." Command="Open" InputGestureText="Ctrl+O" ToolTip="Open previous measurement"/>
+                        <MenuItem Name="menuSaveAs" Header="_Save as..." Command="SaveAs" InputGestureText="Ctrl+S" ToolTip="Save measurement results to file"/>
                         <Separator/>
                         <MenuItem Header="_Import">
-                            <MenuItem Header="Impulse Response from Wave File" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick" ToolTip="16384-sample 32-bit float 1-channel impulse response wav files (16384_ImpulseResponse_48000_FL_0_10,2.wav)"/>
-                            <MenuItem Header="FIR Coefficients from Wave File" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="1024-tap (704-tap for subwoofer) 32-bits IEEE mono FIR coefficient wav files (coefficient48kHz_FlatCurveFilter_FL.wav)"/>
+                            <MenuItem Header="Impulse Response from Wave File" Click="MenuItem_Import_ChannelResponseData_WaveFile_OnClick" ToolTip="Import 16384-sample 32-bit float 1-channel impulse response wav files (16384_ImpulseResponse_48000_FL_0_10,2.wav)"/>
+                            <MenuItem Header="FIR Coefficients from Wave File" Click="MenuItem_Import_CurveFilterCoeff_WaveFile_OnClick" ToolTip="Import 1024-tap (704-tap for subwoofer) 32-bit IEEE mono FIR coefficient wav files (coefficient48kHz_FlatCurveFilter_FL.wav)"/>
                         </MenuItem>
-                        <MenuItem Header="_Export" ToolTip="Export 16384-sample 32-bit float 1-channel impulse response">
-                            <MenuItem Header="Impulse Response to Wave File" Click="MenuItem_Export_ChannelResponseData_WaveFile_OnClick" ToolTip="Export all channels, all positions to wav files"/>
-                            <MenuItem Header="Impulse Response to Frd File" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick" ToolTip="Export all channels, all positions to FRD files"/>
-                            <MenuItem Header="Filter Coefficients to Wave File" Click="MenuItem_Export_FilterCoefficients_WaveFile_OnClick" ToolTip="Export all filter coefficients to wav files"/>
+                        <MenuItem Header="_Export">
+                            <MenuItem Header="Impulse Response to Wave File" Click="MenuItem_Export_ChannelResponseData_WaveFile_OnClick" ToolTip="Export impulse response for all channels, all positions to 16384-sample 32-bit IEEE mono wav files"/>
+                            <MenuItem Header="Impulse Response to Frd File" Click="MenuItem_Export_ChannelResponseData_FrdFile_OnClick" ToolTip="Export impulse response for all channels, all positions to FRD files"/>
+                            <MenuItem Header="Filter Coefficients to Wave File" Click="MenuItem_Export_FilterCoefficients_WaveFile_OnClick" ToolTip="Export filter coefficients for all channels to 1024-sample (704 for subwoofer) 32-bit IEEE mono wav files"/>
                         </MenuItem>
                         <Separator/>
                         <MenuItem Name ="menuClose" Header="_Close" Command="Close" InputGestureText="Alt+F4"/>
@@ -242,7 +242,7 @@
                                 </StackPanel>
                             </Grid>
                         </Grid>
-                        <GroupBox Grid.Row="1" Header="Receiver Audyssey">
+                        <GroupBox Grid.Row="1" Header="Receiver Audio and Audyssey">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -258,18 +258,22 @@
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Row="0" Grid.Column="0" Content="AudyMultEq" IsChecked="{Binding AudyMultEq}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <CheckBox Grid.Row="1" Grid.Column="0" Content="AudyLfc" IsChecked="{Binding AudyLfc}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <CheckBox Grid.Row="2" Grid.Column="0" Content="AudyDynVol" IsChecked="{Binding AudyDynVol}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <CheckBox Grid.Row="3" Grid.Column="0" Content="AudyDynEq" IsChecked="{Binding AudyDynEq}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <Label Grid.Row="0" Grid.Column="1" Content="AudyEqSet"></Label>
+                                <CheckBox Grid.Row="0" Grid.Column="0" Content="Audyssey MultEQ" IsChecked="{Binding AudyMultEq}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Grid.Row="0" Grid.Column="1" Content="MultEQ XT32"></Label>
                                 <ComboBox Grid.Row="0" Grid.Column="2" SelectedValue="{Binding AudyEqSet}" ItemsSource="{Binding AudyEqSetList}" VerticalAlignment="Center"/>
-                                <Label Grid.Row="1" Grid.Column="1" Content="AudyLfcLev"></Label>
+
+                                <CheckBox Grid.Row="1" Grid.Column="0" Content="Audyssey LFC" IsChecked="{Binding AudyLfc}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Grid.Row="1" Grid.Column="1" Content="Reduction Level"></Label>
                                 <ComboBox Grid.Row="1" Grid.Column="2" SelectedValue="{Binding AudyLfcLev}" ItemsSource="{Binding AudyLfcLevList}" VerticalAlignment="Center"/>
-                                <Label Grid.Row="2" Grid.Column="1" Content="AudyDynVolSet"></Label>
-                                <ComboBox Grid.Row="2" Grid.Column="2" SelectedValue="{Binding AudyDynSet}" ItemsSource="{Binding AudyDynSetList}" VerticalAlignment="Center"/>
-                                <Label Grid.Row="3" Grid.Column="1" Content="AudyDynEqRef (dB)"></Label>
+                                
+                                <CheckBox Grid.Row="2" Grid.Column="0" Content="Dynamic Volume" IsChecked="{Binding AudyDynVol}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Grid.Row="2" Grid.Column="1" Content="Compression Level"></Label>
+                                <ComboBox Grid.Row="2" Grid.Column="2" SelectedValue="{Binding AudyDynSet}" ItemsSource="{Binding AudyDynSetList}" ToolTip="{Binding AudyDynSetToolTip}" VerticalAlignment="Center"/>
+                                
+                                <CheckBox Grid.Row="3" Grid.Column="0" Content="Dynamic EQ" IsChecked="{Binding AudyDynEq}" Margin="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Label Grid.Row="3" Grid.Column="1" Content="EQ Reference (dB)"></Label>
                                 <ComboBox Grid.Row="3" Grid.Column="2" SelectedValue="{Binding AudyEqRef}" ItemsSource="{Binding AudyEqRefList}" VerticalAlignment="Center"/>
+                                
                                 <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal">
                                     <CustomControls:NumericUpDown x:Name="NumericUpDownControl"  Value="{Binding NumPos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  MaxValue="8" MinValue="1" Width="34" Margin="6,0,0,0" />
                                     <Label Content="NumPos" VerticalAlignment="Center"></Label>

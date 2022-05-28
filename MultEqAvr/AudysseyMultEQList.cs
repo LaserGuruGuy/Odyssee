@@ -175,6 +175,9 @@ namespace Audyssey
             public static Collection<string> AudyDynSetList { get; } = new()
             { "H", "M", "L" };
             [JsonIgnore]
+            public static string AudyDynSetToolTip { get; } = 
+            "Heavy, Medium, Light";
+            [JsonIgnore]
             public static Collection<string> AudyEqSetList { get; } = new()
             { "Audy", "Flat" };
             [JsonIgnore]
