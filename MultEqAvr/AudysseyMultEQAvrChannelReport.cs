@@ -71,7 +71,7 @@ namespace Audyssey
                 {
                     try
                     {
-                        return (decimal)Math.Round((double)_Distance * 100d / 343d) / 10m;
+                        return (decimal)Math.Round((double)_Distance * 10000d / 343d); // microseconds
                     }
                     catch
                     {
@@ -80,7 +80,7 @@ namespace Audyssey
                 }
                 set
                 {
-                    Distance = (int)(value * 34.30m);
+                    Distance = (int)(value * 0.343m);
                 }
             }
 

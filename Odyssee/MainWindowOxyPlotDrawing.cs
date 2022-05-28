@@ -432,7 +432,6 @@ namespace Odyssee
         {
             if (selectedAxisLimits.Contains("ImpulseResponse") == false)
             {
-
                 if (AverageResponseData != null)
                 {
                     if (AverageResponseData.Count > 0)

@@ -366,15 +366,14 @@ namespace Odyssee
 
         private void ParseResponseDataToWaveFilePath(string FilePath)
         {
-            const int SampleRate = 48000;
             foreach (var ch in audysseyMultEQAvr.DetectedChannels)
             {
                 if (ch.Skip == false)
                 {
                     foreach (var rspd in ch.ResponseData)
                     {
-                        string FileName = FilePath + "\\" + rspd.Value.Length + "_ImpulseResponse_" + SampleRate + "_" + ch.Channel + "_" + rspd.Key + "_" + ch.ChannelReport.Delay + ".wav";
-                        WriteWaveFile(FileName, rspd.Value, SampleRate);
+                        string FileName = FilePath + "\\" + "ImpulseResponse_" + ch.Channel + "_" + rspd.Key + "_" + ch.ChannelReport.Delay + "µs.wav";
+                        WriteWaveFile(FileName, rspd.Value, 48000);
                     }
                 }
             }
@@ -382,15 +381,14 @@ namespace Odyssee
 
         private void ParseResponseDataToFrdFilePath(string FilePath)
         {
-            const int SampleRate = 48000;
             foreach (var ch in audysseyMultEQAvr.DetectedChannels)
             {
                 if (ch.Skip == false)
                 {
                     foreach (var rspd in ch.ResponseData)
                     {
-                        string FileName = FilePath + "\\" + rspd.Value.Length + "_ImpulseResponse_" + SampleRate + "_" + ch.Channel + "_Position" + rspd.Key + ".frd";
-                        WriteFrdFile(FileName, rspd.Value, SampleRate);
+                        string FileName = FilePath + "\\" + "ImpulseResponse_" + ch.Channel + "_" + rspd.Key + "_" + ch.ChannelReport.Delay + "µs.frd";
+                        WriteFrdFile(FileName, rspd.Value, 48000);
                     }
                 }
             }
@@ -433,32 +431,27 @@ namespace Odyssee
             if (File.Exists(FileName))
             {
                 string[] keywords = System.IO.Path.GetFileNameWithoutExtension(FileName).Split('_');
-                if ((keywords.Length == 6 || keywords.Length == 5) && keywords[1] == "ImpulseResponse")
+                if ((keywords.Length == 4 || keywords.Length == 3) && keywords[0] == "ImpulseResponse")
                 {
-                    int SampleSize = 0;
-                    int SampleRate = 0;
                     string Channel = string.Empty;
                     string Position = string.Empty;
                     decimal? Delay = null;
 
                     try
                     {
-                        SampleSize = int.Parse(keywords[0]);
-                        SampleRate = int.Parse(keywords[2]);
-                        Channel = keywords[3];
-                        Position = keywords[4];
-                        Delay = decimal.Parse(keywords[5]);
+                        Channel = keywords[1];
+                        Position = keywords[2];
+                        Delay = decimal.Parse(keywords[3].Replace("µs", ""));
                     }
                     catch
                     {
-
                     }
 
-                    double[] Data = ReadWaveFile(FileName, SampleRate, MultEQList.SampleCountList[0]);
+                    double[] Data = ReadWaveFile(FileName, 48000, MultEQList.SampleCountList[0]);
 
                     try
                     {
-                        if (Data.Length == SampleSize)
+                        if (Data.Length == MultEQList.SampleCountList[0])
                         {
                             if (audysseyMultEQAvr.DetectedChannels != null)
                             {
@@ -479,7 +472,6 @@ namespace Odyssee
                     }
                     catch
                     {
-
                     }
                 }
             }
@@ -596,17 +588,12 @@ namespace Odyssee
                         (reader.WaveFormat.SampleRate == SampleRate) &&
                         (reader.SampleCount == SampleCount))
                     {
-                        float[] sampleframe;
-                        var readback = new List<float>();
-                        do
+                        double[] WaveData = new double[SampleCount];
+                        for (int i = 0; i < SampleCount; i++)
                         {
-                            sampleframe = reader.ReadNextSampleFrame();
-                            if (sampleframe != null)
-                            {
-                                readback.Add(sampleframe[0]);
-                            }
-                        } while (sampleframe != null);
-                        return FloatToDoubleArray(readback.ToArray());
+                            WaveData[i] = reader.ReadNextSampleFrame()[0];
+                        }
+                        return WaveData;
                     }
                     else
                     {
@@ -615,7 +602,8 @@ namespace Odyssee
                                          "\nBitsPerSample: " + reader.WaveFormat.BitsPerSample       + (reader.WaveFormat.BitsPerSample == 32 ? string.Empty : ", expected: 32") + 
                                          "\nEncoding: "      + reader.WaveFormat.Encoding.ToString() + (reader.WaveFormat.Encoding == WaveFormatEncoding.IeeeFloat ? string.Empty : ", expected: " + WaveFormatEncoding.IeeeFloat) +
                                          "\nSampleRate: "    + reader.WaveFormat.SampleRate          + (reader.WaveFormat.SampleRate == SampleRate ? string.Empty : ", expected: " + SampleRate) +
-                                         "\nSampleCount: "   + reader.SampleCount                    + (reader.SampleCount == SampleCount ? string.Empty : ", expected: "  + SampleCount);
+                                         "\nSampleCount: "   + reader.SampleCount                    + (reader.SampleCount == SampleCount ? string.Empty : ", expected: "  + SampleCount) +
+                                         "\nDuration: "      + reader.TotalTime.TotalMilliseconds    + " ms";
                         MessageBox.Show(Message, FileName.Substring(FileName.LastIndexOf('\\')), MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
