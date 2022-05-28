@@ -302,7 +302,9 @@ namespace Audyssey
             #region Methods
             private System.Windows.Input.ICommand _ClearAudyCurveFilter;
             private System.Windows.Input.ICommand _ClearFlatCurveFilter;
+            [JsonIgnore]
             public System.Windows.Input.ICommand ClearAudyCurveFilter => _ClearAudyCurveFilter ?? (_ClearAudyCurveFilter = new CommunityToolkit.Mvvm.Input.RelayCommand<object>(ClearAudyCurveFilterCommand));
+            [JsonIgnore]
             public System.Windows.Input.ICommand ClearFlatCurveFilter => _ClearFlatCurveFilter ?? (_ClearFlatCurveFilter = new CommunityToolkit.Mvvm.Input.RelayCommand<object>(ClearFlatCurveFilterCommand));
             public void ClearAudyCurveFilterCommand(object Object)
             {

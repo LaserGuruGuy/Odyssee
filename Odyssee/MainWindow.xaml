@@ -349,7 +349,7 @@
                                     <GridViewColumn Header="Average" Width="auto" >
                                             <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox Name="Average" Checked="ListView_CheckBox_ResponseDataAverage_Checked" Unchecked="ListView_CheckBox_ResponseDataAverage_Unchecked" Initialized="ListView_CheckBox_ResponseDataAverage_Initialized"/>
+                                                <CheckBox Name="Average" Checked="ListView_CheckBox_ResponseDataAverage_Checked" Unchecked="ListView_CheckBox_ResponseDataAverage_Unchecked" Initialized="ListView_CheckBox_ResponseDataAverage_Initialized" ToolTip="Check to add to Average"/>
                                              </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -421,7 +421,7 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10,0,0,5">
                         <Label Content="{Binding SelectedChannel.FirFilterGain}" VerticalContentAlignment="Center" VerticalAlignment="Center" FontStretch="Condensed" Margin="0,-5,0,-6"/>
-                        <CheckBox Name="CheckBox_CurveFilter" Content="Apply Curve Filter" Checked="CheckBox_CurveFilter_Checked" Unchecked="CheckBox_CurveFilter_Unchecked" Margin="0,0,10,0" IsChecked="False"/>
+                        <CheckBox Name="CheckBox_CurveFilter" Content="Apply Curve Filter" Checked="CheckBox_CurveFilter_Checked" Unchecked="CheckBox_CurveFilter_Unchecked" Margin="0,0,10,0" IsChecked="False" ToolTip="Apply filter to Channel Response checked Average"/>
                         <RadioButton Name="RadioButton_FlatCurveFilter" Content="Flat Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0"/>
                         <RadioButton Name="RadioButton_AudyCurveFilter" Content="Audy Curve Filter" Checked="RadioButton_CurveFilter_Checked" Margin="0,0,10,0" IsChecked="True"/>
                     </StackPanel>

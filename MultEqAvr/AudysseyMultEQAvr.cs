@@ -238,7 +238,17 @@ namespace Audyssey
                                         {
                                             if (ch.Channel.Equals(Item.Key.Replace("MIX", "")))
                                             {
-                                                if (ch.Setup.Equals(Item.Value) == false)
+                                                if (ch.Setup != null)
+                                                {
+                                                    if (ch.Setup.Equals(Item.Value) == false)
+                                                    {
+                                                        ch.Setup = Item.Value;
+                                                        ch.Skip = Item.Value == "N" ? true : false;
+                                                        SelectedChannel = ch;
+                                                        break;
+                                                    }
+                                                }
+                                                else
                                                 {
                                                     ch.Setup = Item.Value;
                                                     ch.Skip = Item.Value == "N" ? true : false;
@@ -582,7 +592,9 @@ namespace Audyssey
             #region Methods
             private System.Windows.Input.ICommand _ClearCurveFilters;
             private System.Windows.Input.ICommand _NewCurveFilters;
+            [JsonIgnore]
             public System.Windows.Input.ICommand ClearCurveFilters => _ClearCurveFilters ?? (_ClearCurveFilters = new CommunityToolkit.Mvvm.Input.RelayCommand<DetectedChannel>(ClearCurveFiltersCommand));
+            [JsonIgnore]
             public System.Windows.Input.ICommand NewCurveFilters => _NewCurveFilters ?? (_NewCurveFilters = new CommunityToolkit.Mvvm.Input.RelayCommand<DetectedChannel>(NewCurveFiltersCommand));
             public void ClearCurveFiltersCommand(DetectedChannel ch)
             {
