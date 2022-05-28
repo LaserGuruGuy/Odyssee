@@ -21,8 +21,8 @@ namespace Audyssey
             private Dictionary<string, double[]> _ResponseData = new();
             private Dictionary<string, double[]> _AudyCurveFilter = new();
             private Dictionary<string, double[]> _FlatCurveFilter = new();
-            private decimal? _ChLevel = 0m;
-            private object _Crossover = "F";
+            private decimal _ChLevel;
+            private object _Crossover;
             #endregion
 
             public double[] GetOctave(int Band)
@@ -172,7 +172,7 @@ namespace Audyssey
                     RaisePropertyChanged("FlatCurveFilter");
                 }
             }
-            public decimal? ChLevel
+            public decimal ChLevel
             {
                 get
                 {

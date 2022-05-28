@@ -215,18 +215,52 @@ namespace Audyssey
                     {
                         if (AvrStatus.ChSetup != null)
                         {
-                            _DetectedChannels = new();
                             foreach (var Element in AvrStatus.ChSetup)
                             {
                                 foreach (var Item in Element)
                                 {
-                                    int size = Item.Key.Contains("MIX") ? 704 : 1024;
-                                    _DetectedChannels.Add(new()
+                                    if (_DetectedChannels.Count == 0)
                                     {
-                                        Channel = Item.Key.Replace("MIX", ""),
-                                        Setup = Item.Value,
-                                        Skip = Item.Value == "N" ? true : false,
-                                    });
+                                        _DetectedChannels = new();
+                                        _DetectedChannels.Add(new()
+                                        {
+                                            Channel = Item.Key.Replace("MIX", ""),
+                                            Setup = Item.Value,
+                                            Skip = Item.Value == "N" ? true : false,
+                                            Crossover = Item.Value == "S" ? (long)250 : "F",
+                                            ChLevel = 0m
+                                        });
+                                        SelectedChannel = _DetectedChannels[_DetectedChannels.Count - 1];
+                                    }
+                                    else
+                                    {
+                                        foreach (var ch in _DetectedChannels)
+                                        {
+                                            if (ch.Channel.Equals(Item.Key.Replace("MIX", "")))
+                                            {
+                                                if (ch.Setup.Equals(Item.Value) == false)
+                                                {
+                                                    ch.Setup = Item.Value;
+                                                    ch.Skip = Item.Value == "N" ? true : false;
+                                                    SelectedChannel = ch;
+                                                    break;
+                                                }
+                                            }
+                                            else if (_DetectedChannels.IndexOf(ch) == _DetectedChannels.Count - 1)
+                                            {
+                                                _DetectedChannels.Add(new()
+                                                {
+                                                    Channel = Item.Key.Replace("MIX", ""),
+                                                    Setup = Item.Value,
+                                                    Skip = Item.Value == "N" ? true : false,
+                                                    Crossover = Item.Value == "S" ? (long)250 : "F",
+                                                    ChLevel = 0m
+                                                });
+                                                SelectedChannel = _DetectedChannels[_DetectedChannels.Count - 1];
+                                                break;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

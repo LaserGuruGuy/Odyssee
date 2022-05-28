@@ -147,8 +147,8 @@
                                     <ColumnDefinition Width="auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <GroupBox Grid.Column="0" Header="Channel Setup">
-                                    <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels, AsyncState=TwoWay}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0" IsSynchronizedWithCurrentItem="False">
+                                <GroupBox Grid.Column="0" Header="Receiver Setup">
+                                    <ListView Grid.Column="0" x:Name="ChannelsView" BorderThickness="0" ItemsSource="{Binding DetectedChannels}" SelectedItem="{Binding SelectedChannel}" SelectionMode="Single" Margin="0,4,0,0">
                                         <ListView.ContextMenu>
                                             <ContextMenu Selector.IsSelected="True">
                                                 <MenuItem
@@ -166,7 +166,7 @@
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="Channel" Width="auto" DisplayMemberBinding="{Binding Channel}"/>
-                                                <GridViewColumn Header="Setup" Width="auto" DisplayMemberBinding="{Binding Setup}"/>
+                                                <GridViewColumn Header="Speaker" Width="auto" DisplayMemberBinding="{Binding Setup}"/>
                                                 <GridViewColumn Header="Skip" Width="auto">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
@@ -242,7 +242,7 @@
                                 </StackPanel>
                             </Grid>
                         </Grid>
-                        <GroupBox Grid.Row="1" Header="Audyssey">
+                        <GroupBox Grid.Row="1" Header="Receiver Audyssey">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>
@@ -278,7 +278,7 @@
                                 <ComboBox Grid.Row="4" Grid.Column="2" SelectedValue="{Binding AudyFinFlg}" ItemsSource="{Binding AudyFinFlgList}" IsSynchronizedWithCurrentItem="False" VerticalAlignment="Center"/>
                             </Grid>
                         </GroupBox>
-                        <GroupBox Grid.Row="2" Header="Audio Video Receiver Info and Status">
+                        <GroupBox Grid.Row="2" Header="Receiver Info and Status">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto"/>

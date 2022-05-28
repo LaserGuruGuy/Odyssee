@@ -91,10 +91,12 @@ namespace Odyssee
                 string Serialized = File.ReadAllText(FileName);
 
                 audysseyMultEQAvr.Reset();
+                audysseyMultEQAvr.AvrStatus.Reset();
+                audysseyMultEQAvr.AvrInfo.Reset();
 
                 JsonConvert.PopulateObject(Serialized, audysseyMultEQAvr, new JsonSerializerSettings
                 {
-                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                    ObjectCreationHandling = ObjectCreationHandling.Auto
                 });
             }
         }

@@ -118,7 +118,7 @@ namespace Odyssee
             
             if (e.PropertyName.Equals("ChSetup"))
             {
-                audysseyMultEQAvr.DetectedChannels = null;
+                audysseyMultEQAvr.DetectedChannels = new();
             }
             
             if (e.PropertyName.Equals("SelectedAudyCurveFilter") ||
