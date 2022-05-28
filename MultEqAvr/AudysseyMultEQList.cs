@@ -167,7 +167,7 @@ namespace Audyssey
             { 32000, 44100, 48000 };
             [JsonIgnore]
             public static Collection<int> SampleCountList { get; } = new()
-            { 1024, 704 };
+            { 16384, 1024, 704 };
             [JsonIgnore]
             public static Collection<string> CurveFilterList { get; } = new()
             { "referenceCurveFilter", "flatCurveFilter" };
